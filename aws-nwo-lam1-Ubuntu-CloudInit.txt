@@ -142,7 +142,7 @@ runcmd:
  - echo
  - echo 'Updating apache2 configuration for *.duckdns.org SSL cert'
  - sed -i "s|SSLCertificateFile\(.*\)|SSLCertificateFile /etc/letsencrypt/live/lamurakami.duckdns.org/fullchain.pem|" /etc/apache2/sites-available/default-ssl.conf
- - sed -i 's|SSLCertificateKeyFile\(.*\)|SSLCertificateKeyFile /etc/letsencrypt/live/lamurakami.duckdns.org/privkey|' /etc/apache2/sites-available/default-ssl.conf
+ - sed -i 's|SSLCertificateKeyFile\(.*\)|SSLCertificateKeyFile /etc/letsencrypt/live/lamurakami.duckdns.org/privkey.pem|' /etc/apache2/sites-available/default-ssl.conf
  - echo
  - echo Adding LAM AWS web content
  - tar -xvzf /mnt/efs/aws-lam1-ubuntu/www.tgz --directory /var/www
