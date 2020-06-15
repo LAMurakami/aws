@@ -1,0 +1,247 @@
+
+#cloud-config
+
+# Tell cloud-init to log the output to a log file
+output: {all: '| tee -a /var/log/cloud-init-output.log'}
+
+# $Id: aws-nwo-lam1-Ubuntu-CloudInit.txt,v 1.52 2020/06/12 01:05:56 lam Exp lam $
+#
+# https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
+
+bootcmd:
+ - echo
+ - echo Report kernel version
+ - uname -a
+ - echo
+ - echo Report Release version
+ - head /etc/*release
+ - echo
+ - echo Report AWS EC2 metadata for this instance
+ - ec2metadata | grep -v '^user-data'
+ - echo
+ - echo Report AWS EC2 user-data for this instance
+ - curl -s http://169.254.169.254/latest/user-data
+ - echo
+ - echo 'Set hostname and localhost alias in /etc/hosts'
+ - mv /etc/hosts /etc/hosts.old
+ - sed '1s/localhost/lam1.lam1.us lam1 localhost/' /etc/hosts.old > /etc/hosts
+ - diff -U0 /etc/hosts.old /etc/hosts
+ - echo
+
+# Set hostname
+hostname: lam1
+
+# Set timezone
+timezone: US/Alaska
+
+# Upgrade apt database on first boot
+apt_update: true
+
+# Upgrade the instance on first boot
+apt_upgrade: true
+
+# Install additional packages on first boot
+packages:
+ - rcs
+ - nfs-common
+ - awscli
+ - mailutils
+ - man2html
+ - swish++
+ - libio-captureoutput-perl
+ - libcgi-pm-perl
+ - libdbi-perl
+ - libdbd-mysql-perl
+ - php
+ - php-gd
+ - texlive
+ - php-xml*
+ - php7.2-xml
+ - lynx
+ - apache2-doc
+ - libapache2-mod-perl2
+ - libbsd-resource-perl
+ - libapache2-reload-perl
+ - apache2-suexec-custom
+ - mariadb-client
+ - mariadb-server
+ - php-mysql
+ - php7.2-mysql
+ - libapache2-mod-php
+ - libapache2-mod-php7.2
+ - php7.2-mbstring
+ - roundcube
+ - dovecot-imapd
+ - x11-apps
+ - leafpad
+ - whois
+
+ssh_import_is: [ubuntu]
+ssh_authorized_keys:
+ - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAYEAnNqVrt71AKSIMmSAIONBx4jIEK0IIZF5fSAaB9kI4oOK+t7aSTKAZwwgKHWJ536XFdR3Ql5Xi0r2CuUEf1GVEagAxLZTXRuim5UGmS63rfSxGwq9JQVg5WDbN5ilnGxSmqsD77SApvmffcO/T2zZWd+rrjMWWRi9zQwRdQRm60bc69ajJbjIJd8SCXIggUPzTkUz5Sca7dhdffcMpGR9bdexFln+YSli1ohtvs2zVBM4ncpufGS+Auax8+gQNr32QeSszlKuKsXYorZ9gl+Z8s62mX5yCXIrH2hWoHsCTUX38iVM8/wI6sPVosarkng7mPOOQLy5k50Y0cb9FRQGlrvmQqsc3fI7tC1fblhKL0HaY844kIZRHwFuOI04ik+b8Swdjed6+FH/RIKppuOY+qfdmv8gcX4ZhpbKg+JN+u5Xy5awpUFqhsbBdCz0MvLNPKEbDNCFokX8nL0HqGeABk2DOJ1+IOFz5pIiCL31LTVGTQ0AwXp3nkaHZykJNrcB Authentication from lam@laptop.lam1.us
+
+runcmd:
+ - echo
+ - echo Adding nfs4 mount to AWS NW-O VPC Elastic File System
+ - mkdir /mnt/efs
+ - chown ubuntu:ubuntu /mnt/efs
+ - mkdir /etc/RCS
+ - ci -l -t-"File System table for LAM AWS web and shell server" /etc/fstab
+ - nfsOpt="nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
+ - echo "fs-6f45fac6.efs.us-west-2.amazonaws.com:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
+ - rcsdiff -U0 /etc/fstab
+ - ci -l -m"Added nfs4 mount to AWS NW-O VPC Elastic File System" /etc/fstab
+ - mount -a -t nfs4
+ - echo
+ - echo 'Installing GNU which v2.21 compiled for Ubuntu Server 16.04'
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/which.tgz --directory /usr/local
+ - file /usr/local/bin/which
+ - echo
+ - echo 'Installing GNU tnef 1.4.15 compiled for Ubuntu Server 16.04'
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/tnef.tgz --directory /usr/local
+ - file /usr/local/bin/tnef
+ - echo
+ - echo Listen for ssh connections on alternate port 55520 and add ssh Banner
+ - mkdir /etc/ssh/RCS
+ - ci -l -t-"Secure SHell configuraton for LAM AWS web and shell server" /etc/ssh/sshd_config
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/sshd_config.tgz --directory /etc/ssh
+ - rcsdiff -U0 /etc/ssh/sshd_config
+ - ci -l -m"Listen for ssh connections on alternate port 55520 and add ssh Banner" /etc/ssh/sshd_config
+ - systemctl restart sshd
+ - echo
+ - echo Check US Alaska local time for this system
+ - ls -lF --time-style=long-iso /etc/localtime
+ - echo
+ - echo Installing ubuntu user bash resources
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/ubuntu.tgz --directory /home/ubuntu
+ - echo
+ - echo '***** Secure site *****'
+ - echo
+ - echo 'Installing Let-s Encrypt certificates for TLS encryption (HTTPS)'
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz --directory /etc
+ - echo
+ - echo 'Updating apache2 configuration for larryforalaska.com'
+ - a2ensite default-ssl
+ - a2enmod ssl
+ - a2enmod info
+ - a2enmod authz_groupfile.load
+ - a2enmod rewrite
+ - a2enmod cgi
+ - mkdir /etc/apache2/sites-available/RCS
+ - ci -t-"Default site configuration for LAM AWS web" /etc/apache2/sites-available/000-default.conf
+ - ci -t-"SSL site configuration for LAM AWS web" /etc/apache2/sites-available/default-ssl.conf
+ - mkdir /etc/apache2/mods-available/RCS
+ - ci -t-"Apache aliases configuration for LAM AWS web" /etc/apache2/mods-available/alias.conf
+ - ci -t-"Apache autoindex configuration for LAM AWS web" /etc/apache2/mods-available/autoindex.conf
+ - ci -t-"Apache Directory index configuration for LAM AWS web" /etc/apache2/mods-available/dir.conf
+ - mkdir /etc/apache2/RCS
+ - ci -l -t-"Apache2 main configuration for LAM AWS web" /etc/apache2/apache2.conf
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/apache2.tgz --directory /etc
+ - ci -l -m"Update from default to LAM AWS web configuration" /etc/apache2/apache2.conf
+ - sed -i "s|aws|lam1|" /etc/apache2/apache2.conf
+ - echo
+ - echo 'Updating apache2 configuration for *.duckdns.org SSL cert'
+ - sed -i "s|SSLCertificateFile\(.*\)|SSLCertificateFile /etc/letsencrypt/live/lamurakami.duckdns.org/fullchain.pem|" /etc/apache2/sites-available/default-ssl.conf
+ - sed -i 's|SSLCertificateKeyFile\(.*\)|SSLCertificateKeyFile /etc/letsencrypt/live/lamurakami.duckdns.org/privkey|' /etc/apache2/sites-available/default-ssl.conf
+ - echo
+ - echo Adding LAM AWS web content
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/www.tgz --directory /var/www
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/wiki.tgz --directory /var/www
+ - chown -R ubuntu:ubuntu /var/www
+ - mkdir /var/www/Multicount
+ - chown www-data:www-data /var/www/Multicount
+ - echo
+ - echo Installing LAM Common Gateway Interface Perl modules
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/perl-LAM.tgz --directory /usr/local
+ - echo
+ - echo 'Creating {lam|Mediawiki} database and user'
+ - mysql  --table < /mnt/efs/aws-lam1-ubuntu/lam-user.sql
+ - echo
+ - echo '***** Additional sites *****'
+ - echo
+ - echo 'Adding jana@www.interiordems.org user and group'
+ - groupadd -g 5001 interiordems
+ - useradd -N -u 5001 -s /bin/bash -g interiordems -G mail,interiordems jana
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/jana.tgz --directory /home
+ - passwd -u jana
+ - echo
+ - echo 'Installing {new|old}.interiordems.com web sites'
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/interiordems-conf.tgz --directory /etc/apache2/sites-available
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/interiordems.tgz --directory /var/www
+ - a2ensite 020_interiordems
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/oldinteriordems-conf.tgz --directory /etc/apache2/sites-available
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/oldinteriordems.tgz --directory /var/www
+ - a2ensite 010_oldinteriordems
+ - echo
+ - echo 'Adding mike@mike.lam1.us user, group and www Content'
+ - useradd --shell /bin/bash --create-home --groups users --uid 55501 mike
+ - usermod --groups users,mike mike
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/mike.tgz --directory /home
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/www-mike.tgz --directory /var/www
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/mike-conf.tgz --directory /etc/apache2/sites-available
+ - a2ensite 081_mike
+ - echo
+ - echo 'Installing arsc.lam1.us web site'
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/arsc-conf.tgz --directory /etc/apache2/sites-available
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/arsc.tgz --directory /var/www
+ - a2ensite 060_arsc
+ - echo
+ - echo 'Installing sites.lam1.us web site'
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/sites-conf.tgz --directory /etc/apache2/sites-available
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/sites.tgz --directory /var/www
+ - a2ensite 030_sites
+ - echo
+ - echo 'Installing cabo.lam1.us web site'
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/cabo-conf.tgz --directory /etc/apache2/sites-available
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/cabo.tgz --directory /var/www
+ - a2ensite 040_cabo
+ - echo
+ - echo 'Installing z.lam1.us web site'
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/z-conf.tgz --directory /etc/apache2/sites-available
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/z.tgz --directory /var/www
+ - a2ensite 050_z
+ - echo
+ - echo 'Installing aws.lam1.us web site'
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/aws-conf.tgz --directory /etc/apache2/sites-available
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/aws.tgz --directory /var/www
+ - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/080_aws.conf
+ - a2ensite 080_aws
+ - /var/www/aws/cloud-init.pl
+ - echo
+ - echo Adding blinkenshell www Content
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/blinkenshell.tgz --directory /var/www
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/blinkenshell-conf.tgz --directory /etc/apache2/sites-available
+ - a2ensite 051_blinkenshell
+ - echo
+ - echo Adding olnes www Content
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/olnes.tgz --directory /var/www
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/olnes-conf.tgz --directory /etc/apache2/sites-available
+ - a2ensite 052_olnes
+ - echo
+ - echo Adding alaskademocrat www Content
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/alaskademocrat.tgz --directory /var/www
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/alaskademocrat-conf.tgz --directory /etc/apache2/sites-available
+ - a2ensite 071_alaskademocrat
+ - echo
+ - echo '***** Final Initialization Steps *****'
+ - echo
+ - echo Refreshing lam database
+ - cp -r /home/ubuntu/.aws /root
+ - aws s3 cp s3://lamurakami/Bk-20-MySQL.lam.sql.gz - | gunzip -c | mysql --user=lam lam
+ - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz - | gunzip -c | mysql --user=lam wikidb
+ - sed -e "s|://aws.lam1.us|://lam1.duckdns.org|g" /var/www/html/A/LocalSettings.php > /tmp/LocalSettings.php
+ - mv /tmp/LocalSettings.php /var/www/html/A/LocalSettings.php
+ - systemctl restart apache2
+ - echo
+ - echo Updating lam1.duckdns.org IP address
+ - echo url="https://www.duckdns.org/update?domains=lam1&token=$(cat ~ubuntu/.duckdns)&verbose=true&ip=" | curl -s -k -K -
+ - echo " for lam1.duckdns.org IP address update"
+ - echo
+ - echo Add root alias so default AWS ubuntu user gets root mail
+ - ci -l -t-"Aliases for LAM AWS ubuntu web and shell server" /etc/aliases
+ - tar -xvzf /mnt/efs/aws-lam1-ubuntu/mailutils.tgz --directory /etc
+ - rcsdiff -U0 /etc/aliases
+ - newaliases
+ - echo
+ - echo List Installed Packages information
+ - dpkg -l
