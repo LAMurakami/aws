@@ -88,7 +88,7 @@ runcmd:
  - mkdir /etc/RCS
  - ci -l -t-"File System table for LAM AWS web and shell server" /etc/fstab
  - nfsOpt="nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
- - echo "fs-6f45fac6.efs.us-west-2.amazonaws.com:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
+ - echo "172.31.14.159:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
  - rcsdiff -U0 /etc/fstab
  - ci -l -m"Added nfs4 mount to AWS NW-O VPC Elastic File System" /etc/fstab
  - mount -a -t nfs4
@@ -113,12 +113,12 @@ runcmd:
  - ls -lF --time-style=long-iso /etc/localtime
  - echo
  - echo Installing ubuntu user bash resources
- - tar -xvzf /mnt/efs/aws-lam1-ubuntu/ubuntu.tgz --directory /home/ubuntu
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/ubuntu.tgz --directory /home/ubuntu
  - echo
  - echo '***** Secure site *****'
  - echo
  - echo 'Installing Let-s Encrypt certificates for TLS encryption (HTTPS)'
- - tar -xvzf /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz --directory /etc
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz --directory /etc
  - echo
  - echo 'Updating apache2 configuration for larryforalaska.com'
  - a2ensite default-ssl
@@ -145,7 +145,7 @@ runcmd:
  - sed -i 's|SSLCertificateKeyFile\(.*\)|SSLCertificateKeyFile /etc/letsencrypt/live/lamurakami.duckdns.org/privkey.pem|' /etc/apache2/sites-available/default-ssl.conf
  - echo
  - echo Adding LAM AWS web content
- - tar -xvzf /mnt/efs/aws-lam1-ubuntu/www.tgz --directory /var/www
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/www.tgz --directory /var/www
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/wiki.tgz --directory /var/www
  - chown -R ubuntu:ubuntu /var/www
  - mkdir /var/www/Multicount
@@ -187,8 +187,8 @@ runcmd:
  - a2ensite 060_arsc
  - echo
  - echo 'Installing sites.lam1.us web site'
- - tar -xvzf /mnt/efs/aws-lam1-ubuntu/sites-conf.tgz --directory /etc/apache2/sites-available
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/sites.tgz --directory /var/www
+ - ln -s /var/www/sites/sites_apache2.conf /etc/apache2/sites-available/030_sites.conf
  - a2ensite 030_sites
  - echo
  - echo 'Installing cabo.lam1.us web site'
