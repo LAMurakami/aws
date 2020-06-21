@@ -182,8 +182,8 @@ runcmd:
  - a2ensite 081_mike
  - echo
  - echo 'Installing arsc.lam1.us web site'
- - tar -xvzf /mnt/efs/aws-lam1-ubuntu/arsc-conf.tgz --directory /etc/apache2/sites-available
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/arsc.tgz --directory /var/www
+ - ln -s /var/www/arsc/arsc_apache2.conf /etc/apache2/sites-available/060_arsc.conf
  - a2ensite 060_arsc
  - echo
  - echo 'Installing sites.lam1.us web site'
@@ -192,8 +192,8 @@ runcmd:
  - a2ensite 030_sites
  - echo
  - echo 'Installing cabo.lam1.us web site'
- - tar -xvzf /mnt/efs/aws-lam1-ubuntu/cabo-conf.tgz --directory /etc/apache2/sites-available
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/cabo.tgz --directory /var/www
+ - ln -s /var/www/cabo/cabo_apache2.conf /etc/apache2/sites-available/040_cabo.conf
  - a2ensite 040_cabo
  - echo
  - echo 'Installing z.lam1.us web site'
@@ -202,7 +202,6 @@ runcmd:
  - a2ensite 050_z
  - echo
  - echo 'Installing aws.lam1.us web site'
- - tar -xvzf /mnt/efs/aws-lam1-ubuntu/aws-conf.tgz --directory /etc/apache2/sites-available
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/aws.tgz --directory /var/www
  - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/080_aws.conf
  - a2ensite 080_aws
