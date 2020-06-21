@@ -4,7 +4,7 @@
 # Tell cloud-init to log the output to a log file
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
-# $Id: aws-nwo-lam1-Ubuntu-CloudInit.txt,v 1.52 2020/06/12 01:05:56 lam Exp lam $
+# /var/www/aws/aws-nwo-lam1-Ubuntu-CloudInit.txt - Initialize lam1.duckdns.org
 #
 # https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
 
@@ -197,8 +197,8 @@ runcmd:
  - a2ensite 040_cabo
  - echo
  - echo 'Installing z.lam1.us web site'
- - tar -xvzf /mnt/efs/aws-lam1-ubuntu/z-conf.tgz --directory /etc/apache2/sites-available
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/z.tgz --directory /var/www
+ - ln -s /var/www/z/z_apache2.conf /etc/apache2/sites-available/050_z.conf
  - a2ensite 050_z
  - echo
  - echo 'Installing aws.lam1.us web site'
@@ -214,7 +214,7 @@ runcmd:
  - echo
  - echo Adding olnes www Content
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/olnes.tgz --directory /var/www
- - tar -xvzf /mnt/efs/aws-lam1-ubuntu/olnes-conf.tgz --directory /etc/apache2/sites-available
+ - ln -s /var/www/olnes/olnes_apache2.conf /etc/apache2/sites-available/052_olnes.conf
  - a2ensite 052_olnes
  - echo
  - echo Adding alaskademocrat www Content
