@@ -209,7 +209,7 @@ runcmd:
  - echo
  - echo Adding blinkenshell www Content
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/blinkenshell.tgz --directory /var/www
- - tar -xvzf /mnt/efs/aws-lam1-ubuntu/blinkenshell-conf.tgz --directory /etc/apache2/sites-available
+ - ln -s /var/www/blinkenshell/blinkenshell_apache2.conf /etc/apache2/sites-available/051_blinkenshell.conf
  - a2ensite 051_blinkenshell
  - echo
  - echo Adding olnes www Content
