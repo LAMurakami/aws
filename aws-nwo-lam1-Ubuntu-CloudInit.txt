@@ -19,14 +19,6 @@ bootcmd:
  - echo Report AWS EC2 metadata for this instance
  - ec2metadata | grep -v '^user-data'
  - echo
- - echo Report AWS EC2 user-data for this instance
- - curl -s http://169.254.169.254/latest/user-data
- - echo
- - echo 'Set hostname and localhost alias in /etc/hosts'
- - mv /etc/hosts /etc/hosts.old
- - sed '1s/localhost/lam1.lam1.us lam1 localhost/' /etc/hosts.old > /etc/hosts
- - diff -U0 /etc/hosts.old /etc/hosts
- - echo
 
 # Set hostname
 hostname: lam1
@@ -70,8 +62,6 @@ packages:
  - libapache2-mod-php
  - libapache2-mod-php7.2
  - php7.2-mbstring
- - roundcube
- - dovecot-imapd
  - x11-apps
  - leafpad
  - whois
@@ -81,6 +71,9 @@ ssh_authorized_keys:
  - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAYEAnNqVrt71AKSIMmSAIONBx4jIEK0IIZF5fSAaB9kI4oOK+t7aSTKAZwwgKHWJ536XFdR3Ql5Xi0r2CuUEf1GVEagAxLZTXRuim5UGmS63rfSxGwq9JQVg5WDbN5ilnGxSmqsD77SApvmffcO/T2zZWd+rrjMWWRi9zQwRdQRm60bc69ajJbjIJd8SCXIggUPzTkUz5Sca7dhdffcMpGR9bdexFln+YSli1ohtvs2zVBM4ncpufGS+Auax8+gQNr32QeSszlKuKsXYorZ9gl+Z8s62mX5yCXIrH2hWoHsCTUX38iVM8/wI6sPVosarkng7mPOOQLy5k50Y0cb9FRQGlrvmQqsc3fI7tC1fblhKL0HaY844kIZRHwFuOI04ik+b8Swdjed6+FH/RIKppuOY+qfdmv8gcX4ZhpbKg+JN+u5Xy5awpUFqhsbBdCz0MvLNPKEbDNCFokX8nL0HqGeABk2DOJ1+IOFz5pIiCL31LTVGTQ0AwXp3nkaHZykJNrcB Authentication from lam@laptop.lam1.us
 
 runcmd:
+ - echo
+ - echo 'Report AWS EC2 user-data for this instance (CloudInit directives)'
+ - curl -s http://169.254.169.254/latest/user-data
  - echo
  - echo Adding nfs4 mount to AWS NW-O VPC Elastic File System
  - mkdir /mnt/efs
@@ -92,6 +85,11 @@ runcmd:
  - rcsdiff -U0 /etc/fstab
  - ci -l -m"Added nfs4 mount to AWS NW-O VPC Elastic File System" /etc/fstab
  - mount -a -t nfs4
+ - echo
+ - echo 'Set hostname and localhost alias in /etc/hosts'
+ - ci -l -t-"Hosts table for LAM AWS web and shell server" /etc/hosts
+ - sed -i '1s/localhost/lam1.lam1.us lam1 localhost/' /etc/hosts
+ - rcsdiff -U0 /etc/hosts
  - echo
  - echo 'Installing GNU which v2.21 compiled for Ubuntu Server 16.04'
  - tar -xvzf /mnt/efs/aws-lam1-ubuntu/which.tgz --directory /usr/local
@@ -235,6 +233,9 @@ runcmd:
  - echo Updating lam1.duckdns.org IP address
  - echo url="https://www.duckdns.org/update?domains=lam1&token=$(cat ~ubuntu/.duckdns)&verbose=true&ip=" | curl -s -k -K -
  - echo " for lam1.duckdns.org IP address update"
+ - echo
+ - echo Install dovecot-imapd after /etc/hosts has been configured
+ - apt-get install --yes dovecot-imapd
  - echo
  - echo Add root alias so default AWS ubuntu user gets root mail
  - ci -l -t-"Aliases for LAM AWS ubuntu web and shell server" /etc/aliases
