@@ -118,7 +118,7 @@ runcmd:
  - echo 'Installing Let-s Encrypt certificates for TLS encryption (HTTPS)'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz --directory /etc
  - echo
- - echo 'Updating apache2 configuration for larryforalaska.com'
+ - echo 'Updating apache2 configuration for lam1'
  - a2ensite default-ssl
  - a2enmod ssl
  - a2enmod info
@@ -219,6 +219,12 @@ runcmd:
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/alaskademocrat.tgz --directory /var/www
  - tar -xvzf /mnt/efs/aws-lam1-ubuntu/alaskademocrat-conf.tgz --directory /etc/apache2/sites-available
  - a2ensite 071_alaskademocrat
+ - echo
+ - echo
+ - echo Adding larryforalaska www Content
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/larryforalaska.tgz --directory /var/www
+ - ln -s /var/www/larryforalaska/larryforalaska_apache2.conf /etc/apache2/sites-available/070_larryforalaska.conf
+ - a2ensite 070_larryforalaska
  - echo
  - echo '***** Final Initialization Steps *****'
  - echo
