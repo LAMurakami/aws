@@ -164,19 +164,19 @@ runcmd:
  - passwd -u jana
  - echo
  - echo 'Installing {new|old}.interiordems.com web sites'
- - tar -xvzf /mnt/efs/aws-lam1-ubuntu/interiordems-conf.tgz --directory /etc/apache2/sites-available
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/interiordems.tgz --directory /var/www
+ - ln -s /var/www/interiordems/interiordems_apache2.conf /etc/apache2/sites-available/020_interiordems.conf
  - a2ensite 020_interiordems
- - tar -xvzf /mnt/efs/aws-lam1-ubuntu/oldinteriordems-conf.tgz --directory /etc/apache2/sites-available
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/oldinteriordems.tgz --directory /var/www
+ - ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf /etc/apache2/sites-available/010_oldinteriordems.conf
  - a2ensite 010_oldinteriordems
  - echo
  - echo 'Adding mike@mike.lam1.us user, group and www Content'
  - useradd --shell /bin/bash --create-home --groups users --uid 55501 mike
  - usermod --groups users,mike mike
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/mike.tgz --directory /home
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/www-mike.tgz --directory /var/www
- - tar -xvzf /mnt/efs/aws-lam1-ubuntu/mike-conf.tgz --directory /etc/apache2/sites-available
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/mike-www.tgz --directory /var/www
+ - ln -s /var/www/mike/mike_apache2.conf /etc/apache2/sites-available/081_mike.conf
  - a2ensite 081_mike
  - echo
  - echo 'Installing arsc.lam1.us web site'
@@ -217,9 +217,8 @@ runcmd:
  - echo
  - echo Adding alaskademocrat www Content
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/alaskademocrat.tgz --directory /var/www
- - tar -xvzf /mnt/efs/aws-lam1-ubuntu/alaskademocrat-conf.tgz --directory /etc/apache2/sites-available
+ - ln -s /var/www/alaskademocrat/alaskademocrat_apache2.conf /etc/apache2/sites-available/071_alaskademocrat.conf
  - a2ensite 071_alaskademocrat
- - echo
  - echo
  - echo Adding larryforalaska www Content
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/larryforalaska.tgz --directory /var/www
