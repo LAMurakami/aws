@@ -20,12 +20,12 @@ content in a html/ subdirectory as outlined below:
 
 /var/www/aws/
          |-- aws-nwo-lam1-Ubuntu-CloudInit.txt
-         |-- apache2.conf
          |-- cloud-init.pl
          |-- <site>_apache2.conf
          |-- <site>_archive_rebuild.bash
          |-- html/                     DocumentRoot /var/www/aws/html/
 /var/www/no-ssl/
+         |-- apache2.conf
          |-- Implement_no-ssl_conf.bash
          |-- Implement_more_sites_conf.bash
          |-- Implement_more_apache2_stuff.bash
