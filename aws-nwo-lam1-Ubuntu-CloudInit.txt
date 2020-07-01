@@ -19,6 +19,8 @@ bootcmd:
  - echo Report AWS EC2 metadata for this instance
  - ec2metadata | grep -v '^user-data'
  - echo
+ - echo List Installed Packages information
+ - dpkg -l
 
 # Set hostname
 hostname: lam1
@@ -119,33 +121,31 @@ runcmd:
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz --directory /etc
  - echo
  - echo 'Updating apache2 configuration for lam1'
- - a2ensite default-ssl
  - a2enmod ssl
  - a2enmod info
  - a2enmod authz_groupfile.load
  - a2enmod rewrite
  - a2enmod cgi
- - mkdir /etc/apache2/sites-available/RCS
- - ci -t-"Default site configuration for LAM AWS web" /etc/apache2/sites-available/000-default.conf
- - ci -t-"SSL site configuration for LAM AWS web" /etc/apache2/sites-available/default-ssl.conf
  - mkdir /etc/apache2/mods-available/RCS
  - ci -t-"Apache aliases configuration for LAM AWS web" /etc/apache2/mods-available/alias.conf
  - ci -t-"Apache autoindex configuration for LAM AWS web" /etc/apache2/mods-available/autoindex.conf
  - ci -t-"Apache Directory index configuration for LAM AWS web" /etc/apache2/mods-available/dir.conf
+ - ci -t-"Apache server-info configuration for LAM AWS web" /etc/apache2/mods-available/info.conf
+ - ci -t-"Apache server-status configuration for LAM AWS web" /etc/apache2/mods-available/status.conf
  - mkdir /etc/apache2/RCS
- - ci -l -t-"Apache2 main configuration for LAM AWS web" /etc/apache2/apache2.conf
- - tar -xvzf /mnt/efs/aws-lam1-ubuntu/apache2.tgz --directory /etc
- - ci -l -m"Update from default to LAM AWS web configuration" /etc/apache2/apache2.conf
- - sed -i "s|aws|lam1|" /etc/apache2/apache2.conf
+ - ci -t-"Apache2 main configuration for LAM AWS web" /etc/apache2/apache2.conf
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/no-ssl.tgz --directory /var/www
+ - /var/www/no-ssl/Implement_no-ssl_conf.bash
+ - /var/www/no-ssl/Implement_more_apache2_stuff.bash
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/lam.tgz --directory /var/www
+ - /var/www/lam/Implement_lam_conf.bash
  - echo
  - echo 'Updating apache2 configuration for *.duckdns.org SSL cert'
- - sed -i "s|SSLCertificateFile\(.*\)|SSLCertificateFile /etc/letsencrypt/live/lamurakami.duckdns.org/fullchain.pem|" /etc/apache2/sites-available/default-ssl.conf
- - sed -i 's|SSLCertificateKeyFile\(.*\)|SSLCertificateKeyFile /etc/letsencrypt/live/lamurakami.duckdns.org/privkey.pem|' /etc/apache2/sites-available/default-ssl.conf
+ - sed -i "s|SSLCertificateFile\(.*\)|SSLCertificateFile /etc/letsencrypt/live/lamurakami.duckdns.org/fullchain.pem|" /var/www/lam/lam_apache2.conf
+ - sed -i 's|SSLCertificateKeyFile\(.*\)|SSLCertificateKeyFile /etc/letsencrypt/live/lamurakami.duckdns.org/privkey.pem|' /var/www/lam/lam_apache2.conf
  - echo
- - echo Adding LAM AWS web content
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/www.tgz --directory /var/www
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/wiki.tgz --directory /var/www
- - chown -R ubuntu:ubuntu /var/www
+ - echo 'Update from default to LAM AWS lam1 web configuration'
+ - sed -i "s|aws|lam1|" /var/www/no-ssl/apache2.conf
  - mkdir /var/www/Multicount
  - chown www-data:www-data /var/www/Multicount
  - echo
@@ -231,8 +231,8 @@ runcmd:
  - cp -r /home/ubuntu/.aws /root
  - aws s3 cp s3://lamurakami/Bk-20-MySQL.lam.sql.gz - | gunzip -c | mysql --user=lam lam
  - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz - | gunzip -c | mysql --user=lam wikidb
- - sed -e "s|://aws.lam1.us|://lam1.duckdns.org|g" /var/www/html/A/LocalSettings.php > /tmp/LocalSettings.php
- - mv /tmp/LocalSettings.php /var/www/html/A/LocalSettings.php
+ - sed -e "s|://aws.lam1.us|://lam1.duckdns.org|g" /var/www/lam/html/A/LocalSettings.php > /tmp/LocalSettings.php
+ - mv /tmp/LocalSettings.php /var/www/lam/html/A/LocalSettings.php
  - systemctl restart apache2
  - echo
  - echo Updating lam1.duckdns.org IP address
