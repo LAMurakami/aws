@@ -1,4 +1,4 @@
-Linux Apache MariaDB in the cloud
+# Linux Apache MariaDB in the cloud
 accessed by IP Address website for the
 [lamurakami.duckdns.org](http://lamurakami.duckdns.org/)
 [lam1.duckdns.org](http://lam1.duckdns.org/)
@@ -6,40 +6,88 @@ accessed by IP Address website for the
 [larryforalaska.duckdns.org](http://larryforalaska.duckdns.org/)
 Dynamic Domain Name Service subdomains possibly being served by the instance.
 
-This repo contains content in the html folder and an apache2 configuration
-that can be implemented with:
+This repo contains content in the html folder and an apache2 configuration.
 
- sudo ln -s /var/www/aws/aws_apache2.conf \
- /etc/apache2/sites-available/080_aws.conf
+Content (DocumentRoot) is now at /var/www/<site>/html for all sites and
+configuration and supporting files within /var/www/<site> but not the
+DocumentRoot.
 
- sudo a2ensite 080_aws
- sudo systemctl reload apache2
+The LAM AWS EC2 lam1 CloudInit builds a LAMP model web service software
+stack instance from the Latest Ubuntu Server image available.
+The configuration and content is split into several sub directories of
+/var/www/ with each being a separate git repository.  Each repo has the
+content in a html/ subdirectory as outlined below:
 
-If the repo contents are installed in a location other than /var/www
-the path in the configuration and in the instuctions would have to be modified.
+/var/www/aws/
+         |-- aws-nwo-lam1-Ubuntu-CloudInit.txt
+         |-- apache2.conf
+         |-- cloud-init.pl
+         |-- <site>_apache2.conf
+         |-- <site>_archive_rebuild.bash
+         |-- html/                     DocumentRoot /var/www/aws/html/
+/var/www/no-ssl/
+         |-- Implement_no-ssl_conf.bash
+         |-- Implement_more_sites_conf.bash
+         |-- Implement_more_apache2_stuff.bash
+         |-- <site>_apache2.conf
+         |-- <site>_archive_rebuild.bash
+         |-- html/                     DocumentRoot /var/www/no-ssl/html/
+             |-- Public/
+                 |-- Scripts/
+/var/www/<additional-sites>/
+         |-- <site>_apache2.conf
+         |-- <site>_archive_rebuild.bash
+         |-- html/                     DocumentRoot /var/www/<additional-sites>/html/
+/var/www/lam/
+         |-- Implement_lam_conf.bash
+         |-- <site>_apache2.conf
+         |-- <site>_archive_rebuild.bash
+         |-- .ht{group,passwd}
+         |-- data/
+         |-- html/                     DocumentRoot /var/www/lam/html/
+             |-- Private/
+                 |-- Scripts/
 
-The aws_archive_rebuild.bash script will Rebuild an archive of /var/www/aws
-resources when they change.  It is intended to be run daily with:
+* Implement* These four scripts will implement the configuration when run
+with root (sudo) permissions.
 
- ln -s /var/www/aws/aws_archive_rebuild.bash /mnt/efs/aws-lam1-ubuntu/aws
+* aws-nwo-lam1-Ubuntu-CloudInit.txt is the configuration for the initializaton
+of the instance during the first and subsequent boots.  During the first boot
+it updates all the installed packages and then installs additional packages
+to support LAMP model web services including a MediaWiki installation.
+It modifies the File System Table so that a LAM AWS Elastic File System (EFS)
+instance shared with all the LAM AWS EC2 instances is mounted by nfs4.
+The site subdirectories and additional software is installed from tgz
+archives on this persistant shared filesystem.
 
-This would then be picked up by the Daily cron job to backup
-/mnt/efs/aws-lam1-ubuntu archives.
+* apache2.conf is the main apache2 configuration file.  The /Public alias is
+included here allowing no-ssl/html/Public/ content to be accessed from any
+site and a set of /var/www/no-ssl/html/Public/Scripts Directory directives
+defining .cgi-pl as scripts to be accessed from any site.
+A set of custom error handlers are also defined here.
 
- $ cat /etc/cron.daily/Bk-20-aws-changes
- #!/bin/bash
- run-parts --report /mnt/efs/aws-lam1-ubuntu
- [19:34:30 Sunday 06/14/2020] ubuntu@aws
+* cloud-init.pl applies the public-hostname, public-ipv4, local-hostname and
+local-ipv4 values from the /var/log/cloud-init-output.log to the
+/var/www/aws/html/index.html and /var/www/aws/aws_apache2.conf files so the
+Dynamic Domain Name Service page is displayed when the AWS public domain name
+or IP address is visited.
 
-A new instance can be launched from the command line with the following:
+* <site>_apache2.conf is the site apache2 configuration file.  The LAM AWS
+EC2 LAMP instance does not support .htaccess files.  The <site>_apache2.conf
+file is linked into /etc/apache2/sites-available and then enabled with
+a2ensite in the Implement_more_sites_conf.bash script which also assigns
+a three digit numerical order for the sites.  Force apache2 to read any
+changes in configuration files with:
+ systemctl reload apache2
 
- aws ec2 run-instances --count 1 --image-id ami-003634241a8fcdec0 \
- --instance-type t3.nano --security-group-ids sg-3bda0647 \
- --associate-public-ip-address --key-name aws-nwo-lam1 --user-data \
- file:///var/www/aws/aws-nwo-lam1-Ubuntu-CloudInit.txt
-
-The CloudInit includes a call to and cloud-init.pl which updates
-/var/www/aws/html/index.html and /var/www/aws/aws_apache2.conf
-based on some /var/log/cloud-init-output.log values generated
-by /var/www/aws/aws-nwo-lam1-Ubuntu-CloudInit.txt directives.
-
+* <site>_archive_rebuild.bash is a script to rebuild a tar archive if anything
+has changed since the archive was last rebuilt.  By not rebuilding the archive
+if nothing has changed the data transmitted to a remote copy of the backups is
+reduced.  The whole archive will be transmitted if any file changes but the
+archive is compressed.  The archive rebuild should only be run on the master
+system and not on clones.  The script is linked into the backup directory with:
+ ln -s /var/www/${REPO}/${REPO}_archive_rebuild.bash \
+ /mnt/efs/aws-lam1-ubuntu/${REPO}
+The script will only run if the archive file already exists as it is used as
+the Newer reference.  Create a zero byte archive file with an old date with:
+ touch -d 1955-05-20 /mnt/efs/aws-lam1-ubuntu/${REPO}.tgz
