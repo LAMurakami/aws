@@ -91,3 +91,7 @@ system and not on clones.  The script is linked into the backup directory with:
 The script will only run if the archive file already exists as it is used as
 the Newer reference.  Create a zero byte archive file with an old date with:
  touch -d 1955-05-20 /mnt/efs/aws-lam1-ubuntu/${REPO}.tgz
+
+* site_perl-LAM contains perl modules to be linked into site_perl.
+The modules simplify a number of cgi perl routines used in both Public
+and Private scripts of the sites.
