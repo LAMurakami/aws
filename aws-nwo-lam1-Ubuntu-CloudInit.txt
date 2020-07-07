@@ -149,9 +149,6 @@ runcmd:
  - mkdir /var/www/Multicount
  - chown www-data:www-data /var/www/Multicount
  - echo
- - echo Installing LAM Common Gateway Interface Perl modules
- - tar -xvzf /mnt/efs/aws-lam1-ubuntu/perl-LAM.tgz --directory /usr/local
- - echo
  - echo 'Creating {lam|Mediawiki} database and user'
  - mysql  --table < /mnt/efs/aws-lam1-ubuntu/lam-user.sql
  - echo
