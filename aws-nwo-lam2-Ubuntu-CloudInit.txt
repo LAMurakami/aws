@@ -54,7 +54,6 @@ packages:
  - nfs-common
  - awscli
  - mailutils
- - man2html
  - swish++
  - libio-captureoutput-perl
  - libcgi-pm-perl
@@ -64,7 +63,6 @@ packages:
  - php-gd
  - texlive
  - php-xml*
- - php7.2-xml
  - lynx
  - apache2-doc
  - libapache2-mod-perl2
@@ -74,13 +72,11 @@ packages:
  - mariadb-client
  - mariadb-server
  - php-mysql
- - php7.2-mysql
  - libapache2-mod-php
- - libapache2-mod-php7.2
- - php7.2-mbstring
  - x11-apps
- - leafpad
  - whois
+ - libgtk2.0-0
+ - mlocate
 
 ssh_import_is: [ubuntu]
 ssh_authorized_keys:
@@ -106,6 +102,10 @@ runcmd:
  - ci -l -t-"Hosts table for LAM AWS web and shell server" /etc/hosts
  - sed -i '1s/localhost/lam2.lam1.us lam2 localhost/' /etc/hosts
  - rcsdiff -U0 /etc/hosts
+ - echo
+ - echo 'Installing leafpad compiled for Ubuntu Server 20.04'
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/leafpad-Ubuntu-20-04.tgz --directory /usr/local
+ - file /usr/local/bin/leafpad
  - echo
  - echo 'Installing GNU which v2.21 compiled for Ubuntu Server 16.04'
  - tar -xvzf /mnt/efs/aws-lam1-ubuntu/which.tgz --directory /usr/local
@@ -246,6 +246,9 @@ runcmd:
  - tar -xvzf /mnt/efs/aws-lam1-ubuntu/mailutils.tgz --directory /etc
  - rcsdiff -U0 /etc/aliases
  - newaliases
+ - echo
+ - echo Install man2html after apache has been configured
+ - apt-get install -y man2html
  - echo
  - echo List Installed Packages information
  - dpkg -l

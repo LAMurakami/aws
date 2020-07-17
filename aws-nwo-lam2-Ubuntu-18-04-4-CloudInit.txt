@@ -4,7 +4,21 @@
 # Tell cloud-init to log the output to a log file
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
-# /var/www/aws/aws-nwo-lam1-Ubuntu-CloudInit.txt - Initialize lam1.duckdns.org
+# /var/www/aws/aws-nwo-lam2-Ubuntu-CloudInit.txt - Initialize lam2.duckdns.org
+#
+# The lam2 instance was designed to be a SSH SOCKS5 Proxy server on port 443
+# Port 443 is normally used for HTTPS so is likely to be available even when
+# other ports are blocked.
+# The CloudInit directives are a fork of the lam1 directives with a new
+# host name that takes over the lam2 DDNS sites instead of the lam1 sites.
+# The lam1 http sites are all installed so this instance can check in as
+# lam1 and support all but the https site.
+# The ssl module of apache2 is not loaded so that the sshd can listen on
+# port 443, Let's Encrypt certificates are not installed and the default
+# info and status modules are invoked instead of the modified version that
+# serve authenticated users on the secure site.
+# The /var/www/lam (ssl site) directory is installed but the site is not
+# enabled.  The databeses for the secure site are not installed.
 #
 # https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
 
@@ -23,7 +37,7 @@ bootcmd:
  - dpkg -l
 
 # Set hostname
-hostname: lam1
+hostname: lam2
 
 # Set timezone
 timezone: US/Alaska
@@ -40,6 +54,7 @@ packages:
  - nfs-common
  - awscli
  - mailutils
+ - man2html
  - swish++
  - libio-captureoutput-perl
  - libcgi-pm-perl
@@ -49,6 +64,7 @@ packages:
  - php-gd
  - texlive
  - php-xml*
+ - php7.2-xml
  - lynx
  - apache2-doc
  - libapache2-mod-perl2
@@ -58,11 +74,13 @@ packages:
  - mariadb-client
  - mariadb-server
  - php-mysql
+ - php7.2-mysql
  - libapache2-mod-php
+ - libapache2-mod-php7.2
+ - php7.2-mbstring
  - x11-apps
+ - leafpad
  - whois
- - libgtk2.0-0
- - mlocate
 
 ssh_import_is: [ubuntu]
 ssh_authorized_keys:
@@ -86,12 +104,8 @@ runcmd:
  - echo
  - echo 'Set hostname and localhost alias in /etc/hosts'
  - ci -l -t-"Hosts table for LAM AWS web and shell server" /etc/hosts
- - sed -i '1s/localhost/lam1.lam1.us lam1 localhost/' /etc/hosts
+ - sed -i '1s/localhost/lam2.lam1.us lam2 localhost/' /etc/hosts
  - rcsdiff -U0 /etc/hosts
- - echo
- - echo 'Installing leafpad compiled for Ubuntu Server 20.04'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/leafpad-Ubuntu-20-04.tgz --directory /usr/local
- - file /usr/local/bin/leafpad
  - echo
  - echo 'Installing GNU which v2.21 compiled for Ubuntu Server 16.04'
  - tar -xvzf /mnt/efs/aws-lam1-ubuntu/which.tgz --directory /usr/local
@@ -107,6 +121,9 @@ runcmd:
  - tar -xvzf /mnt/efs/aws-lam1-ubuntu/sshd_config.tgz --directory /etc/ssh
  - rcsdiff -U0 /etc/ssh/sshd_config
  - ci -l -m"Listen for ssh connections on alternate port 55520 and add ssh Banner" /etc/ssh/sshd_config
+ - mv /etc/ssh/sshd_config /tmp
+ - /mnt/efs/aws-lam1-ubuntu/sshd_config-add-port-443.sed /tmp/sshd_config > /etc/ssh/sshd_config
+ - rcsdiff -U0 /etc/ssh/sshd_config
  - systemctl restart sshd
  - echo
  - echo Check US Alaska local time for this system
@@ -115,14 +132,11 @@ runcmd:
  - echo Installing ubuntu user bash resources
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/ubuntu.tgz --directory /home/ubuntu
  - echo
- - echo '***** Secure site *****'
+ - echo '***** http sites *****'
  - echo
- - echo 'Installing Let-s Encrypt certificates for TLS encryption (HTTPS)'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz --directory /etc
- - echo
- - echo 'Updating apache2 configuration for lam1'
- - a2enmod ssl
+ - echo 'Updating apache2 configuration for lam2'
  - a2enmod info
+ - a2enmod status
  - a2enmod authz_groupfile.load
  - a2enmod rewrite
  - a2enmod cgi
@@ -130,27 +144,21 @@ runcmd:
  - ci -t-"Apache aliases configuration for LAM AWS web" /etc/apache2/mods-available/alias.conf
  - ci -t-"Apache autoindex configuration for LAM AWS web" /etc/apache2/mods-available/autoindex.conf
  - ci -t-"Apache Directory index configuration for LAM AWS web" /etc/apache2/mods-available/dir.conf
- - ci -t-"Apache server-info configuration for LAM AWS web" /etc/apache2/mods-available/info.conf
- - ci -t-"Apache server-status configuration for LAM AWS web" /etc/apache2/mods-available/status.conf
  - mkdir /etc/apache2/RCS
  - ci -t-"Apache2 main configuration for LAM AWS web" /etc/apache2/apache2.conf
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/no-ssl.tgz --directory /var/www
  - /var/www/no-ssl/Implement_no-ssl_conf.bash
  - /var/www/no-ssl/Implement_more_apache2_stuff.bash
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/lam.tgz --directory /var/www
- - /var/www/lam/Implement_lam_conf.bash
  - echo
  - echo 'Updating apache2 configuration for *.duckdns.org SSL cert'
  - sed -i "s|SSLCertificateFile\(.*\)|SSLCertificateFile /etc/letsencrypt/live/lamurakami.duckdns.org/fullchain.pem|" /var/www/lam/lam_apache2.conf
  - sed -i 's|SSLCertificateKeyFile\(.*\)|SSLCertificateKeyFile /etc/letsencrypt/live/lamurakami.duckdns.org/privkey.pem|' /var/www/lam/lam_apache2.conf
  - echo
- - echo 'Update from default to LAM AWS lam1 web configuration'
- - sed -i "s|aws|lam1|" /var/www/no-ssl/apache2.conf
+ - echo 'Update from default to LAM AWS lam2 web configuration'
+ - sed -i "s|aws|lam2|" /var/www/no-ssl/apache2.conf
  - mkdir /var/www/Multicount
  - chown www-data:www-data /var/www/Multicount
- - echo
- - echo 'Creating {lam|Mediawiki} database and user'
- - mysql  --table < /mnt/efs/aws-lam1-ubuntu/lam-user.sql
  - echo
  - echo '***** Additional sites *****'
  - echo
@@ -224,17 +232,11 @@ runcmd:
  - echo
  - echo '***** Final Initialization Steps *****'
  - echo
- - echo Refreshing lam database
- - cp -r /home/ubuntu/.aws /root
- - aws s3 cp s3://lamurakami/Bk-20-MySQL.lam.sql.gz - | gunzip -c | mysql --user=lam lam
- - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz - | gunzip -c | mysql --user=lam wikidb
- - sed -e "s|://aws.lam1.us|://lam1.duckdns.org|g" /var/www/lam/html/A/LocalSettings.php > /tmp/LocalSettings.php
- - mv /tmp/LocalSettings.php /var/www/lam/html/A/LocalSettings.php
  - systemctl restart apache2
  - echo
- - echo Updating lam1.duckdns.org IP address
- - echo url="https://www.duckdns.org/update?domains=lam1&token=$(cat ~ubuntu/.duckdns)&verbose=true&ip=" | curl -s -k -K -
- - echo " for lam1.duckdns.org IP address update"
+ - echo Updating lam2.duckdns.org IP address
+ - echo url="https://www.duckdns.org/update?domains=lam2&token=$(cat ~ubuntu/.duckdns)&verbose=true&ip=" | curl -s -k -K -
+ - echo " for lam2.duckdns.org IP address update"
  - echo
  - echo Install dovecot-imapd after /etc/hosts has been configured
  - apt-get install --yes dovecot-imapd
@@ -244,9 +246,6 @@ runcmd:
  - tar -xvzf /mnt/efs/aws-lam1-ubuntu/mailutils.tgz --directory /etc
  - rcsdiff -U0 /etc/aliases
  - newaliases
- - echo
- - echo Install man2html after apache has been configured
- - apt-get install -y man2html
  - echo
  - echo List Installed Packages information
  - dpkg -l
