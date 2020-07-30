@@ -25,7 +25,7 @@ content in a html/ subdirectory as outlined below:
          |-- cloud-init.pl
          |-- &lt;site&gt;_apache2.conf
          |-- &lt;site&gt;_archive_rebuild.bash
-         |-- html/                     DocumentRoot /var/www/aws/html/
+         |-- html/           DocumentRoot /var/www/aws/html/
 /var/www/no-ssl/
          |-- apache2.conf
          |-- Implement_no-ssl_conf.bash
@@ -33,20 +33,20 @@ content in a html/ subdirectory as outlined below:
          |-- Implement_more_apache2_stuff.bash
          |-- &lt;site&gt;_apache2.conf
          |-- &lt;site&gt;_archive_rebuild.bash
-         |-- html/                     DocumentRoot /var/www/no-ssl/html/
+         |-- html/           DocumentRoot /var/www/no-ssl/html/
              |-- Public/
                  |-- Scripts/
 /var/www/&lt;additional-sites&gt;/
          |-- &lt;site&gt;_apache2.conf
          |-- &lt;site&gt;_archive_rebuild.bash
-         |-- html/                     DocumentRoot /var/www/&lt;additional-sites&gt;/html/
+         |-- html/           DocumentRoot /var/www/&lt;additional-sites&gt;/html/
 /var/www/lam/
          |-- Implement_lam_conf.bash
          |-- &lt;site&gt;_apache2.conf
          |-- &lt;site&gt;_archive_rebuild.bash
          |-- .ht{group,passwd}
          |-- data/
-         |-- html/                     DocumentRoot /var/www/lam/html/
+         |-- html/           DocumentRoot /var/www/lam/html/
              |-- Private/
                  |-- Scripts/</pre>
 
