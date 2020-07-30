@@ -8,8 +8,8 @@ Dynamic Domain Name Service subdomains possibly being served by the instance.
 
 This repo contains content in the html folder and an apache2 configuration.
 
-Content (DocumentRoot) is now at /var/www/<site>/html for all sites and
-configuration and supporting files within /var/www/<site> but not the
+Content (DocumentRoot) is now at /var/www/&lt;site&gt;/html for all sites and
+configuration and supporting files within /var/www/&lt;site&gt; but not the
 DocumentRoot.
 
 The LAM AWS EC2 lam1 CloudInit builds a LAMP model web service software
