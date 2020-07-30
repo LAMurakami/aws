@@ -36,7 +36,7 @@ content in a html/ subdirectory as outlined below:
          |-- html/                     DocumentRoot /var/www/no-ssl/html/
              |-- Public/
                  |-- Scripts/
-/var/www/<additional-sites>/
+/var/www/&lt;additional-sites&gt;/
          |-- <site>_apache2.conf
          |-- <site>_archive_rebuild.bash
          |-- html/                     DocumentRoot /var/www/<additional-sites>/html/
