@@ -18,7 +18,7 @@ The configuration and content is split into several sub directories of
 /var/www/ with each being a separate git repository.  Each repo has the
 content in a html/ subdirectory as outlined below:
 
-/var/www/aws/
+<pre>/var/www/aws/
          |-- aws-nwo-lam1-Ubuntu-CloudInit.txt
          |-- cloud-init.pl
          |-- <site>_apache2.conf
@@ -46,7 +46,7 @@ content in a html/ subdirectory as outlined below:
          |-- data/
          |-- html/                     DocumentRoot /var/www/lam/html/
              |-- Private/
-                 |-- Scripts/
+                 |-- Scripts/</pre>
 
 * Implement* These four scripts will implement the configuration when run
 with root (sudo) permissions.
