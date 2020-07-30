@@ -23,27 +23,27 @@ content in a html/ subdirectory as outlined below:
 <pre>/var/www/aws/
          |-- aws-nwo-lam1-Ubuntu-CloudInit.txt
          |-- cloud-init.pl
-         |-- <site>_apache2.conf
-         |-- <site>_archive_rebuild.bash
+         |-- &lt;site&gt;_apache2.conf
+         |-- &lt;site&gt;_archive_rebuild.bash
          |-- html/                     DocumentRoot /var/www/aws/html/
 /var/www/no-ssl/
          |-- apache2.conf
          |-- Implement_no-ssl_conf.bash
          |-- Implement_more_sites_conf.bash
          |-- Implement_more_apache2_stuff.bash
-         |-- <site>_apache2.conf
-         |-- <site>_archive_rebuild.bash
+         |-- &lt;site&gt;_apache2.conf
+         |-- &lt;site&gt;_archive_rebuild.bash
          |-- html/                     DocumentRoot /var/www/no-ssl/html/
              |-- Public/
                  |-- Scripts/
 /var/www/&lt;additional-sites&gt;/
-         |-- <site>_apache2.conf
-         |-- <site>_archive_rebuild.bash
-         |-- html/                     DocumentRoot /var/www/<additional-sites>/html/
+         |-- &lt;site&gt;_apache2.conf
+         |-- &lt;site&gt;_archive_rebuild.bash
+         |-- html/                     DocumentRoot /var/www/&lt;additional-sites&gt;/html/
 /var/www/lam/
          |-- Implement_lam_conf.bash
-         |-- <site>_apache2.conf
-         |-- <site>_archive_rebuild.bash
+         |-- &lt;site&gt;_apache2.conf
+         |-- &lt;site&gt;_archive_rebuild.bash
          |-- .ht{group,passwd}
          |-- data/
          |-- html/                     DocumentRoot /var/www/lam/html/
@@ -74,15 +74,15 @@ local-ipv4 values from the /var/log/cloud-init-output.log to the
 Dynamic Domain Name Service page is displayed when the AWS public domain name
 or IP address is visited.
 
-* <site>_apache2.conf is the site apache2 configuration file.  The LAM AWS
-EC2 LAMP instance does not support .htaccess files.  The <site>_apache2.conf
+* &lt;site&gt;_apache2.conf is the site apache2 configuration file.  The LAM AWS
+EC2 LAMP instance does not support .htaccess files.  The &lt;site&gt;_apache2.conf
 file is linked into /etc/apache2/sites-available and then enabled with
 a2ensite in the Implement_more_sites_conf.bash script which also assigns
 a three digit numerical order for the sites.  Force apache2 to read any
 changes in configuration files with:
  systemctl reload apache2
 
-* <site>_archive_rebuild.bash is a script to rebuild a tar archive if anything
+* &lt;site&gt;_archive_rebuild.bash is a script to rebuild a tar archive if anything
 has changed since the archive was last rebuilt.  By not rebuilding the archive
 if nothing has changed the data transmitted to a remote copy of the backups is
 reduced.  The whole archive will be transmitted if any file changes but the
