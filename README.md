@@ -12,7 +12,9 @@ Content (DocumentRoot) is now at /var/www/&lt;site&gt;/html for all sites and
 configuration and supporting files within /var/www/&lt;site&gt; but not the
 DocumentRoot.
 
-The LAM AWS EC2 lam1 CloudInit builds a LAMP model web service software
+The LAM AWS EC2 lam1 CloudInit builds a
+[LAMP](https://en.wikipedia.org/wiki/LAMP_(software_bundle))
+model web service software
 stack instance from the Latest Ubuntu Server image available.
 The configuration and content is split into several sub directories of
 /var/www/ with each being a separate git repository.  Each repo has the
