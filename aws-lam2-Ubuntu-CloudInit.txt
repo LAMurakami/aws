@@ -1,0 +1,181 @@
+
+#cloud-config
+
+# Tell cloud-init to log the output to a log file
+output: {all: '| tee -a /var/log/cloud-init-output.log'}
+
+# /var/www/aws/aws-nwo-lam2-Ubuntu-CloudInit.txt - Initialize lam2.duckdns.org
+#
+# This version uses only Public GitHub repos for the configuration and content.
+# It does not check in to lam2.duckdns.org because that requires a token
+# that is not available in public repos.  The Public & Domain Name can be used
+# to access the server and the Private IP can be used from within the VPC.
+#
+# The lam2 instance was designed to be a SSH SOCKS5 Proxy server on port 443
+# Port 443 is normally used for HTTPS so is likely to be available even when
+# other ports are blocked.
+# The CloudInit directives are a fork of the lam1 directives with a new
+# host name that takes over the lam2 DDNS sites instead of the lam1 sites.
+# The lam1 http sites are all installed so this instance can check in as
+# lam1 and support all but the https site.
+# The ssl module of apache2 is not loaded so that the sshd can listen on
+# port 443, Let's Encrypt certificates are not installed and the default
+# info and status modules are invoked instead of the modified version that
+# serve authenticated users on the secure site.
+# The /var/www/lam (ssl site) directory is not installed
+# The databeses for the secure site are not installed.
+#
+# https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
+
+bootcmd:
+ - echo
+ - echo Report kernel version
+ - uname -a
+ - echo
+ - echo Report Release version
+ - head /etc/*release
+ - echo
+ - echo Report AWS EC2 metadata for this instance
+ - ec2metadata | grep -v '^user-data'
+ - echo
+ - echo List Installed Packages information
+ - dpkg -l
+
+# Set hostname
+hostname: lam2
+
+# Set timezone
+timezone: US/Alaska
+
+# Upgrade apt database on first boot
+apt_update: true
+
+# Upgrade the instance on first boot
+apt_upgrade: true
+
+# Install additional packages on first boot
+packages:
+ - rcs
+ - nfs-common
+ - awscli
+ - mailutils
+ - swish++
+ - libio-captureoutput-perl
+ - libcgi-pm-perl
+ - libdbi-perl
+ - libdbd-mysql-perl
+ - php
+ - php-gd
+ - texlive
+ - php-xml*
+ - lynx
+ - apache2-doc
+ - libapache2-mod-perl2
+ - libbsd-resource-perl
+ - libapache2-reload-perl
+ - apache2-suexec-custom
+ - mariadb-client
+ - mariadb-server
+ - php-mysql
+ - libapache2-mod-php
+ - x11-apps
+ - whois
+ - libgtk2.0-0
+ - mlocate
+ - php-mbstring
+
+ssh_import_is: [ubuntu]
+ssh_authorized_keys:
+ - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAYEAnNqVrt71AKSIMmSAIONBx4jIEK0IIZF5fSAaB9kI4oOK+t7aSTKAZwwgKHWJ536XFdR3Ql5Xi0r2CuUEf1GVEagAxLZTXRuim5UGmS63rfSxGwq9JQVg5WDbN5ilnGxSmqsD77SApvmffcO/T2zZWd+rrjMWWRi9zQwRdQRm60bc69ajJbjIJd8SCXIggUPzTkUz5Sca7dhdffcMpGR9bdexFln+YSli1ohtvs2zVBM4ncpufGS+Auax8+gQNr32QeSszlKuKsXYorZ9gl+Z8s62mX5yCXIrH2hWoHsCTUX38iVM8/wI6sPVosarkng7mPOOQLy5k50Y0cb9FRQGlrvmQqsc3fI7tC1fblhKL0HaY844kIZRHwFuOI04ik+b8Swdjed6+FH/RIKppuOY+qfdmv8gcX4ZhpbKg+JN+u5Xy5awpUFqhsbBdCz0MvLNPKEbDNCFokX8nL0HqGeABk2DOJ1+IOFz5pIiCL31LTVGTQ0AwXp3nkaHZykJNrcB Authentication from lam@laptop.lam1.us
+
+runcmd:
+ - echo
+ - echo 'Report AWS EC2 user-data for this instance (CloudInit directives)'
+ - curl -s http://169.254.169.254/latest/user-data
+ - echo
+ - echo "Adding a swapfile"
+ - dd if=/dev/zero of=/swapfile bs=128M count=1
+ - chmod 600 /swapfile
+ - mkswap /swapfile
+ - swapon /swapfile
+ - mkdir /etc/RCS
+ - ci -l -t-"File System table for LAM AWS web and shell server" /etc/fstab
+ - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+ - ci -l -m"Added swap file to the file system table" /etc/fstab
+ - echo
+ - echo 'Set hostname and localhost alias in /etc/hosts'
+ - ci -l -t-"Hosts table for LAM AWS web and shell server" /etc/hosts
+ - sed -i '1s/localhost/lam2.lam1.us lam2 localhost/' /etc/hosts
+ - rcsdiff -U0 /etc/hosts
+ - echo
+ - echo "Listen for ssh connections on alternate port 55520 and add ssh Banner"
+ - git clone https://github.com/LAMurakami/ubuntu-etc /tmp/ubuntu-etc
+ - sh -xc "cd /tmp/ubuntu-etc ; git checkout lam2"
+ - mkdir /etc/ssh/RCS
+ - ci -l -t-"Secure Shell configuraton for LAM AWS web and shell server" /etc/ssh/sshd_config
+ - cp /tmp/ubuntu-etc/ssh/sshd_config /etc/ssh
+ - cp /tmp/ubuntu-etc/ssh/Banner.txt /etc/ssh
+ - ci -l -m"Listen for ssh connections on alternate port 55520 and add ssh Banner" /etc/ssh/sshd_config
+ - systemctl restart sshd
+ - echo
+ - echo Check US Alaska local time for this system
+ - ls -lF --time-style=long-iso /etc/localtime
+ - echo
+ - echo '***** http sites *****'
+ - echo
+ - echo 'Updating apache2 configuration for lam2'
+ - a2enmod info
+ - a2enmod status
+ - a2enmod authz_groupfile.load
+ - a2enmod rewrite
+ - a2enmod cgi
+ - mkdir /etc/apache2/mods-available/RCS
+ - ci -t-"Apache aliases configuration for LAM AWS web" /etc/apache2/mods-available/alias.conf
+ - ci -t-"Apache autoindex configuration for LAM AWS web" /etc/apache2/mods-available/autoindex.conf
+ - ci -t-"Apache Directory index configuration for LAM AWS web" /etc/apache2/mods-available/dir.conf
+ - mkdir /etc/apache2/RCS
+ - ci -t-"Apache2 main configuration for LAM AWS web" /etc/apache2/apache2.conf
+ - git clone https://github.com/LAMurakami/no-ssl /var/www/no-ssl
+ - /var/www/no-ssl/Implement_no-ssl_conf.bash
+ - /var/www/no-ssl/Implement_more_apache2_stuff.bash
+ - echo
+ - echo 'Update from default to LAM AWS lam2 web configuration'
+ - sed -i "s|aws|lam2|" /var/www/no-ssl/apache2.conf
+ - mkdir /var/www/Multicount
+ - chown www-data:www-data /var/www/Multicount
+ - echo
+ - echo '***** Additional sites *****'
+ - echo
+ - echo 'Installing arsc.lam1.us web site'
+ - git clone https://github.com/LAMurakami/arsc /var/www/arsc
+ - ln -s /var/www/arsc/arsc_apache2.conf /etc/apache2/sites-available/060_arsc.conf
+ - a2ensite 060_arsc
+ - echo
+ - echo 'Installing aws.lam1.us web site'
+ - git clone https://github.com/LAMurakami/aws /var/www/aws
+ - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/080_aws.conf
+ - a2ensite 080_aws
+ - /var/www/aws/cloud-init.pl
+ - echo
+ - echo '***** Final Initialization Steps *****'
+ - echo
+ - systemctl restart apache2
+ - echo
+ - echo Install dovecot-imapd after /etc/hosts has been configured
+ - apt-get install --yes dovecot-imapd
+ - echo
+ - echo Add root alias so default AWS ubuntu user gets root mail
+ - ci -l -t-"Aliases for LAM AWS ubuntu web and shell server" /etc/aliases
+ - cp /tmp/ubuntu-etc/aliases /etc/aliases
+ - mkdir /etc/dovecot/conf.d/RCS
+ - ci -l -t-"dovecot onf for LAM AWS ubuntu web and shell server" /etc/dovecot/conf.d/10-master.conf
+ - cp /tmp/ubuntu-etc/dovecot/conf.d/10-master.conf /etc/dovecot/conf.d/10-master.conf
+ - rcsdiff -U0 /etc/aliases
+ - newaliases
+ - rm -rf /tmp/ubuntu-etc
+ - echo
+ - echo Install man2html after apache has been configured
+ - apt-get install -y man2html
+ - echo
+ - echo List Installed Packages information
+ - dpkg -l
