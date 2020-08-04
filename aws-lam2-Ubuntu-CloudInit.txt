@@ -4,7 +4,7 @@
 # Tell cloud-init to log the output to a log file
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
-# /var/www/aws/aws-nwo-lam2-Ubuntu-CloudInit.txt - Initialize lam2.duckdns.org
+# /var/www/aws/aws-lam2-Ubuntu-CloudInit.txt - Initialize lam2.duckdns.org
 #
 # This version uses only Public GitHub repos for the configuration and content.
 # It does not check in to lam2.duckdns.org because that requires a token
