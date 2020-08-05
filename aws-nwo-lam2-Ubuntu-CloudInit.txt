@@ -6,6 +6,11 @@ output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
 # /var/www/aws/aws-nwo-lam2-Ubuntu-CloudInit.txt - Initialize lam2.duckdns.org
 #
+# This version uses the LAM EFS private repo copies and then sets the URL
+# to git@ak17:${REPO}.git or git@github.com:LAMurakami/${REPO}.git as
+# appropriate.
+# See aws-lam2-Ubuntu-CloudInit.txt for the Public repos only version.
+#
 # The lam2 instance was designed to be a SSH SOCKS5 Proxy server on port 443
 # Port 443 is normally used for HTTPS so is likely to be available even when
 # other ports are blocked.
@@ -88,15 +93,20 @@ runcmd:
  - echo 'Report AWS EC2 user-data for this instance (CloudInit directives)'
  - curl -s http://169.254.169.254/latest/user-data
  - echo
+ - echo 'Set git user name, email for system'
+ - git config --system user.name "LAMurakami"
+ - git config --system user.email GitHub@LAMurakami.com
+ - git config --system core.editor vi
+ - git config --system branch.autosetuprebase always
+ - echo
+ - echo 'Install etckeeper to track configuration changes'
+ - apt-get install etckeeper
+ - echo
  - echo Adding nfs4 mount to AWS NW-O VPC Elastic File System
  - mkdir /mnt/efs
  - chown ubuntu:ubuntu /mnt/efs
- - mkdir /etc/RCS
- - ci -l -t-"File System table for LAM AWS web and shell server" /etc/fstab
  - nfsOpt="nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
  - echo "172.31.14.159:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
- - rcsdiff -U0 /etc/fstab
- - ci -l -m"Added nfs4 mount to AWS NW-O VPC Elastic File System" /etc/fstab
  - mount -a -t nfs4
  - echo
  - echo "Adding a swapfile"
@@ -105,12 +115,9 @@ runcmd:
  - mkswap /swapfile
  - swapon /swapfile
  - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
- - ci -l -m"Added swap file to the file system table" /etc/fstab
  - echo
  - echo 'Set hostname and localhost alias in /etc/hosts'
- - ci -l -t-"Hosts table for LAM AWS web and shell server" /etc/hosts
  - sed -i '1s/localhost/lam2.lam1.us lam2 localhost/' /etc/hosts
- - rcsdiff -U0 /etc/hosts
  - echo
  - echo 'Installing leafpad compiled for Ubuntu Server 20.04'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/leafpad-Ubuntu-20-04.tgz --directory /usr/local
@@ -124,15 +131,12 @@ runcmd:
  - tar -xvzf /mnt/efs/aws-lam1-ubuntu/tnef.tgz --directory /usr/local
  - file /usr/local/bin/tnef
  - echo
- - echo Listen for ssh connections on alternate port 55520 and add ssh Banner
- - mkdir /etc/ssh/RCS
- - ci -l -t-"Secure SHell configuraton for LAM AWS web and shell server" /etc/ssh/sshd_config
- - tar -xvzf /mnt/efs/aws-lam1-ubuntu/sshd_config.tgz --directory /etc/ssh
- - rcsdiff -U0 /etc/ssh/sshd_config
- - ci -l -m"Listen for ssh connections on alternate port 55520 and add ssh Banner" /etc/ssh/sshd_config
- - mv /etc/ssh/sshd_config /tmp
- - /mnt/efs/aws-lam1-ubuntu/sshd_config-add-port-443.sed /tmp/sshd_config > /etc/ssh/sshd_config
- - rcsdiff -U0 /etc/ssh/sshd_config
+ - echo "Listen for ssh connections on alternate port 55520 and add ssh Banner"
+ - git clone /mnt/efs/git/etc.git /tmp/ubuntu-etc
+ - sh -c "cd /tmp/ubuntu-etc;git remote set-url origin git@github.com:LAMurakami/ubuntu-etc.git"
+ - sh -c "cd /tmp/ubuntu-etc;git checkout lam2"
+ - cp /tmp/ubuntu-etc/ssh/sshd_config /etc/ssh
+ - cp /tmp/ubuntu-etc/ssh/Banner.txt /etc/ssh
  - systemctl restart sshd
  - echo
  - echo Check US Alaska local time for this system
@@ -149,20 +153,17 @@ runcmd:
  - a2enmod authz_groupfile.load
  - a2enmod rewrite
  - a2enmod cgi
- - mkdir /etc/apache2/mods-available/RCS
- - ci -t-"Apache aliases configuration for LAM AWS web" /etc/apache2/mods-available/alias.conf
- - ci -t-"Apache autoindex configuration for LAM AWS web" /etc/apache2/mods-available/autoindex.conf
- - ci -t-"Apache Directory index configuration for LAM AWS web" /etc/apache2/mods-available/dir.conf
- - mkdir /etc/apache2/RCS
- - ci -t-"Apache2 main configuration for LAM AWS web" /etc/apache2/apache2.conf
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/no-ssl.tgz --directory /var/www
+ - git clone /mnt/efs/git/no-ssl.git /var/www/no-ssl
+ - sh -c "cd /var/www/no-ssl;git remote set-url origin git@github.com:LAMurakami/no-ssl"
+ - sh -c "cd /var/www/no-ssl;git remote add ak17 git@ak17:no-ssl.git"
+ - rm /etc/apache2/apache2.conf
+ - rm /etc/apache2/mods-available/alias.conf
+ - rm /etc/apache2/mods-available/autoindex.conf
+ - rm /etc/apache2/mods-available/dir.conf
  - /var/www/no-ssl/Implement_no-ssl_conf.bash
  - /var/www/no-ssl/Implement_more_apache2_stuff.bash
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/lam.tgz --directory /var/www
- - echo
- - echo 'Updating apache2 configuration for *.duckdns.org SSL cert'
- - sed -i "s|SSLCertificateFile\(.*\)|SSLCertificateFile /etc/letsencrypt/live/lamurakami.duckdns.org/fullchain.pem|" /var/www/lam/lam_apache2.conf
- - sed -i 's|SSLCertificateKeyFile\(.*\)|SSLCertificateKeyFile /etc/letsencrypt/live/lamurakami.duckdns.org/privkey.pem|' /var/www/lam/lam_apache2.conf
+ - git clone /mnt/efs/git/lam.git /var/www/lam
+ - sh -c "cd /var/www/lam;git remote set-url origin git@ak17:lam"
  - echo
  - echo 'Update from default to LAM AWS lam2 web configuration'
  - sed -i "s|aws|lam2|" /var/www/no-ssl/apache2.conf
@@ -171,30 +172,10 @@ runcmd:
  - echo
  - echo '***** Additional sites *****'
  - echo
- - echo 'Adding jana@www.interiordems.org user and group'
- - groupadd -g 5001 interiordems
- - useradd -N -u 5001 -s /bin/bash -g interiordems -G mail,interiordems jana
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/jana.tgz --directory /home
- - passwd -u jana
- - echo
- - echo 'Installing {new|old}.interiordems.com web sites'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/interiordems.tgz --directory /var/www
- - ln -s /var/www/interiordems/interiordems_apache2.conf /etc/apache2/sites-available/020_interiordems.conf
- - a2ensite 020_interiordems
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/oldinteriordems.tgz --directory /var/www
- - ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf /etc/apache2/sites-available/010_oldinteriordems.conf
- - a2ensite 010_oldinteriordems
- - echo
- - echo 'Adding mike@mike.lam1.us user, group and www Content'
- - useradd --shell /bin/bash --create-home --groups users --uid 55501 mike
- - usermod --groups users,mike mike
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/mike.tgz --directory /home
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/mike-www.tgz --directory /var/www
- - ln -s /var/www/mike/mike_apache2.conf /etc/apache2/sites-available/081_mike.conf
- - a2ensite 081_mike
- - echo
  - echo 'Installing arsc.lam1.us web site'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/arsc.tgz --directory /var/www
+ - git clone /mnt/efs/git/arsc /var/www/arsc
+ - sh -c "cd /var/www/arsc;git remote set-url origin git@github.com:LAMurakami/arsc"
+ - sh -c "cd /var/www/arsc;git remote add ak17 git@ak17:arsc.git"
  - ln -s /var/www/arsc/arsc_apache2.conf /etc/apache2/sites-available/060_arsc.conf
  - a2ensite 060_arsc
  - echo
@@ -214,7 +195,9 @@ runcmd:
  - a2ensite 050_z
  - echo
  - echo 'Installing aws.lam1.us web site'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/aws.tgz --directory /var/www
+ - git clone /mnt/efs/git/aws /var/www/aws
+ - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws.git"
+ - sh -c "cd /var/www/aws;git remote add ak17 git@ak17:aws.git"
  - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/080_aws.conf
  - a2ensite 080_aws
  - /var/www/aws/cloud-init.pl
@@ -241,8 +224,18 @@ runcmd:
  - echo
  - echo '***** Final Initialization Steps *****'
  - echo
+ - echo 'Set ubuntu as owner of /var/www/{no-ssl,lam,arsc,aws}'
+ - chown -R ubuntu:ubuntu /var/www/no-ssl /var/www/lam /var/www/arsc /var/www/aws
+ - echo
  - systemctl restart apache2
  - echo
+ - sh -c "cd /etc;git add apache2/mods-available/alias.conf"
+ - sh -c "cd /etc;git add apache2/mods-enabled/*"
+ - sh -c "cd /etc;git add apache2/sites-available/*"
+ - sh -c "cd /etc;git add apache2/sites-enabled/*"
+ - sh -c "cd /etc;git add profile.d/mlocate.sh ssh/Banner.txt"
+ - sh -c "cd /etc;git rm apache2/sites-enabled/000-default.conf"
+ - sh -c "cd /etc ; git commit -a -m 'Changes from lam2-Ubuntu-CloudInit'"
  - echo Updating lam2.duckdns.org IP address
  - echo url="https://www.duckdns.org/update?domains=lam2&token=$(cat ~ubuntu/.duckdns)&verbose=true&ip=" | curl -s -k -K -
  - echo " for lam2.duckdns.org IP address update"
@@ -251,10 +244,12 @@ runcmd:
  - apt-get install --yes dovecot-imapd
  - echo
  - echo Add root alias so default AWS ubuntu user gets root mail
- - ci -l -t-"Aliases for LAM AWS ubuntu web and shell server" /etc/aliases
- - tar -xvzf /mnt/efs/aws-lam1-ubuntu/mailutils.tgz --directory /etc
- - rcsdiff -U0 /etc/aliases
+ - cp /tmp/ubuntu-etc/aliases /etc/aliases
+ - cp /tmp/ubuntu-etc/dovecot/conf.d/10-master.conf /etc/dovecot/conf.d/10-master.conf
  - newaliases
+ - rm -rf /tmp/ubuntu-etc
+ - echo
+ - sh -c "cd /etc ; git commit -a -m 'Changes from lam2-Ubuntu-CloudInit'"
  - echo
  - echo Install man2html after apache has been configured
  - apt-get install -y man2html
