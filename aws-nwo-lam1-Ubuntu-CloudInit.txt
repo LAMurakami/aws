@@ -271,16 +271,21 @@ runcmd:
  - echo url="https://www.duckdns.org/update?domains=lam1&token=$(cat ~ubuntu/.duckdns)&verbose=true&ip=" | curl -s -k -K -
  - echo " for lam1.duckdns.org IP address update"
  - echo
- - echo Install dovecot-imapd after /etc/hosts has been configured
+ - echo 'Install dovecot-imapd after /etc/hosts has been configured'
  - apt-get install --yes dovecot-imapd
  - echo
  - echo Add root alias so default AWS ubuntu user gets root mail
  - cp /tmp/ubuntu-etc/aliases /etc/aliases
  - cp /tmp/ubuntu-etc/dovecot/conf.d/10-master.conf /etc/dovecot/conf.d/10-master.conf
  - newaliases
- - rm -rf /tmp/ubuntu-etc
  - echo
  - sh -c "cd /etc ; git commit -a -m 'Changes from lam2-Ubuntu-CloudInit'"
+ - echo
+ - echo Install gitweb after apache has been configured
+ - apt-get install -y gitweb
+ - a2disconf gitweb
+ - cp /tmp/ubuntu-etc/gitweb.conf /etc/gitweb.conf
+ - rm -rf /tmp/ubuntu-etc
  - echo
  - echo Install man2html after apache has been configured
  - apt-get install -y man2html
