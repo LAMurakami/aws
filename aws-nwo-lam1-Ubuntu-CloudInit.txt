@@ -118,7 +118,6 @@ runcmd:
  - echo
  - echo 'Listen for ssh connections on alternate port 55520 and add ssh Banner'
  - git clone /mnt/efs/git/etc.git /tmp/ubuntu-etc
- - sh -c "cd /tmp/ubuntu-etc;git remote set-url origin git@github.com:LAMurakami/ubuntu-etc.git"
  - cp /tmp/ubuntu-etc/ssh/sshd_config /etc/ssh
  - cp /tmp/ubuntu-etc/ssh/Banner.txt /etc/ssh
  - systemctl restart sshd
@@ -180,20 +179,26 @@ runcmd:
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/jana.tgz --directory /home
  - echo
  - echo 'Installing {new|old}.interiordems.com web sites'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/interiordems.tgz --directory /var/www
+ - git clone /mnt/efs/git/interiordems.git /var/www/interiordems
+ - sh -c "cd /var/www/interiordems;git remote set-url origin git@ak17:interiordems"
  - ln -s /var/www/interiordems/interiordems_apache2.conf /etc/apache2/sites-available/020_interiordems.conf
  - a2ensite 020_interiordems
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/oldinteriordems.tgz --directory /var/www
+ - chown -R ubuntu:www-data /var/www/interiordems
+ - git clone /mnt/efs/git/oldinteriordems.git /var/www/oldinteriordems
+ - sh -c "cd /var/www/oldinteriordems;git remote set-url origin git@ak17:oldinteriordems"
  - ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf /etc/apache2/sites-available/010_oldinteriordems.conf
  - a2ensite 010_oldinteriordems
+ - chown -R ubuntu:www-data /var/www/oldinteriordems
  - echo
  - echo 'Adding mike@mike.lam1.us user, group and www Content'
  - useradd --shell /bin/bash --create-home --groups users --uid 55501 mike
  - usermod --groups users,mike mike
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/mike.tgz --directory /home
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/mike-www.tgz --directory /var/www
+ - git clone /mnt/efs/git/mike.git /var/www/mike
+ - sh -c "cd /var/www/mike;git remote set-url origin git@ak17:mike"
  - ln -s /var/www/mike/mike_apache2.conf /etc/apache2/sites-available/081_mike.conf
  - a2ensite 081_mike
+ - chown -R ubuntu:www-data /var/www/mike
  - echo
  - echo 'Installing arsc.lam1.us web site'
  - git clone /mnt/efs/git/arsc /var/www/arsc
@@ -201,21 +206,28 @@ runcmd:
  - sh -c "cd /var/www/arsc;git remote add ak17 git@ak17:arsc.git"
  - ln -s /var/www/arsc/arsc_apache2.conf /etc/apache2/sites-available/060_arsc.conf
  - a2ensite 060_arsc
+ - chown -R ubuntu:www-data /var/www/arsc
  - echo
  - echo 'Installing sites.lam1.us web site'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/sites.tgz --directory /var/www
+ - git clone /mnt/efs/git/sites.git /var/www/sites
+ - sh -c "cd /var/www/sites;git remote set-url origin git@ak17:sites"
  - ln -s /var/www/sites/sites_apache2.conf /etc/apache2/sites-available/030_sites.conf
  - a2ensite 030_sites
+ - chown -R ubuntu:www-data /var/www/sites
  - echo
  - echo 'Installing cabo.lam1.us web site'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/cabo.tgz --directory /var/www
+ - git clone /mnt/efs/git/cabo.git /var/www/cabo
+ - sh -c "cd /var/www/cabo;git remote set-url origin git@ak17:cabo"
  - ln -s /var/www/cabo/cabo_apache2.conf /etc/apache2/sites-available/040_cabo.conf
  - a2ensite 040_cabo
+ - chown -R ubuntu:www-data /var/www/cabo
  - echo
  - echo 'Installing z.lam1.us web site'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/z.tgz --directory /var/www
+ - git clone /mnt/efs/git/z.git /var/www/z
+ - sh -c "cd /var/www/z;git remote set-url origin git@ak17:z"
  - ln -s /var/www/z/z_apache2.conf /etc/apache2/sites-available/050_z.conf
  - a2ensite 050_z
+ - chown -R ubuntu:www-data /var/www/z
  - echo
  - echo 'Installing aws.lam1.us web site'
  - git clone /mnt/efs/git/aws /var/www/aws
@@ -226,29 +238,41 @@ runcmd:
  - /var/www/aws/cloud-init.pl
  - echo
  - echo Adding blinkenshell www Content
+ # Extract blinkenshell from archive that includes date time stamps
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/blinkenshell.tgz --directory /var/www
+ # Clone the blinkenshell repo and integrate it with blinkenshell archive
+ - git clone /mnt/efs/git/blinkenshell.git /tmp/blinkenshell
+ - mv /tmp/blinkenshell/.git /var/www/blinkenshell
+ - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
  - ln -s /var/www/blinkenshell/blinkenshell_apache2.conf /etc/apache2/sites-available/051_blinkenshell.conf
  - a2ensite 051_blinkenshell
+ - chown -R ubuntu:www-data /var/www/blinkenshell
  - echo
  - echo Adding olnes www Content
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/olnes.tgz --directory /var/www
+ - git clone /mnt/efs/git/olnes.git /var/www/olnes
+ - sh -c "cd /var/www/olnes;git remote set-url origin git@ak17:olnes"
  - ln -s /var/www/olnes/olnes_apache2.conf /etc/apache2/sites-available/052_olnes.conf
  - a2ensite 052_olnes
+ - chown -R ubuntu:www-data /var/www/olnes
  - echo
  - echo Adding alaskademocrat www Content
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/alaskademocrat.tgz --directory /var/www
+ - git clone /mnt/efs/git/alaskademocrat.git /var/www/alaskademocrat
+ - sh -c "cd /var/www/alaskademocrat;git remote set-url origin git@ak17:alaskademocrat"
  - ln -s /var/www/alaskademocrat/alaskademocrat_apache2.conf /etc/apache2/sites-available/071_alaskademocrat.conf
  - a2ensite 071_alaskademocrat
+ - chown -R ubuntu:www-data /var/www/alaskademocrat
  - echo
  - echo Adding larryforalaska www Content
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/larryforalaska.tgz --directory /var/www
+ - git clone /mnt/efs/git/larryforalaska.git /var/www/larryforalaska
+ - sh -c "cd /var/www/larryforalaska;git remote set-url origin git@ak17:larryforalaska"
  - ln -s /var/www/larryforalaska/larryforalaska_apache2.conf /etc/apache2/sites-available/070_larryforalaska.conf
  - a2ensite 070_larryforalaska
+ - chown -R ubuntu:www-data /var/www/larryforalaska
  - echo
  - echo '***** Final Initialization Steps *****'
  - echo
- - echo 'Set ubuntu as owner of /var/www/{no-ssl,lam,arsc,aws}'
- - chown -R ubuntu:ubuntu /var/www/no-ssl /var/www/lam /var/www/arsc /var/www/aws
+ - echo 'Set ubuntu as owner of /var/www/{no-ssl,lam,aws}'
+ - chown -R ubuntu:www-data /var/www/no-ssl /var/www/lam /var/www/aws
  - echo
  - echo Refreshing lam database
  - cp -r /home/ubuntu/.aws /root
