@@ -111,9 +111,21 @@ runcmd:
  - echo 'Set hostname and localhost alias in /etc/hosts'
  - sed -i '1s/localhost/lam2.lam1.us lam2 localhost/' /etc/hosts
  - echo
+ - echo 'Install leafpad compiled for Ubuntu Server 20.04'
+ - wget -q -P /tmp https://github.lamurakami.com/Install/leafpad-Ubuntu-20-04.tgz
+ - tar -xzf /tmp/leafpad-Ubuntu-20-04.tgz --directory /usr/local
+ - rm /tmp/leafpad-Ubuntu-20-04.tgz
+ - file /usr/local/bin/leafpad
+ - echo
+ - echo 'Installing GNU which v2.21 compiled for Ubuntu Server 20.04'
+ - wget -q -P /tmp https://github.lamurakami.com/Install/which-Ubuntu-20-04.tgz
+ - tar -xzf /tmp/which-Ubuntu-20-04.tgz --directory /usr/local
+ - rm /tmp/which-Ubuntu-20-04.tgz
+ - file /usr/local/bin/which
+ - echo
  - echo "Listen for ssh connections on alternate port 55520 and add ssh Banner"
  - git clone https://github.com/LAMurakami/ubuntu-etc /tmp/ubuntu-etc
- - sh -xc "cd /tmp/ubuntu-etc ; git checkout lam2"
+ - sh -c "cd /tmp/ubuntu-etc ; git checkout lam2"
  - cp /tmp/ubuntu-etc/ssh/sshd_config /etc/ssh
  - cp /tmp/ubuntu-etc/ssh/Banner.txt /etc/ssh
  - systemctl restart sshd
@@ -159,13 +171,13 @@ runcmd:
  - echo
  - systemctl restart apache2
  - echo
- - sh -xc "cd /etc;git add apache2/mods-available/alias.conf"
- - sh -xc "cd /etc;git add apache2/mods-enabled/*"
- - sh -xc "cd /etc;git add apache2/sites-available/*"
- - sh -xc "cd /etc;git add apache2/sites-enabled/*"
- - sh -xc "cd /etc;git add profile.d/mlocate.sh ssh/Banner.txt"
- - sh -xc "cd /etc;git rm apache2/sites-enabled/000-default.conf"
- - sh -xc "cd /etc ; git commit -a -m 'Changes from lam2-Ubuntu-CloudInit'"
+ - sh -c "cd /etc;git add apache2/mods-available/alias.conf"
+ - sh -c "cd /etc;git add apache2/mods-enabled/*"
+ - sh -c "cd /etc;git add apache2/sites-available/*"
+ - sh -c "cd /etc;git add apache2/sites-enabled/*"
+ - sh -c "cd /etc;git add profile.d/mlocate.sh ssh/Banner.txt"
+ - sh -c "cd /etc;git rm apache2/sites-enabled/000-default.conf"
+ - sh -c "cd /etc ; git commit -a -m 'Changes from lam2-Ubuntu-CloudInit'"
  - echo
  - echo Install dovecot-imapd after /etc/hosts has been configured
  - apt-get install --yes dovecot-imapd
@@ -176,7 +188,7 @@ runcmd:
  - newaliases
  - rm -rf /tmp/ubuntu-etc
  - echo
- - sh -xc "cd /etc ; git commit -a -m 'Changes from lam2-Ubuntu-CloudInit'"
+ - sh -c "cd /etc ; git commit -a -m 'Changes from lam2-Ubuntu-CloudInit'"
  - echo
  - echo Install man2html after apache has been configured
  - apt-get install -y man2html
