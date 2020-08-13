@@ -82,6 +82,7 @@ packages:
  - libgtk2.0-0
  - mlocate
  - php-mbstring
+ - glances
 
 ssh_import_is: [ubuntu]
 ssh_authorized_keys:
@@ -102,7 +103,7 @@ runcmd:
  - apt-get install etckeeper
  - echo
  - echo "Adding a swapfile"
- - dd if=/dev/zero of=/swapfile bs=128M count=1
+ - dd if=/dev/zero of=/swapfile bs=32M count=8
  - chmod 600 /swapfile
  - mkswap /swapfile
  - swapon /swapfile
