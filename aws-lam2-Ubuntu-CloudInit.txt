@@ -91,7 +91,8 @@ ssh_authorized_keys:
 runcmd:
  - echo
  - echo 'Report AWS EC2 user-data for this instance (CloudInit directives)'
- - curl -s http://169.254.169.254/latest/user-data
+ # Allow for either gzip compressed user-data or plain text user-data
+ - (curl -s http://169.254.169.254/latest/user-data | gunzip) || curl -s http://169.254.169.254/latest/user-data
  - echo
  - echo 'Set git user name, email for system'
  - git config --system user.name "LAMurakami"
