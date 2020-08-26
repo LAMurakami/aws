@@ -157,13 +157,11 @@ runcmd:
  - mv /tmp/lam/.git /tmp/lam/.gitignore /var/www/lam
  - rm -rf /tmp/lam # Remove the lam repo fragment
  - sh -c "cd /var/www/lam;git remote set-url origin git@ak17:lam"
+ # Use lam1 branch to serve secure site at https://lam1.duckdns.org
+ - sh -c "cd /var/www/lam;git checkout lam1"
  - rm /etc/apache2/mods-available/info.conf
  - rm /etc/apache2/mods-available/status.conf
  - /var/www/lam/Implement_lam_conf.bash
- - echo
- - echo 'Updating apache2 configuration for *.duckdns.org SSL cert'
- - sed -i "s|SSLCertificateFile\(.*\)|SSLCertificateFile /etc/letsencrypt/live/lamurakami.duckdns.org/fullchain.pem|" /var/www/lam/lam_apache2.conf
- - sed -i 's|SSLCertificateKeyFile\(.*\)|SSLCertificateKeyFile /etc/letsencrypt/live/lamurakami.duckdns.org/privkey.pem|' /var/www/lam/lam_apache2.conf
  - echo
  - echo 'Update from default to LAM AWS lam1 web configuration'
  - sed -i "s|aws|lam1|" /var/www/no-ssl/apache2.conf
@@ -280,8 +278,6 @@ runcmd:
  - cp -r /home/ubuntu/.aws /root
  - aws s3 cp s3://lamurakami/Bk-20-MySQL.lam.sql.gz - | gunzip -c | mysql --user=lam lam
  - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz - | gunzip -c | mysql --user=lam wikidb
- - sed -e "s|://aws.lam1.us|://lam1.duckdns.org|g" /var/www/lam/html/A/LocalSettings.php > /tmp/LocalSettings.php
- - mv /tmp/LocalSettings.php /var/www/lam/html/A/LocalSettings.php
  - systemctl restart apache2
  - echo
  - sh -c "cd /etc;git add apache2/mods-available/alias.conf"
