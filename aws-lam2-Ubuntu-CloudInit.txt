@@ -125,6 +125,11 @@ runcmd:
  - rm /tmp/which-Ubuntu-20-04.tgz
  - file /usr/local/bin/which
  - echo
+ - echo 'Installing GNU tnef 1.4.18 compiled for Ubuntu Server 20.04'
+ - wget -q -P /tmp https://github.lamurakami.com/Install/tnef-Ubuntu-20-04.tgz
+ - tar -xzf /tmp/tnef-Ubuntu-20-04.tgz --directory /usr/local
+ - file /usr/local/bin/tnef
+ - echo
  - echo "Listen for ssh connections on alternate port 55520 and add ssh Banner"
  - git clone https://github.com/LAMurakami/ubuntu-etc /tmp/ubuntu-etc
  - sh -c "cd /tmp/ubuntu-etc ; git checkout lam2"

@@ -129,8 +129,8 @@ runcmd:
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/which-Ubuntu-20-04.tgz --directory /usr/local
  - file /usr/local/bin/which
  - echo
- - echo 'Installing GNU tnef 1.4.15 compiled for Ubuntu Server 16.04'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/tnef.tgz --directory /usr/local
+ - echo 'Installing GNU tnef 1.4.18 compiled for Ubuntu Server 20-04'
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/tnef-Ubuntu-20-04.tgz --directory /usr/local
  - file /usr/local/bin/tnef
  - echo
  - echo 'Listen for ssh connections on alternate port 55520 and add ssh Banner'
