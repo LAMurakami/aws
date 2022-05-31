@@ -111,8 +111,8 @@ runcmd:
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/leafpad-Ubuntu-20-04.tgz --directory /usr/local
  - file /usr/local/bin/leafpad
  - echo
- - echo 'Installing GNU which v2.21 compiled for Ubuntu Server 20.04'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/which-Ubuntu-20-04.tgz --directory /usr/local
+ - echo 'Installing GNU which v2.21 compiled for Ubuntu Server 22.04'
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/which-Ubuntu-22-04.tgz --directory /usr/local
  - file /usr/local/bin/which
  - echo
  - echo 'Installing GNU tnef 1.4.18 compiled for Ubuntu Server 20.04'
