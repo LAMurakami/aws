@@ -27,55 +27,56 @@ ssh_authorized_keys:
 
 runcmd:
  - echo
- - echo 'Report AWS EC2 user-data for this instance (CloudInit directives)'
+ - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
  # Allow for either gzip compressed user-data or plain text user-data
  - (curl -s http://169.254.169.254/latest/user-data | gunzip) || curl -s http://169.254.169.254/latest/user-data
  - echo
- - echo Report kernel version
+ - echo 'AWS LAM Report kernel version'
  - uname -a
  - echo
- - echo Report Release version
- - head /etc/*release - echo
- - echo Adding nfs4 mount to AWS NW-O VPC Elastic File System
+ - echo 'AWS LAM Report Release version'
+ - head /etc/*release
+ - echo
+ - echo 'AWS LAM Adding nfs4 mount to AWS NW-O VPC Elastic File System'
  - mkdir /mnt/efs
  - chown ec2-user:ec2-user /mnt/efs
  - nfsOpt="nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
  - echo "172.31.14.159:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
  - mount -a -t nfs4
  - echo
- - echo "Allow any to read /var/log/cloud-init-output.log"
+ - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
  - echo
- - echo "Install lamp-mariadb10.2-php7.2 php7.2"
+ - echo 'AWS LAM Install lamp-mariadb10.2-php7.2 php7.2'
  - sh -c "amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2"
  - echo
- - echo "systemctl start httpd"
+ - echo 'AWS LAM systemctl start httpd'
  - systemctl start httpd
  - echo
- - echo "systemctl enable httpd"
+ - echo 'AWS LAM systemctl enable httpd'
  - systemctl enable httpd
  - echo
- - echo "add apache group to ec2-user"
+ - echo 'AWS LAM add apache group to ec2-user'
  - sh -c "usermod -a -G apache ec2-user"
  - echo
- - echo "Change ownership of /var/www"
+ - echo 'AWS LAM Change ownership of /var/www'
  - sh -c "chown -R ec2-user:apache /var/www"
  - echo
- - echo "Change permissions of /var/www"
+ - echo 'AWS LAM Change permissions of /var/www'
  - chmod 2775 /var/www
  - echo
- - echo "Change permissions of /var/www directoroes"
+ - echo 'AWS LAM Change permissions of /var/www directoroes'
  - sh -c "find /var/www -type d -exec chmod 2775 {} \;"
  - echo
- - echo "Change permissions of /var/www files"
+ - echo 'AWS LAM Change permissions of /var/www files'
  - sh -c "find /var/www -type f -exec chmod 0664 {} \;"
  - echo
- - echo "Create /phpinfo.php page"
+ - echo 'AWS LAM Create /phpinfo.php page'
  - [ sh, -c, 'echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php' ]
  - echo
- - echo "Update packages"
+ - echo 'AWS LAM Update packages'
  - yum -y update
  - echo
- - echo List Installed Packages information
+ - echo 'AWS LAM List Installed Packages information'
  - sh -c "rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE}-%{ARCH}\n' | sort"
 
