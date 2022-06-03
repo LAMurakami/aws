@@ -44,6 +44,9 @@ runcmd:
  - echo "172.31.14.159:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
  - mount -a -t nfs4
  - echo
+ - echo 'AWS LAM Report AWS EC2 metadata for this instance'
+ - /mnt/efs/aws-lam1-ubuntu/ec2-user-data.bash
+ - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
  - echo
