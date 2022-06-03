@@ -17,7 +17,6 @@ repo_upgrade: all
 packages:
  - rcs
  - httpd
- - mariadb-client
  - mariadb-server
  - awscli
 
@@ -30,6 +29,22 @@ runcmd:
  - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
  # Allow for either gzip compressed user-data or plain text user-data
  - (curl -s http://169.254.169.254/latest/user-data | gunzip) || curl -s http://169.254.169.254/latest/user-data
+ - echo
+ - echo 'AWS LAM Install Extra Packages for Enterprise Linux (EPEL)'
+ - amazon-linux-extras install -y epel
+ - echo
+ - echo 'AWS LAM Install etckeeper to track configuration changes'
+ - yum install -y etckeeper
+ - echo
+ - echo 'AWS LAM Set git user name, email for system'
+ - git config --system user.name "LAMurakami"
+ - git config --system user.email GitHub@LAMurakami.com
+ - git config --system core.editor vi
+ - git config --system branch.autosetuprebase always
+ - echo
+ - echo 'AWS LAM Initialize etckeeper'
+ - etckeeper init
+ - etckeeper commit -m 'Initial commit'
  - echo
  - echo 'AWS LAM Report kernel version'
  - uname -a
@@ -50,8 +65,8 @@ runcmd:
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
  - echo
- - echo 'AWS LAM Install lamp-mariadb10.2-php7.2 php7.2'
- - sh -c "amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2"
+ - echo 'AWS LAM Install php7.4'
+ - sh -c "amazon-linux-extras install -y php7.4"
  - echo
  - echo 'AWS LAM systemctl start httpd'
  - systemctl start httpd
