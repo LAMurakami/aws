@@ -1,0 +1,81 @@
+#cloud-config
+
+# Tell cloud-init to log the output to a log file
+output : { all : '| tee -a /var/log/cloud-init-output.log' }
+
+# Set hostname
+hostname: lam2
+
+# Set timezone
+timezone: US/Alaska
+
+# Upgrade repo database on first boot
+repo_update: true
+# Upgrade the instance on first boot
+repo_upgrade: all
+
+packages:
+ - rcs
+ - httpd
+ - mariadb-client
+ - mariadb-server
+ - awscli
+
+ssh_import_is: [ec2-user]
+ssh_authorized_keys:
+ - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAYEAnNqVrt71AKSIMmSAIONBx4jIEK0IIZF5fSAaB9kI4oOK+t7aSTKAZwwgKHWJ536XFdR3Ql5Xi0r2CuUEf1GVEagAxLZTXRuim5UGmS63rfSxGwq9JQVg5WDbN5ilnGxSmqsD77SApvmffcO/T2zZWd+rrjMWWRi9zQwRdQRm60bc69ajJbjIJd8SCXIggUPzTkUz5Sca7dhdffcMpGR9bdexFln+YSli1ohtvs2zVBM4ncpufGS+Auax8+gQNr32QeSszlKuKsXYorZ9gl+Z8s62mX5yCXIrH2hWoHsCTUX38iVM8/wI6sPVosarkng7mPOOQLy5k50Y0cb9FRQGlrvmQqsc3fI7tC1fblhKL0HaY844kIZRHwFuOI04ik+b8Swdjed6+FH/RIKppuOY+qfdmv8gcX4ZhpbKg+JN+u5Xy5awpUFqhsbBdCz0MvLNPKEbDNCFokX8nL0HqGeABk2DOJ1+IOFz5pIiCL31LTVGTQ0AwXp3nkaHZykJNrcB Authentication from lam@laptop.lam1.us
+
+runcmd:
+ - echo
+ - echo 'Report AWS EC2 user-data for this instance (CloudInit directives)'
+ # Allow for either gzip compressed user-data or plain text user-data
+ - (curl -s http://169.254.169.254/latest/user-data | gunzip) || curl -s http://169.254.169.254/latest/user-data
+ - echo
+ - echo Report kernel version
+ - uname -a
+ - echo
+ - echo Report Release version
+ - head /etc/*release - echo
+ - echo Adding nfs4 mount to AWS NW-O VPC Elastic File System
+ - mkdir /mnt/efs
+ - chown ec2-user:ec2-user /mnt/efs
+ - nfsOpt="nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
+ - echo "172.31.14.159:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
+ - mount -a -t nfs4
+ - echo
+ - echo "Allow any to read /var/log/cloud-init-output.log"
+ - chmod a+r /var/log/cloud-init-output.log
+ - echo
+ - echo "Install lamp-mariadb10.2-php7.2 php7.2"
+ - sh -c "amazon-linux-extras install -y lamp-mariadb10.2-php7.2 php7.2"
+ - echo
+ - echo "systemctl start httpd"
+ - systemctl start httpd
+ - echo
+ - echo "systemctl enable httpd"
+ - systemctl enable httpd
+ - echo
+ - echo "add apache group to ec2-user"
+ - sh -c "usermod -a -G apache ec2-user"
+ - echo
+ - echo "Change ownership of /var/www"
+ - sh -c "chown -R ec2-user:apache /var/www"
+ - echo
+ - echo "Change permissions of /var/www"
+ - chmod 2775 /var/www
+ - echo
+ - echo "Change permissions of /var/www directoroes"
+ - sh -c "find /var/www -type d -exec chmod 2775 {} \;"
+ - echo
+ - echo "Change permissions of /var/www files"
+ - sh -c "find /var/www -type f -exec chmod 0664 {} \;"
+ - echo
+ - echo "Create /phpinfo.php page"
+ - [ sh, -c, 'echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php' ]
+ - echo
+ - echo "Update packages"
+ - yum -y update
+ - echo
+ - echo List Installed Packages information
+ - sh -c "rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE}-%{ARCH}\n' | sort"
+
