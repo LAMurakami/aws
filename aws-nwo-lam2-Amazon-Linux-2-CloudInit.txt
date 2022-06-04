@@ -41,7 +41,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Initialize etckeeper'
  - etckeeper init
- - etckeeper commit -m 'Initial commit'
+ - etckeeper commit -m 'AWS LAM Initial Cloud-init commit'
  - echo
  - echo 'AWS LAM Report kernel version'
  - uname -a
@@ -63,6 +63,9 @@ runcmd:
  - swapon /swapfile
  - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
  - echo
+ - echo 'AWS LAM Install xauth to allow X11 forwarding requests'
+ - yum install -y xauth
+ - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
  - cp /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2-sshd_config /etc/ssh/sshd_config
  - cp /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2-Banner.txt /etc/ssh/Banner.txt
@@ -71,8 +74,16 @@ runcmd:
  - echo 'AWS LAM Report AWS EC2 metadata for this instance'
  - /mnt/efs/aws-lam1-ubuntu/ec2-user-data.bash
  - echo
+ - echo 'AWS LAM Check US Alaska local time for this system'
+ - ls -lF --time-style=long-iso /etc/localtime
+ - echo
  - echo 'AWS LAM Installing Amazon Linux 2 user bash resources'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2.tgz --directory /home/ec2-user
+ - echo
+ - echo 'AWS LAM ***** Secure site *****'
+ - echo
+ - echo 'AWS LAM Installing Let-s Encrypt certificates for TLS encryption (HTTPS)'
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz --directory /etc
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
@@ -119,6 +130,9 @@ runcmd:
  - echo
  - echo 'AWS LAM List Installed Packages information'
  - sh -c "rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE}-%{ARCH}\n' | sort"
+ - echo
+ - echo 'AWS LAM Final Cloud-init etckeeper commit'
+ - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
  - echo
  - echo 'AWS LAM cloud-init complete'
 
