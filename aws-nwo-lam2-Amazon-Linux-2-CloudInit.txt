@@ -23,6 +23,7 @@ packages:
  - lynx
  - texlive
  - php-gd
+ - xorg-x11-apps
 
 ssh_import_is: [ec2-user]
 ssh_authorized_keys:
