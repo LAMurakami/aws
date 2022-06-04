@@ -62,6 +62,9 @@ runcmd:
  - echo 'AWS LAM Report AWS EC2 metadata for this instance'
  - /mnt/efs/aws-lam1-ubuntu/ec2-user-data.bash
  - echo
+ - echo 'AWS LAM Installing Amazon Linux 2 user bash resources'
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2.tgz --directory /home/ec2-user
+ - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
  - echo
@@ -94,6 +97,10 @@ runcmd:
  - echo
  - echo 'AWS LAM Update packages'
  - yum -y update
+ - echo
+ - echo 'AWS LAM Updating lam2.duckdns.org IP address'
+ - echo url="https://www.duckdns.org/update?domains=lam2&token=$(cat ~ec2-user/.duckdns)&verbose=true&ip=" | curl -s -k -K -
+ - echo " for lam2.duckdns.org IP address update"
  - echo
  - echo 'AWS LAM List Installed Packages information'
  - sh -c "rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE}-%{ARCH}\n' | sort"
