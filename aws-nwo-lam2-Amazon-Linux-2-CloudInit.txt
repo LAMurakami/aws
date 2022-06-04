@@ -3,9 +3,6 @@
 # Tell cloud-init to log the output to a log file
 output : { all : '| tee -a /var/log/cloud-init-output.log' }
 
-# Set hostname
-hostname: lam2
-
 # Set timezone
 timezone: US/Alaska
 
@@ -80,6 +77,9 @@ runcmd:
  - echo 'AWS LAM add apache group to ec2-user'
  - sh -c "usermod -a -G apache ec2-user"
  - echo
+ - echo 'AWS LAM Create /phpinfo.php page'
+ - [ sh, -c, 'echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php' ]
+ - echo
  - echo 'AWS LAM Change ownership of /var/www'
  - sh -c "chown -R ec2-user:apache /var/www"
  - echo
@@ -92,11 +92,11 @@ runcmd:
  - echo 'AWS LAM Change permissions of /var/www files'
  - sh -c "find /var/www -type f -exec chmod 0664 {} \;"
  - echo
- - echo 'AWS LAM Create /phpinfo.php page'
- - [ sh, -c, 'echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php' ]
- - echo
  - echo 'AWS LAM Update packages'
  - yum -y update
+ - echo
+ - echo 'AWS LAM Set lam2.duckdns.org hostname'
+ - /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2-set-hostname.bash
  - echo
  - echo 'AWS LAM Updating lam2.duckdns.org IP address'
  - echo url="https://www.duckdns.org/update?domains=lam2&token=$(cat ~ec2-user/.duckdns)&verbose=true&ip=" | curl -s -k -K -
@@ -104,4 +104,6 @@ runcmd:
  - echo
  - echo 'AWS LAM List Installed Packages information'
  - sh -c "rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE}-%{ARCH}\n' | sort"
+ - echo
+ - echo 'AWS LAM cloud-init complete'
 
