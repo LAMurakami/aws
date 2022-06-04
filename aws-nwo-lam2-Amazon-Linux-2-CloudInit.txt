@@ -63,6 +63,11 @@ runcmd:
  - swapon /swapfile
  - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
  - echo
+ - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
+ - cp /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2-sshd_config /etc/ssh/sshd_config
+ - cp /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2-Banner.txt /etc/ssh/Banner.txt
+ - systemctl restart sshd
+ - echo
  - echo 'AWS LAM Report AWS EC2 metadata for this instance'
  - /mnt/efs/aws-lam1-ubuntu/ec2-user-data.bash
  - echo
