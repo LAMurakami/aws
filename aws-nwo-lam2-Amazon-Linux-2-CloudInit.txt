@@ -16,6 +16,13 @@ packages:
  - httpd
  - mariadb-server
  - awscli
+ - whois
+ - php-mbstring
+ - php-intl
+ - php-mysql
+ - lynx
+ - texlive
+ - php-gd
 
 ssh_import_is: [ec2-user]
 ssh_authorized_keys:
