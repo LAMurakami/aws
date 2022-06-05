@@ -25,6 +25,7 @@ packages:
  - texlive
  - php-gd
  - xorg-x11-apps
+ - perl-CGI
 
 ssh_import_is: [ec2-user]
 ssh_authorized_keys:
@@ -34,10 +35,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
- - echo
- - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
- # Allow for either gzip compressed user-data or plain text user-data
- - (curl -s http://169.254.169.254/latest/user-data | gunzip) || curl -s http://169.254.169.254/latest/user-data
  - echo
  - echo 'AWS LAM Install Extra Packages for Enterprise Linux (EPEL)'
  - amazon-linux-extras install -y epel
@@ -86,6 +83,10 @@ runcmd:
  - echo 'AWS LAM Report AWS EC2 metadata for this instance'
  - /mnt/efs/aws-lam1-ubuntu/ec2-user-data.bash
  - echo
+ - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
+ # Allow for either gzip compressed user-data or plain text user-data
+ - (curl -s http://169.254.169.254/latest/user-data | gunzip) || curl -s http://169.254.169.254/latest/user-data
+ - echo
  - echo 'AWS LAM Check US Alaska local time for this system'
  - ls -lF --time-style=long-iso /etc/localtime
  - echo
@@ -118,6 +119,24 @@ runcmd:
  - rm -rf /tmp/lam # Remove the lam repo fragment
  - sh -c "cd /var/www/lam;git remote set-url origin git@ak20:lam"
  - echo
+ - echo 'AWS LAM create Multicount directory'
+ - mkdir /var/www/Multicount
+ - echo
+ - echo 'AWS LAM Install LAM perl modules'
+ - mkdir /usr/local/share/perl5
+ - ln -s /var/www/no-ssl/site_perl-LAM /usr/local/share/perl5/LAM
+ - echo
+ - echo 'AWS LAM allow Ubuntu apache2 log path or Amazon Linux 2 apache2 log path'
+ - sh -c "cd /var/log;ln -s httpd apache2"
+ - ln -s /var/log/apache2 /etc/httpd/logs
+ - chmod a+rx /var/log/httpd
+ - echo
+ - echo 'AWS LAM update aws site with current public local name ipv4'
+ - /var/www/aws/cloud-init.pl
+ - echo
+ - echo 'AWS LAM enable aws site'
+ - ln -s /var/www/aws/aws_apache2.conf /etc/httpd/conf.d/zzz_080_aws.conf
+ - echo
  - echo 'AWS LAM Update main apache2 configuration'
  - cp /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2-httpd.conf /etc/httpd/conf/httpd.conf
  - echo
@@ -140,6 +159,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Change ownership of /var/www'
  - sh -c "chown -R ec2-user:apache /var/www"
+ - chown apache:apache /var/www/Multicount
  - echo
  - echo 'AWS LAM Update packages'
  - yum -y update
