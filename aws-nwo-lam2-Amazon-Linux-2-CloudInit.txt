@@ -14,6 +14,7 @@ repo_upgrade: all
 packages:
  - rcs
  - httpd
+ - mod_ssl
  - mariadb-server
  - awscli
  - whois
@@ -92,6 +93,8 @@ runcmd:
  - echo
  - echo 'AWS LAM Installing Let-s Encrypt certificates for TLS encryption (HTTPS)'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz --directory /etc
+ - sed -i 's|^SSLCertificateFile \(.*\)|SSLCertificateFile /etc/letsencrypt/live/lamurakami.duckdns.org/fullchain.pem|' /etc/httpd/conf.d/ssl.conf
+ - sed -i 's|^SSLCertificateKeyFile \(.*\)|SSLCertificateKeyFile /etc/letsencrypt/live/lamurakami.duckdns.org/privkey.pem|' /etc/httpd/conf.d/ssl.conf
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
