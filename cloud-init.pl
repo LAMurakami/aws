@@ -7,11 +7,13 @@ my $tempFileName,$sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst;
 $tempFileName = sprintf("/tmp/aws-meta-%04d-%02d-%02d-%02d-%02d-%02d-%d.txt",
  $year+1900,$mon+1,$mday,$hour,$min,$sec,$$);
 
+print "\ntempFileName: $tempFileName\n";
+
 qx(/var/www/aws/ec2-user-data.bash > $tempFileName);     # Capture ec2 user data
 
-open (CONFIG, $configFile)                             # Open configuration file
+open (CONFIG, $tempFileName)                                    # Open temp file
  or                                                    # or report error and end
-  die "Run time error: $0\nConfiguration file: $configFile NOT opened!\n$!\n\n";
+  die "Run time error: $0\nTemp file: $tempFileName NOT opened!\n$!\n\n";
 
 our %cA = loadConfigHash(); # Load Configuration Parameters hash!
 close(CONFIG);
