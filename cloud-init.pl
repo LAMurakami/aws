@@ -1,7 +1,14 @@
 #!/usr/bin/perl
 # $Id: cloud-init.pl,v 1.3 2018/04/18 09:05:00 ubuntu Exp ubuntu $
 
-my $configFile = '/var/log/cloud-init-output.log';
+# Construct a temp file name with the date and PID
+my $tempFileName,$sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst;
+($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime();
+$tempFileName = sprintf("/tmp/aws-meta-%04d-%02d-%02d-%02d-%02d-%02d-%d.txt",
+ $year+1900,$mon+1,$mday,$hour,$min,$sec,$$);
+
+qx(/var/www/aws/ec2-user-data.bash > $tempFileName);     # Capture ec2 user data
+
 open (CONFIG, $configFile)                             # Open configuration file
  or                                                    # or report error and end
   die "Run time error: $0\nConfiguration file: $configFile NOT opened!\n$!\n\n";
@@ -17,7 +24,7 @@ open (CONFIG, $updateFile)                             # Open configuration file
 our %cB = loadConfigHash(); # Load Configuration Parameters hash!
 close(CONFIG);
 
-print "\n
+print "
   instance-type: $cB{'instance-type'}
               -> $cA{'instance-type'}
 
