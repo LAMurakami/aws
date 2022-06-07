@@ -89,6 +89,7 @@ runcmd:
  - git config --system user.email GitHub@LAMurakami.com
  - git config --system core.editor vi
  - git config --system branch.autosetuprebase always
+ - git config --system init.defaultBranch master
  - echo
  - echo 'AWS LAM Install etckeeper to track configuration changes'
  - apt-get install etckeeper
@@ -145,6 +146,9 @@ runcmd:
  - a2enmod authz_groupfile.load
  - a2enmod rewrite
  - a2enmod cgi
+ - echo
+ - echo 'AWS LAM Tell git installing in /var/www/lam is O.K.'
+ - git config --system --add safe.directory /var/www/lam
  - git clone /mnt/efs/git/no-ssl.git /var/www/no-ssl
  - sh -c "cd /var/www/no-ssl;git remote set-url origin git@github.com:LAMurakami/no-ssl"
  - sh -c "cd /var/www/no-ssl;git remote add ak20 git@ak20:no-ssl"
@@ -285,9 +289,10 @@ runcmd:
  - sh -c "cd /etc;git add apache2/sites-enabled/*"
  - sh -c "cd /etc;git add profile.d/mlocate.sh ssh/Banner.txt"
  - sh -c "cd /etc;git rm apache2/sites-enabled/000-default.conf"
- - sh -c "cd /etc ; git commit -a -m 'Changes from lam2-Ubuntu-CloudInit'"
+ - sh -c "cd /etc ; git commit -a -m 'Changes from lam1-Ubuntu-CloudInit'"
  - sh -c "cd /etc;git add letsencrypt/*"
- - sh -c "cd /etc ; git commit -a -m 'Changes from lam2-Ubuntu-CloudInit'"
+ - sh -c "cd /etc ; git commit -a -m 'Changes from lam1-Ubuntu-CloudInit'"
+ - echo
  - echo 'AWS LAM Updating lam1.duckdns.org IP address'
  - echo url="https://www.duckdns.org/update?domains=lam1&token=$(cat ~ubuntu/.duckdns)&verbose=true&ip=" | curl -s -k -K -
  - echo " for lam1.duckdns.org IP address update"
@@ -300,7 +305,7 @@ runcmd:
  - cp /tmp/ubuntu-etc/dovecot/conf.d/10-master.conf /etc/dovecot/conf.d/10-master.conf
  - newaliases
  - echo
- - sh -c "cd /etc ; git commit -a -m 'Changes from lam2-Ubuntu-CloudInit'"
+ - sh -c "cd /etc ; git commit -a -m 'Changes from lam1-Ubuntu-CloudInit'"
  - echo
  - echo 'AWS LAM Install gitweb after apache has been configured'
  - apt-get install -y gitweb
@@ -313,3 +318,5 @@ runcmd:
  - echo
  - echo 'AWS LAM List Installed Packages information'
  - dpkg -l
+ - echo
+ - echo 'AWS LAM cloud-init complete'
