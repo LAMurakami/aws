@@ -15,7 +15,6 @@ packages:
  - rcs
  - httpd
  - mod_ssl
- - mariadb-server
  - awscli
  - whois
  - php-mbstring
@@ -36,7 +35,7 @@ runcmd:
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
  - echo
- - echo 'AWS LAM Install Extra Packages for Enterprise Linux (EPEL)'
+ - echo 'AWS LAM Install Extra Packages for Enterprise Linux (EPEL) from amazon-linux-extras'
  - amazon-linux-extras install -y epel
  - echo
  - echo 'AWS LAM Install etckeeper to track configuration changes'
@@ -141,6 +140,9 @@ runcmd:
  - echo 'AWS LAM Update main apache2 configuration'
  - cp /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2-httpd.conf /etc/httpd/conf/httpd.conf
  - echo
+ - echo 'AWS LAM Install MariaDB 10.5 from amazon-linux-extras'
+ - amazon-linux-extras install -y mariadb10.5
+ - echo
  - echo 'AWS LAM enable and start MariaDB *****'
  - systemctl enable mariadb
  - systemctl start mariadb
@@ -153,7 +155,7 @@ runcmd:
  - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
  - echo
- - echo 'AWS LAM Install php7.4'
+ - echo 'AWS LAM Install php7.4 from amazon-linux-extras'
  - sh -c "amazon-linux-extras install -y php7.4"
  - echo
  - echo 'AWS LAM systemctl start httpd'
