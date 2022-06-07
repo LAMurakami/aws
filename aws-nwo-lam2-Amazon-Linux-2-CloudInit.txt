@@ -47,6 +47,7 @@ runcmd:
  - git config --system user.email GitHub@LAMurakami.com
  - git config --system core.editor vi
  - git config --system branch.autosetuprebase always
+ - git config --system init.defaultBranch master
  - echo
  - echo 'AWS LAM Initialize etckeeper'
  - etckeeper init
@@ -139,6 +140,16 @@ runcmd:
  - echo
  - echo 'AWS LAM Update main apache2 configuration'
  - cp /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2-httpd.conf /etc/httpd/conf/httpd.conf
+ - echo
+ - echo 'AWS LAM enable and start MariaDB *****'
+ - systemctl enable mariadb
+ - systemctl start mariadb
+ - echo
+ - echo 'AWS LAM Creating {lam|Mediawiki} database and user'
+ - mysql --table < /var/www/lam/lam-user.sql
+ - echo 'AWS LAM Refreshing lam database'
+ - cp -r /home/ec2-user/.aws /root
+ - aws s3 cp s3://lamurakami/Bk-20-MySQL.lam.sql.gz - | gunzip -c | mysql --user=lam lam
  - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
  - echo
