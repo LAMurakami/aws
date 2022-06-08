@@ -97,8 +97,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Install Let-s Encrypt certificates for TLS encryption (HTTPS)'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz --directory /etc
- - sed -i 's|^SSLCertificateFile \(.*\)|SSLCertificateFile /etc/letsencrypt/live/lamurakami.duckdns.org/fullchain.pem|' /etc/httpd/conf.d/ssl.conf
- - sed -i 's|^SSLCertificateKeyFile \(.*\)|SSLCertificateKeyFile /etc/letsencrypt/live/lamurakami.duckdns.org/privkey.pem|' /etc/httpd/conf.d/ssl.conf
  - echo
  - echo 'AWS LAM Install aws.lam1.us web site'
  - git clone /mnt/efs/git/aws /var/www/aws
@@ -119,8 +117,14 @@ runcmd:
  - rm -rf /tmp/lam # Remove the lam repo fragment
  - sh -c "cd /var/www/lam;git remote set-url origin git@ak20:lam"
  - echo
+ - echo 'AWS LAM Use lam2 branch to serve secure site at https://lam2.duckdns.org'
+ - sh -c "cd /var/www/lam;git checkout lam2"
+ - echo
  - echo 'AWS LAM create Multicount directory'
  - mkdir /var/www/Multicount
+ - echo
+ - echo 'AWS LAM Install mod_perl'
+ - yum install -y mod_perl
  - echo
  - echo 'AWS LAM Install LAM perl modules'
  - mkdir /usr/local/share/perl5
@@ -138,7 +142,10 @@ runcmd:
  - ln -s /var/www/aws/aws_apache2.conf /etc/httpd/conf.d/zzz_080_aws.conf
  - echo
  - echo 'AWS LAM Update main apache2 configuration'
- - cp /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2-httpd.conf /etc/httpd/conf/httpd.conf
+ - cp /var/www/aws/Amazon-Linux-2-httpd.conf /etc/httpd/conf/httpd.conf
+ - echo
+ - echo 'AWS LAM Update apache2 ssl configuration'
+ - cp /var/www/lam/lam_apache2.conf /etc/httpd/conf.d/ssl.conf
  - echo
  - echo 'AWS LAM Install MariaDB 10.5 from amazon-linux-extras'
  - amazon-linux-extras install -y mariadb10.5
