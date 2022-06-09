@@ -27,6 +27,7 @@ packages:
  - xorg-x11-apps
  - perl-CGI
  - xauth
+ - gitweb
 
 ssh_import_is: [ec2-user]
 ssh_authorized_keys:
@@ -145,6 +146,10 @@ runcmd:
  - echo
  - echo 'AWS LAM Update apache2 ssl configuration'
  - cp /var/www/lam/lam_apache2.conf /etc/httpd/conf.d/ssl.conf
+ - echo
+ - echo 'AWS LAM Update gitweb configuration'
+ - sed -i '1 s|Alias /git /var/www/git|Alias /gitweb /var/www/git|' /etc/httpd/conf.d/git.conf
+ - cp /var/www/aws/Amazon-Linux-2-gitweb.conf /etc/gitweb.conf
  - echo
  - echo 'AWS LAM Install MariaDB10.5 and php7.4 from amazon-linux-extras'
  - amazon-linux-extras install -y mariadb10.5 php7.4
