@@ -17,14 +17,16 @@ packages:
  - mod_ssl
  - awscli
  - whois
+ - php-gd
  - php-mbstring
  - php-intl
  - php-mysql
+ - php-xml
  - lynx
  - texlive
- - php-gd
  - xorg-x11-apps
  - perl-CGI
+ - xauth
 
 ssh_import_is: [ec2-user]
 ssh_authorized_keys:
@@ -71,9 +73,6 @@ runcmd:
  - mkswap /swapfile
  - swapon /swapfile
  - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
- - echo
- - echo 'AWS LAM Install xauth to allow X11 forwarding requests'
- - yum install -y xauth
  - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
  - cp /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2-sshd_config /etc/ssh/sshd_config
@@ -123,8 +122,8 @@ runcmd:
  - echo 'AWS LAM create Multicount directory'
  - mkdir /var/www/Multicount
  - echo
- - echo 'AWS LAM Install mod_perl'
- - yum install -y mod_perl
+ - echo 'AWS LAM Install mod_perl and man2html'
+ - yum install -y mod_perl man2html
  - echo
  - echo 'AWS LAM Install LAM perl modules'
  - mkdir /usr/local/share/perl5
@@ -147,8 +146,8 @@ runcmd:
  - echo 'AWS LAM Update apache2 ssl configuration'
  - cp /var/www/lam/lam_apache2.conf /etc/httpd/conf.d/ssl.conf
  - echo
- - echo 'AWS LAM Install MariaDB 10.5 from amazon-linux-extras'
- - amazon-linux-extras install -y mariadb10.5
+ - echo 'AWS LAM Install MariaDB10.5 and php7.4 from amazon-linux-extras'
+ - amazon-linux-extras install -y mariadb10.5 php7.4
  - echo
  - echo 'AWS LAM enable and start MariaDB *****'
  - systemctl enable mariadb
@@ -163,9 +162,6 @@ runcmd:
  - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz - | gunzip -c | mysql --user=lam wikidb
  - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
- - echo
- - echo 'AWS LAM Install php7.4 from amazon-linux-extras'
- - sh -c "amazon-linux-extras install -y php7.4"
  - echo
  - echo 'AWS LAM systemctl start httpd'
  - systemctl start httpd
@@ -192,12 +188,15 @@ runcmd:
  - echo 'AWS LAM Set hostname and localhost alias in /etc/hosts'
  - sed -i '1s/localhost/lam2.duckdns.org lam2 localhost/' /etc/hosts
  - echo
+ - echo 'AWS LAM Set hostname in MediaWiki LocalSettings.php'
+ - sed -i 's|lam1.duckdns.org|lam2.duckdns.org|g' /var/www/lam/html/A/LocalSettings.php
+ - echo
  - echo 'AWS LAM Updating lam2.duckdns.org IP address'
  - echo url="https://www.duckdns.org/update?domains=lam2&token=$(cat ~ec2-user/.duckdns)&verbose=true&ip=" | curl -s -k -K -
  - echo " for lam2.duckdns.org IP address update"
  - echo
  - echo 'AWS LAM List Installed Packages information'
- - sh -c "rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE}-%{ARCH}\n' | sort"
+ - repoquery -a --installed --qf '%-30{UI_FROM_REPO}%{NAME}-%{VERSION}-%{RELEASE}-%{ARCH}' | sort --ignore-case --key=1.31
  - echo
  - echo 'AWS LAM Final Cloud-init etckeeper commit'
  - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
