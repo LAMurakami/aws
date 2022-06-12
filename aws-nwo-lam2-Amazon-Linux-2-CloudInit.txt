@@ -20,7 +20,7 @@ packages:
  - php-gd
  - php-mbstring
  - php-intl
- - php-mysql
+ - php-mysqlnd
  - php-xml
  - lynx
  - texlive
