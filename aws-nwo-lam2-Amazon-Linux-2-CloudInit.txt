@@ -14,6 +14,7 @@ repo_upgrade: all
 packages:
  - rcs
  - httpd
+ - httpd-manual
  - mod_ssl
  - awscli
  - whois
