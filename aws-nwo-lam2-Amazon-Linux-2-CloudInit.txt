@@ -146,7 +146,7 @@ runcmd:
  - cp /var/www/aws/Amazon-Linux-2-httpd.conf /etc/httpd/conf/httpd.conf
  - echo
  - echo 'AWS LAM Update apache2 ssl configuration'
- - cp /var/www/lam/lam_apache2.conf /etc/httpd/conf.d/ssl.conf
+ - ln -s /var/www/lam/lam_apache2.conf /etc/httpd/conf.d/ssl.conf
  - echo
  - echo 'AWS LAM Update gitweb configuration'
  - sed -i '1 s|Alias /git /var/www/git|Alias /gitweb /var/www/git|' /etc/httpd/conf.d/git.conf
@@ -160,7 +160,7 @@ runcmd:
  - echo 'AWS LAM Install MariaDB10.5 and php7.4 from amazon-linux-extras'
  - amazon-linux-extras install -y mariadb10.5 php7.4
  - echo
- - echo 'AWS LAM enable and start MariaDB *****'
+ - echo 'AWS LAM enable and start MariaDB'
  - systemctl enable mariadb
  - systemctl start mariadb
  - echo
@@ -172,13 +172,20 @@ runcmd:
  - echo 'AWS LAM Restore latest LAM Alaska MediaWiki database backup from AWS S3'
  - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz - | gunzip -c | mysql --user=lam wikidb
  - echo
+ - echo 'AWS LAM ***** Additional sites *****'
+ - echo
+ - echo 'AWS LAM Installing sites.lam1.us web site'
+ - git clone /mnt/efs/git/sites.git /var/www/sites
+ - sh -c "cd /var/www/sites;git remote set-url origin git@ak20:sites"
+ - ln -s /var/www/sites/sites_apache2.conf /etc/httpd/conf.d/zzz_030_sites.conf
+ - echo
+ - echo 'AWS LAM Installing arsc.lam1.us web site'
+ - git clone /mnt/efs/git/arsc /var/www/arsc
+ - sh -c "cd /var/www/arsc;git remote set-url origin git@github.com:LAMurakami/arsc"
+ - sh -c "cd /var/www/arsc;git remote add ak20 git@ak20:arsc"
+ - ln -s /var/www/arsc/arsc_apache2.conf /etc/httpd/conf.d/zzz_060_arsc.conf
+ - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
- - echo
- - echo 'AWS LAM systemctl start httpd'
- - systemctl start httpd
- - echo
- - echo 'AWS LAM systemctl enable httpd'
- - systemctl enable httpd
  - echo
  - echo 'AWS LAM add apache group to ec2-user'
  - sh -c "usermod -a -G apache ec2-user"
@@ -189,6 +196,12 @@ runcmd:
  - echo 'AWS LAM Change ownership of /var/www'
  - sh -c "chown -R ec2-user:apache /var/www"
  - chown apache:apache /var/www/Multicount
+ - echo
+ - echo 'AWS LAM systemctl start httpd'
+ - systemctl start httpd
+ - echo
+ - echo 'AWS LAM systemctl enable httpd'
+ - systemctl enable httpd
  - echo
  - echo 'AWS LAM Update packages'
  - yum -y update
