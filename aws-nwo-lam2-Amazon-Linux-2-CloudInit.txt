@@ -186,6 +186,16 @@ runcmd:
  - sh -c "cd /var/www/arsc;git remote add ak20 git@ak20:arsc"
  - ln -s /var/www/arsc/arsc_apache2.conf /etc/httpd/conf.d/zzz_060_arsc.conf
  - echo
+ - echo 'AWS LAM Installing cabo.lam1.us web site'
+ - git clone /mnt/efs/git/cabo.git /var/www/cabo
+ - sh -c "cd /var/www/cabo;git remote set-url origin git@ak20:cabo"
+ - ln -s /var/www/cabo/cabo_apache2.conf /etc/httpd/conf.d/zzz_040_cabo.conf
+ - echo
+ - echo 'AWS LAM Adding olnes www Content'
+ - git clone /mnt/efs/git/olnes.git /var/www/olnes
+ - sh -c "cd /var/www/olnes;git remote set-url origin git@ak20:olnes"
+ - ln -s /var/www/olnes/olnes_apache2.conf /etc/httpd/conf.d/zzz_052_olnes.conf
+ - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
  - echo
  - echo 'AWS LAM add apache group to ec2-user'
