@@ -146,6 +146,7 @@ runcmd:
  - cp /var/www/aws/Amazon-Linux-2-httpd.conf /etc/httpd/conf/httpd.conf
  - echo
  - echo 'AWS LAM Update apache2 ssl configuration'
+ - rm /etc/httpd/conf.d/ssl.conf
  - ln -s /var/www/lam/lam_apache2.conf /etc/httpd/conf.d/ssl.conf
  - echo
  - echo 'AWS LAM Update gitweb configuration'
