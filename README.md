@@ -23,30 +23,27 @@ content in a html/ subdirectory as outlined below:
 <pre>/var/www/aws/
          |-- aws-nwo-lam1-Ubuntu-CloudInit.txt
          |-- cloud-init.pl
-         |-- &lt;site&gt;_apache2.conf
-         |-- &lt;site&gt;_archive_rebuild.bash
-         |-- html/           DocumentRoot /var/www/aws/html/
+         |-- aws_apache2.conf
+         |-- html/   DocumentRoot /var/www/aws/html/
 /var/www/no-ssl/
          |-- apache2.conf
          |-- Implement_no-ssl_conf.bash
          |-- Implement_more_sites_conf.bash
          |-- Implement_more_apache2_stuff.bash
-         |-- &lt;site&gt;_apache2.conf
-         |-- &lt;site&gt;_archive_rebuild.bash
-         |-- html/           DocumentRoot /var/www/no-ssl/html/
+         |-- no-ssl_apache2.conf
+         |-- html/   DocumentRoot /var/www/no-ssl/html/
              |-- Public/
                  |-- Scripts/
 /var/www/&lt;additional-sites&gt;/
          |-- &lt;site&gt;_apache2.conf
-         |-- &lt;site&gt;_archive_rebuild.bash
-         |-- html/           DocumentRoot /var/www/&lt;additional-sites&gt;/html/
+         |-- html/   DocumentRoot /var/www/&lt;additional-sites&gt;/html/
 /var/www/lam/
          |-- Implement_lam_conf.bash
-         |-- &lt;site&gt;_apache2.conf
-         |-- &lt;site&gt;_archive_rebuild.bash
+         |-- lam_apache2.conf
+         |-- lam_archive_rebuild.bash
          |-- .ht{group,passwd}
          |-- data/
-         |-- html/           DocumentRoot /var/www/lam/html/
+         |-- html/   DocumentRoot /var/www/lam/html/
              |-- Private/
                  |-- Scripts/</pre>
 
@@ -59,8 +56,14 @@ it updates all the installed packages and then installs additional packages
 to support LAMP model web services including a MediaWiki installation.
 It modifies the File System Table so that a LAM AWS Elastic File System (EFS)
 instance shared with all the LAM AWS EC2 instances is mounted by nfs4.
-The site subdirectories and additional software is installed from tgz
-archives on this persistant shared filesystem.
+The site subdirectories and additional software is installed from git
+repositories and tgz archives on this persistant shared filesystem.
+
+* aws-nwo-lam2-Amazon-Linux-2-CloudInit.txt is an alternate initialization
+for an LAM AWS EC2 using Amazon Linux 2 rather than Ubuntu Server as the
+Linux component of the LAMP model web server.  Adding epel, php7.4 and
+mariadb10.5 repositories using amazon-linux-extras enables this instance
+to support the MediaWiki installation and be an AWS LAM clone.
 
 * apache2.conf is the main apache2 configuration file.  The /Public alias is
 included here allowing no-ssl/html/Public/ content to be accessed from any
@@ -80,19 +83,19 @@ file is linked into /etc/apache2/sites-available and then enabled with
 a2ensite in the Implement_more_sites_conf.bash script which also assigns
 a three digit numerical order for the sites.  Force apache2 to read any
 changes in configuration files with:
- systemctl reload apache2
+<pre>systemctl reload apache2</pre>
 
-* &lt;site&gt;_archive_rebuild.bash is a script to rebuild a tar archive if anything
+* lam_archive_rebuild.bash is a script to rebuild a tar archive if anything
 has changed since the archive was last rebuilt.  By not rebuilding the archive
 if nothing has changed the data transmitted to a remote copy of the backups is
 reduced.  The whole archive will be transmitted if any file changes but the
 archive is compressed.  The archive rebuild should only be run on the master
 system and not on clones.  The script is linked into the backup directory with:
- ln -s /var/www/${REPO}/${REPO}_archive_rebuild.bash \
- /mnt/efs/aws-lam1-ubuntu/${REPO}
+<pre>ln -s /var/www/lam/lam_archive_rebuild.bash \
+/mnt/efs/aws-lam1-ubuntu/lam</pre>
 The script will only run if the archive file already exists as it is used as
 the Newer reference.  Create a zero byte archive file with an old date with:
- touch -d 1955-05-20 /mnt/efs/aws-lam1-ubuntu/${REPO}.tgz
+<pre>touch -d 1955-05-20 /mnt/efs/aws-lam1-ubuntu/lam.tgz</pre>
 
 * site_perl-LAM contains perl modules to be linked into site_perl.
 The modules simplify a number of cgi perl routines used in both Public
