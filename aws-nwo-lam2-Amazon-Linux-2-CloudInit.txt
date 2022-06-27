@@ -196,6 +196,12 @@ runcmd:
  - sh -c "cd /var/www/olnes;git remote set-url origin git@ak20:olnes"
  - ln -s /var/www/olnes/olnes_apache2.conf /etc/httpd/conf.d/zzz_052_olnes.conf
  - echo
+ - echo 'AWS LAM Installing z.lam1.us web site'
+ - git clone /mnt/efs/git/z.git /var/www/z
+ - sh -c "cd /var/www/z;git remote set-url origin git@ak20:z"
+ - ln -s /var/www/z/z_apache2.conf /etc/httpd/conf.d/zzz_050_z.conf
+ - rm /etc/httpd/conf.d/welcome.conf
+ - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
  - echo
  - echo 'AWS LAM add apache group to ec2-user'
