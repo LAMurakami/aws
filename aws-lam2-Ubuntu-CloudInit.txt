@@ -29,16 +29,16 @@ output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
 bootcmd:
  - echo
- - echo Report kernel version
+ - echo 'AWS LAM Report kernel version'
  - uname -a
  - echo
- - echo Report Release version
+ - echo 'AWS LAM Report Release version'
  - head /etc/*release
  - echo
- - echo Report AWS EC2 metadata for this instance
+ - echo 'AWS LAM Report AWS EC2 metadata for this instance'
  - ec2metadata | grep -v '^user-data'
  - echo
- - echo List Installed Packages information
+ - echo 'AWS LAM List Installed Packages information'
  - dpkg -l
 
 # Set hostname
@@ -90,59 +90,62 @@ ssh_authorized_keys:
 
 runcmd:
  - echo
- - echo 'Report AWS EC2 user-data for this instance (CloudInit directives)'
+ - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
+ - chmod a+r /var/log/cloud-init-output.log
+ - echo
+ - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
  # Allow for either gzip compressed user-data or plain text user-data
  - (curl -s http://169.254.169.254/latest/user-data | gunzip) || curl -s http://169.254.169.254/latest/user-data
  - echo
- - echo 'Set git user name, email for system'
+ - echo 'AWS LAM Set git user name, email for system'
  - git config --system user.name "LAMurakami"
  - git config --system user.email GitHub@LAMurakami.com
  - git config --system core.editor vi
  - git config --system branch.autosetuprebase always
  - echo
- - echo 'Install etckeeper to track configuration changes'
+ - echo 'AWS LAM Install etckeeper to track configuration changes'
  - apt-get install etckeeper
  - echo
- - echo "Adding a swapfile"
+ - echo 'AWS LAM Adding a swapfile'
  - dd if=/dev/zero of=/swapfile bs=32M count=8
  - chmod 600 /swapfile
  - mkswap /swapfile
  - swapon /swapfile
  - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
  - echo
- - echo 'Set hostname and localhost alias in /etc/hosts'
+ - echo 'AWS LAM Set hostname and localhost alias in /etc/hosts'
  - sed -i '1s/localhost/lam2.lam1.us lam2 localhost/' /etc/hosts
  - echo
- - echo 'Install leafpad compiled for Ubuntu Server 20.04'
+ - echo 'AWS LAM Install leafpad compiled for Ubuntu Server 20.04'
  - wget -q -P /tmp https://github.lamurakami.com/Install/leafpad-Ubuntu-20-04.tgz
  - tar -xzf /tmp/leafpad-Ubuntu-20-04.tgz --directory /usr/local
  - rm /tmp/leafpad-Ubuntu-20-04.tgz
  - file /usr/local/bin/leafpad
  - echo
- - echo 'Installing GNU which v2.21 compiled for Ubuntu Server 20.04'
+ - echo 'AWS LAM Installing GNU which v2.21 compiled for Ubuntu Server 20.04'
  - wget -q -P /tmp https://github.lamurakami.com/Install/which-Ubuntu-20-04.tgz
  - tar -xzf /tmp/which-Ubuntu-20-04.tgz --directory /usr/local
  - rm /tmp/which-Ubuntu-20-04.tgz
  - file /usr/local/bin/which
  - echo
- - echo 'Installing GNU tnef 1.4.18 compiled for Ubuntu Server 20.04'
+ - echo 'AWS LAM Installing GNU tnef 1.4.18 compiled for Ubuntu Server 20.04'
  - wget -q -P /tmp https://github.lamurakami.com/Install/tnef-Ubuntu-20-04.tgz
  - tar -xzf /tmp/tnef-Ubuntu-20-04.tgz --directory /usr/local
  - file /usr/local/bin/tnef
  - echo
- - echo "Listen for ssh connections on alternate port 55520 and add ssh Banner"
+ - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
  - git clone https://github.com/LAMurakami/ubuntu-etc /tmp/ubuntu-etc
  - sh -c "cd /tmp/ubuntu-etc ; git checkout lam2"
  - cp /tmp/ubuntu-etc/ssh/sshd_config /etc/ssh
  - cp /tmp/ubuntu-etc/ssh/Banner.txt /etc/ssh
  - systemctl restart sshd
  - echo
- - echo Check US Alaska local time for this system
+ - echo 'AWS LAM Check US Alaska local time for this system'
  - ls -lF --time-style=long-iso /etc/localtime
  - echo
- - echo '***** http sites *****'
+ - echo 'AWS LAM ***** http sites *****'
  - echo
- - echo 'Updating apache2 configuration for lam2'
+ - echo 'AWS LAM Updating apache2 configuration for lam2'
  - a2enmod info
  - a2enmod status
  - a2enmod authz_groupfile.load
@@ -156,25 +159,25 @@ runcmd:
  - /var/www/no-ssl/Implement_no-ssl_conf.bash
  - /var/www/no-ssl/Implement_more_apache2_stuff.bash
  - echo
- - echo 'Update from default to LAM AWS lam2 web configuration'
+ - echo 'AWS LAM Update from default to LAM AWS lam2 web configuration'
  - sed -i "s|aws|lam2|" /var/www/no-ssl/apache2.conf
  - mkdir /var/www/Multicount
  - chown www-data:www-data /var/www/Multicount
  - echo
- - echo '***** Additional sites *****'
+ - echo 'AWS LAM ***** Additional sites *****'
  - echo
- - echo 'Installing arsc.lam1.us web site'
+ - echo 'AWS LAM Installing arsc.lam1.us web site'
  - git clone https://github.com/LAMurakami/arsc /var/www/arsc
  - ln -s /var/www/arsc/arsc_apache2.conf /etc/apache2/sites-available/060_arsc.conf
  - a2ensite 060_arsc
  - echo
- - echo 'Installing aws.lam1.us web site'
+ - echo 'AWS LAM Installing aws.lam1.us web site'
  - git clone https://github.com/LAMurakami/aws /var/www/aws
  - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/080_aws.conf
  - a2ensite 080_aws
  - /var/www/aws/cloud-init.pl
  - echo
- - echo '***** Final Initialization Steps *****'
+ - echo 'AWS LAM ***** Final Initialization Steps *****'
  - echo
  - systemctl restart apache2
  - echo
@@ -186,10 +189,10 @@ runcmd:
  - sh -c "cd /etc;git rm apache2/sites-enabled/000-default.conf"
  - sh -c "cd /etc ; git commit -a -m 'Changes from lam2-Ubuntu-CloudInit'"
  - echo
- - echo Install dovecot-imapd after /etc/hosts has been configured
+ - echo 'AWS LAM Install dovecot-imapd after /etc/hosts has been configured'
  - apt-get install --yes dovecot-imapd
  - echo
- - echo Add root alias so default AWS ubuntu user gets root mail
+ - echo 'AWS LAM Add root alias so default AWS ubuntu user gets root mail'
  - cp /tmp/ubuntu-etc/aliases /etc/aliases
  - cp /tmp/ubuntu-etc/dovecot/conf.d/10-master.conf /etc/dovecot/conf.d/10-master.conf
  - newaliases
@@ -197,8 +200,10 @@ runcmd:
  - echo
  - sh -c "cd /etc ; git commit -a -m 'Changes from lam2-Ubuntu-CloudInit'"
  - echo
- - echo Install man2html after apache has been configured
+ - echo 'AWS LAM Install man2html after apache has been configured'
  - apt-get install -y man2html
  - echo
- - echo List Installed Packages information
+ - echo 'AWS LAM List Installed Packages information'
  - dpkg -l
+ - echo
+ - echo 'AWS LAM cloud-init complete'
