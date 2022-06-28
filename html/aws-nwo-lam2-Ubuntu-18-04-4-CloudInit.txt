@@ -1,1 +1,0 @@
-../aws-nwo-lam2-Ubuntu-18-04-4-CloudInit.txt
