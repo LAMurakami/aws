@@ -1,0 +1,246 @@
+#cloud-config
+
+# Tell cloud-init to log the output to a log file
+output : { all : '| tee -a /var/log/cloud-init-output.log' }
+
+# Set timezone
+timezone: US/Alaska
+
+# Upgrade repo database on first boot
+repo_update: true
+# Upgrade the instance on first boot
+repo_upgrade: all
+
+packages:
+ - rcs
+ - httpd
+ - httpd-manual
+ - mod_ssl
+ - awscli
+ - whois
+ - php-gd
+ - php-mbstring
+ - php-intl
+ - php-mysqlnd
+ - php-xml
+ - lynx
+ - texlive
+ - xorg-x11-apps
+ - perl-CGI
+ - xauth
+ - gitweb
+
+ssh_import_is: [ec2-user]
+ssh_authorized_keys:
+ - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAYEAnNqVrt71AKSIMmSAIONBx4jIEK0IIZF5fSAaB9kI4oOK+t7aSTKAZwwgKHWJ536XFdR3Ql5Xi0r2CuUEf1GVEagAxLZTXRuim5UGmS63rfSxGwq9JQVg5WDbN5ilnGxSmqsD77SApvmffcO/T2zZWd+rrjMWWRi9zQwRdQRm60bc69ajJbjIJd8SCXIggUPzTkUz5Sca7dhdffcMpGR9bdexFln+YSli1ohtvs2zVBM4ncpufGS+Auax8+gQNr32QeSszlKuKsXYorZ9gl+Z8s62mX5yCXIrH2hWoHsCTUX38iVM8/wI6sPVosarkng7mPOOQLy5k50Y0cb9FRQGlrvmQqsc3fI7tC1fblhKL0HaY844kIZRHwFuOI04ik+b8Swdjed6+FH/RIKppuOY+qfdmv8gcX4ZhpbKg+JN+u5Xy5awpUFqhsbBdCz0MvLNPKEbDNCFokX8nL0HqGeABk2DOJ1+IOFz5pIiCL31LTVGTQ0AwXp3nkaHZykJNrcB Authentication from lam@laptop.lam1.us
+
+runcmd:
+ - echo
+ - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
+ - chmod a+r /var/log/cloud-init-output.log
+ - echo
+ - echo 'AWS LAM Install Extra Packages for Enterprise Linux (EPEL) from amazon-linux-extras'
+ - amazon-linux-extras install -y epel
+ - echo
+ - echo 'AWS LAM Install etckeeper to track configuration changes'
+ - yum install -y etckeeper
+ - echo
+ - echo 'AWS LAM Set git user name, email for system'
+ - git config --system user.name "LAMurakami"
+ - git config --system user.email GitHub@LAMurakami.com
+ - git config --system core.editor vi
+ - git config --system branch.autosetuprebase always
+ - git config --system init.defaultBranch master
+ - echo
+ - echo 'AWS LAM Initialize etckeeper'
+ - etckeeper init
+ - etckeeper commit -m 'AWS LAM Initial Cloud-init commit'
+ - echo
+ - echo 'AWS LAM Report kernel version'
+ - uname -a
+ - echo
+ - echo 'AWS LAM Report Release version'
+ - head /etc/*release
+ - echo
+ - echo 'AWS LAM Adding nfs4 mount to AWS NW-O VPC Elastic File System'
+ - mkdir /mnt/efs
+ - chown ec2-user:ec2-user /mnt/efs
+ - nfsOpt="nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
+ - echo "172.31.14.159:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
+ - mount -a -t nfs4
+ - echo
+ - echo 'AWS LAM Add a swapfile'
+ - dd if=/dev/zero of=/swapfile bs=32M count=8
+ - chmod 600 /swapfile
+ - mkswap /swapfile
+ - swapon /swapfile
+ - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+ - echo
+ - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
+ - cp /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2-sshd_config /etc/ssh/sshd_config
+ - cp /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2-Banner.txt /etc/ssh/Banner.txt
+ - systemctl restart sshd
+ - echo
+ - echo 'AWS LAM Report AWS EC2 metadata for this instance'
+ - /mnt/efs/aws-lam1-ubuntu/ec2-user-data.bash
+ - echo
+ - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
+ # Allow for either gzip compressed user-data or plain text user-data
+ - (curl -s http://169.254.169.254/latest/user-data | gunzip) || curl -s http://169.254.169.254/latest/user-data
+ - echo
+ - echo 'AWS LAM Check US Alaska local time for this system'
+ - ls -lF --time-style=long-iso /etc/localtime
+ - echo
+ - echo 'AWS LAM Installing Amazon Linux 2 user bash resources'
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2.tgz --directory /home/ec2-user
+ - echo
+ - echo 'AWS LAM ***** Secure site *****'
+ - echo
+ - echo 'AWS LAM Install Let-s Encrypt certificates for TLS encryption (HTTPS)'
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz --directory /etc
+ - echo
+ - echo 'AWS LAM Install aws.lam1.us web site'
+ - git clone /mnt/efs/git/aws /var/www/aws
+ - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
+ - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
+ - echo
+ - echo 'AWS LAM Install no-ssl web site'
+ - git clone /mnt/efs/git/no-ssl.git /var/www/no-ssl
+ - sh -c "cd /var/www/no-ssl;git remote set-url origin git@github.com:LAMurakami/no-ssl"
+ - sh -c "cd /var/www/no-ssl;git remote add ak20 git@ak20:no-ssl"
+ - echo
+ - echo 'AWS LAM Install lam web site'
+ # Extract lam from archive that includes MediWiki but not git repo
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/lam.tgz --directory /var/www
+ # Clone the lam repo and integrate it with MediWiki included lam archive
+ - git clone /mnt/efs/git/lam.git /tmp/lam
+ - mv /tmp/lam/.git /tmp/lam/.gitignore /var/www/lam
+ - rm -rf /tmp/lam # Remove the lam repo fragment
+ - sh -c "cd /var/www/lam;git remote set-url origin git@ak20:lam"
+ - echo
+ - echo 'AWS LAM Use lam2 branch to serve secure site at https://lam2.duckdns.org'
+ - sh -c "cd /var/www/lam;git checkout lam2"
+ - echo
+ - echo 'AWS LAM create Multicount directory'
+ - mkdir /var/www/Multicount
+ - echo
+ - echo 'AWS LAM Install mod_perl and man2html'
+ - yum install -y mod_perl man2html
+ - echo
+ - echo 'AWS LAM Install LAM perl modules'
+ - mkdir /usr/local/share/perl5
+ - ln -s /var/www/no-ssl/site_perl-LAM /usr/local/share/perl5/LAM
+ - echo
+ - echo 'AWS LAM allow Ubuntu apache2 log path or Amazon Linux 2 apache2 log path'
+ - sh -c "cd /var/log;ln -s httpd apache2"
+ - ln -s /var/log/apache2 /etc/httpd/logs
+ - chmod a+rx /var/log/httpd
+ - echo
+ - echo 'AWS LAM update aws site with current public local name ipv4'
+ - /var/www/aws/cloud-init.pl
+ - echo
+ - echo 'AWS LAM enable aws site'
+ - ln -s /var/www/aws/aws_apache2.conf /etc/httpd/conf.d/zzz_080_aws.conf
+ - echo
+ - echo 'AWS LAM Update main apache2 configuration'
+ - cp /var/www/aws/Amazon-Linux-2-httpd.conf /etc/httpd/conf/httpd.conf
+ - echo
+ - echo 'AWS LAM Update apache2 ssl configuration'
+ - rm /etc/httpd/conf.d/ssl.conf
+ - ln -s /var/www/lam/lam_apache2.conf /etc/httpd/conf.d/ssl.conf
+ - echo
+ - echo 'AWS LAM Update gitweb configuration'
+ - sed -i '1 s|Alias /git /var/www/git|Alias /gitweb /var/www/git|' /etc/httpd/conf.d/git.conf
+ - cp /var/www/aws/Amazon-Linux-2-gitweb.conf /etc/gitweb.conf
+ - echo
+ - echo 'AWS LAM Configure /server-status /server-info ReadmeName'
+ - ln -s /var/www/lam/lam_info.conf /etc/httpd/conf.d/info.conf
+ - ln -s /var/www/lam/lam_status.conf /etc/httpd/conf.d/status.conf
+ - sed -i 's/ReadmeName README.html/ReadmeName FOOTER.html/' /etc/httpd/conf.d/autoindex.conf
+ - echo
+ - echo 'AWS LAM Install MariaDB10.5 and php7.4 from amazon-linux-extras'
+ - amazon-linux-extras install -y mariadb10.5 php7.4
+ - echo
+ - echo 'AWS LAM enable and start MariaDB'
+ - systemctl enable mariadb
+ - systemctl start mariadb
+ - echo
+ - echo 'AWS LAM Creating {lam|Mediawiki} database and user'
+ - mysql --table < /var/www/lam/lam-user.sql
+ - echo 'AWS LAM Restore latest lam database backup from AWS S3'
+ - cp -r /home/ec2-user/.aws /root
+ - aws s3 cp s3://lamurakami/Bk-20-MySQL.lam.sql.gz - | gunzip -c | mysql --user=lam lam
+ - echo 'AWS LAM Restore latest LAM Alaska MediaWiki database backup from AWS S3'
+ - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz - | gunzip -c | mysql --user=lam wikidb
+ - echo
+ - echo 'AWS LAM ***** Additional sites *****'
+ - echo
+ - echo 'AWS LAM Installing sites.lam1.us web site'
+ - git clone /mnt/efs/git/sites.git /var/www/sites
+ - sh -c "cd /var/www/sites;git remote set-url origin git@ak20:sites"
+ - ln -s /var/www/sites/sites_apache2.conf /etc/httpd/conf.d/zzz_030_sites.conf
+ - echo
+ - echo 'AWS LAM Installing arsc.lam1.us web site'
+ - git clone /mnt/efs/git/arsc /var/www/arsc
+ - sh -c "cd /var/www/arsc;git remote set-url origin git@github.com:LAMurakami/arsc"
+ - sh -c "cd /var/www/arsc;git remote add ak20 git@ak20:arsc"
+ - ln -s /var/www/arsc/arsc_apache2.conf /etc/httpd/conf.d/zzz_060_arsc.conf
+ - echo
+ - echo 'AWS LAM Installing cabo.lam1.us web site'
+ - git clone /mnt/efs/git/cabo.git /var/www/cabo
+ - sh -c "cd /var/www/cabo;git remote set-url origin git@ak20:cabo"
+ - ln -s /var/www/cabo/cabo_apache2.conf /etc/httpd/conf.d/zzz_040_cabo.conf
+ - echo
+ - echo 'AWS LAM Adding olnes www Content'
+ - git clone /mnt/efs/git/olnes.git /var/www/olnes
+ - sh -c "cd /var/www/olnes;git remote set-url origin git@ak20:olnes"
+ - ln -s /var/www/olnes/olnes_apache2.conf /etc/httpd/conf.d/zzz_052_olnes.conf
+ - echo
+ - echo 'AWS LAM Installing z.lam1.us web site'
+ - git clone /mnt/efs/git/z.git /var/www/z
+ - sh -c "cd /var/www/z;git remote set-url origin git@ak20:z"
+ - ln -s /var/www/z/z_apache2.conf /etc/httpd/conf.d/zzz_050_z.conf
+ - rm /etc/httpd/conf.d/welcome.conf
+ - echo
+ - echo 'AWS LAM ***** Final Initialization Steps *****'
+ - echo
+ - echo 'AWS LAM add apache group to ec2-user'
+ - sh -c "usermod -a -G apache ec2-user"
+ - echo
+ - echo 'AWS LAM Create /phpinfo.php page'
+ - [ sh, -c, 'echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php' ]
+ - echo
+ - echo 'AWS LAM Change ownership of /var/www'
+ - sh -c "chown -R ec2-user:apache /var/www"
+ - chown apache:apache /var/www/Multicount
+ - echo
+ - echo 'AWS LAM systemctl start httpd'
+ - systemctl start httpd
+ - echo
+ - echo 'AWS LAM systemctl enable httpd'
+ - systemctl enable httpd
+ - echo
+ - echo 'AWS LAM Update packages'
+ - yum -y update
+ - echo
+ - echo 'AWS LAM Set lam2.duckdns.org hostname'
+ - /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2-set-hostname.bash
+ - echo
+ - echo 'AWS LAM Set hostname and localhost alias in /etc/hosts'
+ - sed -i '1s/localhost/lam2.duckdns.org lam2 localhost/' /etc/hosts
+ - echo
+ - echo 'AWS LAM Set hostname in MediaWiki LocalSettings.php'
+ - sed -i 's|lam1.duckdns.org|lam2.duckdns.org|g' /var/www/lam/html/A/LocalSettings.php
+ - echo
+ - echo 'AWS LAM Updating lam2.duckdns.org IP address'
+ - echo url="https://www.duckdns.org/update?domains=lam2&token=$(cat ~ec2-user/.duckdns)&verbose=true&ip=" | curl -s -k -K -
+ - echo " for lam2.duckdns.org IP address update"
+ - echo
+ - echo 'AWS LAM List Installed Packages information'
+ - repoquery -a --installed --qf '%-30{UI_FROM_REPO}%{NAME}-%{VERSION}-%{RELEASE}-%{ARCH}' | sort --ignore-case --key=1.31
+ - echo
+ - echo 'AWS LAM Final Cloud-init etckeeper commit'
+ - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
+ - echo
+ - echo 'AWS LAM cloud-init complete'
+
