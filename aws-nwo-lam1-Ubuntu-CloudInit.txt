@@ -66,7 +66,7 @@ packages:
  - x11-apps
  - whois
  - libgtk2.0-0
- - mlocate
+ - plocate
  - php-mbstring
  - php-intl
  - php-apcu
@@ -283,15 +283,8 @@ runcmd:
  - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz - | gunzip -c | mysql --user=lam wikidb
  - systemctl restart apache2
  - echo
- - sh -c "cd /etc;git add apache2/mods-available/alias.conf"
- - sh -c "cd /etc;git add apache2/mods-enabled/*"
- - sh -c "cd /etc;git add apache2/sites-available/*"
- - sh -c "cd /etc;git add apache2/sites-enabled/*"
- - sh -c "cd /etc;git add profile.d/mlocate.sh ssh/Banner.txt"
- - sh -c "cd /etc;git rm apache2/sites-enabled/000-default.conf"
- - sh -c "cd /etc ; git commit -a -m 'Changes from lam1-Ubuntu-CloudInit'"
- - sh -c "cd /etc;git add letsencrypt/*"
- - sh -c "cd /etc ; git commit -a -m 'Changes from lam1-Ubuntu-CloudInit'"
+ - echo 'AWS LAM Changes from lam1-Ubuntu-CloudInit etckeeper commit'
+ - etckeeper commit -m 'AWS LAM Changes from lam1-Ubuntu-CloudInit'
  - echo
  - echo 'AWS LAM Updating lam1.duckdns.org IP address'
  - echo url="https://www.duckdns.org/update?domains=lam1&token=$(cat ~ubuntu/.duckdns)&verbose=true&ip=" | curl -s -k -K -
@@ -315,6 +308,18 @@ runcmd:
  - echo
  - echo 'AWS LAM Install man2html after apache has been configured'
  - apt-get install -y man2html
+ - echo
+ - echo 'AWS LAM ***** Run cron daily plocate jobs *****'
+ - ln -s /var/www/no-ssl/local_scripts/plocate-mnt-efs.sh /etc/cron.daily/plocate-mnt-efs.sh
+ - /etc/cron.daily/plocate-mnt-efs.sh
+ - chmod a+r /mnt/efs/plocate.db
+ - updatedb
+ - echo
+ - echo 'AWS LAM Use Elastic File System plocate database'
+ - ln -s /var/www/no-ssl/plocate.sh /etc/profile.d/plocate.sh
+ - echo
+ - echo 'AWS LAM Final Cloud-init etckeeper commit'
+ - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
  - echo
  - echo 'AWS LAM List Installed Packages information'
  - dpkg -l
