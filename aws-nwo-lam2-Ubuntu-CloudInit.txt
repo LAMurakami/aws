@@ -158,6 +158,9 @@ runcmd:
  - a2enmod authz_groupfile.load
  - a2enmod rewrite
  - a2enmod cgi
+ - echo
+ - echo 'AWS LAM Tell git installing in /var/www/lam is O.K.'
+ - git config --system --add safe.directory /var/www/lam
  - git clone /mnt/efs/git/no-ssl.git /var/www/no-ssl
  - sh -c "cd /var/www/no-ssl;git remote set-url origin git@github.com:LAMurakami/no-ssl"
  - sh -c "cd /var/www/no-ssl;git remote add ak20 git@ak20:no-ssl"
@@ -292,3 +295,5 @@ runcmd:
  - echo
  - echo 'AWS LAM List Installed Packages information'
  - dpkg -l
+ - echo
+ - echo 'AWS LAM cloud-init complete'
