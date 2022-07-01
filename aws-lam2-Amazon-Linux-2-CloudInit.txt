@@ -41,8 +41,8 @@ runcmd:
  - echo 'AWS LAM Install Extra Packages for Enterprise Linux (EPEL) from amazon-linux-extras'
  - amazon-linux-extras install -y epel
  - echo
- - echo 'AWS LAM Install etckeeper to track configuration changes'
- - yum install -y etckeeper
+ - echo 'AWS LAM Install glances and etckeeper to track configuration changes'
+ - yum install -y etckeeper glances
  - echo
  - echo 'AWS LAM Set git user name, email for system'
  - git config --system user.name "LAMurakami"
@@ -155,6 +155,9 @@ runcmd:
  - echo
  - echo 'AWS LAM List Installed Packages information'
  - repoquery -a --installed --qf '%-30{UI_FROM_REPO}%{NAME}-%{VERSION}-%{RELEASE}-%{ARCH}' | sort --ignore-case --key=1.31
+ - echo
+ - echo 'AWS LAM ***** Run cron daily mlocate job *****'
+ - updatedb
  - echo
  - echo 'AWS LAM Final Cloud-init etckeeper commit'
  - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'

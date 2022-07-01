@@ -42,8 +42,8 @@ runcmd:
  - echo 'AWS LAM Install Extra Packages for Enterprise Linux (EPEL) from amazon-linux-extras'
  - amazon-linux-extras install -y epel
  - echo
- - echo 'AWS LAM Install etckeeper to track configuration changes'
- - yum install -y etckeeper
+ - echo 'AWS LAM Install glances and etckeeper to track configuration changes'
+ - yum install -y etckeeper glances
  - echo
  - echo 'AWS LAM Set git user name, email for system'
  - git config --system user.name "LAMurakami"
@@ -76,13 +76,18 @@ runcmd:
  - swapon /swapfile
  - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
  - echo
+ - echo 'AWS LAM Install aws.lam1.us web site'
+ - git clone /mnt/efs/git/aws /var/www/aws
+ - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
+ - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
+ - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
- - cp /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2-sshd_config /etc/ssh/sshd_config
- - cp /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2-Banner.txt /etc/ssh/Banner.txt
+ - cp /var/www/aws/Amazon-Linux-2-sshd_config /etc/ssh/sshd_config
+ - cp /var/www/aws/Amazon-Linux-2-Banner.txt /etc/ssh/Banner.txt
  - systemctl restart sshd
  - echo
  - echo 'AWS LAM Report AWS EC2 metadata for this instance'
- - /mnt/efs/aws-lam1-ubuntu/ec2-user-data.bash
+ - /var/www/aws/ec2-user-data.bash
  - echo
  - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
  # Allow for either gzip compressed user-data or plain text user-data
@@ -98,11 +103,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Install Let-s Encrypt certificates for TLS encryption (HTTPS)'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz --directory /etc
- - echo
- - echo 'AWS LAM Install aws.lam1.us web site'
- - git clone /mnt/efs/git/aws /var/www/aws
- - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
- - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
  - echo
  - echo 'AWS LAM Install no-ssl web site'
  - git clone /mnt/efs/git/no-ssl.git /var/www/no-ssl
@@ -224,7 +224,7 @@ runcmd:
  - yum -y update
  - echo
  - echo 'AWS LAM Set lam2.duckdns.org hostname'
- - /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2-set-hostname.bash
+ - /var/www/aws/Amazon-Linux-2-set-hostname.bash
  - echo
  - echo 'AWS LAM Set hostname and localhost alias in /etc/hosts'
  - sed -i '1s/localhost/lam2.duckdns.org lam2 localhost/' /etc/hosts
