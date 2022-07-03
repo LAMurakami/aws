@@ -1,0 +1,9 @@
+[Unit]
+Description=Sync the clone Zz directory from the main server
+
+[Service]
+Type=simple
+ExecStart=/var/www/aws/systemd/Zz-sync-clone
+Restart=no
+User=ubuntu
+Group=ubuntu

@@ -1,0 +1,10 @@
+[Unit]
+Description=Sync the clone Zz directory during off peak hours
+
+[Timer]
+OnCalendar=*-*-* 23:56:00
+
+Persistent=true
+
+[Install]
+WantedBy=timers.target
