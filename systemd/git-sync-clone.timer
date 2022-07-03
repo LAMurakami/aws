@@ -1,5 +1,5 @@
 [Unit]
-Description=Sync the clone git repos during off peak hours
+Description=Sync the clone git repos timer
 
 [Timer]
 OnCalendar=*-*-* 23:58:00

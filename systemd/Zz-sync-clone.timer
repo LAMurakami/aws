@@ -1,5 +1,5 @@
 [Unit]
-Description=Sync the clone Zz directory during off peak hours
+Description=Sync the clone Zz directory timer
 
 [Timer]
 OnCalendar=*-*-* 23:56:00
