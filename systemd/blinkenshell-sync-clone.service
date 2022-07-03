@@ -1,0 +1,9 @@
+[Unit]
+Description=Sync the clone blinkenshell website from the main server
+ 
+[Service]
+Type=simple
+ExecStart=/var/www/aws/systemd/blinkenshell-sync-clone
+Restart=no
+User=ubuntu
+Group=ubuntu

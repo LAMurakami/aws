@@ -1,0 +1,10 @@
+[Unit]
+Description=Sync the clone blinkenshell website during off peak hours
+
+[Timer]
+OnCalendar=*-*-* 23:54:00
+
+Persistent=true
+
+[Install]
+WantedBy=timers.target
