@@ -1,0 +1,10 @@
+[Unit]
+Description=Sync the clone git repos during off peak hours
+
+[Timer]
+OnCalendar=*-*-* 23:58:00
+
+Persistent=true
+
+[Install]
+WantedBy=timers.target

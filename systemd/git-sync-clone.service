@@ -1,0 +1,9 @@
+[Unit]
+Description=Sync the clone git repos from the main server
+ 
+[Service]
+Type=simple
+ExecStart=/var/www/aws/systemd/git-sync-clone
+Restart=no
+User=ubuntu
+Group=ubuntu
