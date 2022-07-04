@@ -2,7 +2,7 @@
 Description=Sync the clone blinkenshell website timer
 
 [Timer]
-OnCalendar=*-*-* 23:51:00
+OnCalendar=*-*-* 00:05:00
 
 Persistent=true
 
