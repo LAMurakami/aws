@@ -1,5 +1,6 @@
 [Unit]
 Description=Sync the clone Zz directory from the main server
+RequiresMountsFor=/mnt/efs
 
 [Service]
 Type=simple
