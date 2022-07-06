@@ -1,0 +1,8 @@
+#! /bin/bash
+# Refresh the daily lam and wikidb backups from S3
+
+aws s3 cp --no-progress s3://lamurakami/Bk-20-MySQL.lam.sql.gz - \
+| gunzip -c | mysql --user=lam lam
+
+aws s3 cp --no-progress s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz - \
+| gunzip -c | mysql --user=lam wikidb

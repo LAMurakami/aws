@@ -1,0 +1,10 @@
+[Unit]
+Description=Refresh the clone lam and wikidb databases timer
+
+[Timer]
+OnCalendar=*-*-* 08:07:00
+
+Persistent=false
+
+[Install]
+WantedBy=timers.target
