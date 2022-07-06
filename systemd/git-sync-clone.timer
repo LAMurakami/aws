@@ -2,7 +2,7 @@
 Description=Sync the clone git repos timer
 
 [Timer]
-OnCalendar=*-*-* 23:53:00
+OnCalendar=*-*-* 00:53:00
 
 Persistent=true
 
