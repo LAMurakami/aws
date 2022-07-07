@@ -1,0 +1,9 @@
+[Unit]
+Description=Daily backup service
+RequiresMountsFor=/mnt/efs
+
+[Service]
+Type=simple
+WorkingDirectory=/
+ExecStart=/usr/bin/run-parts --verbose /var/www/aws/systemd/daily-backup
+Restart=no
