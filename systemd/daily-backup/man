@@ -1,0 +1,36 @@
+#!/bin/bash
+
+<<PROGRAM_TEXT
+
+This script will rebuild an archive of /usr/local/man resources
+ if any of the resources have been changed or added.
+
+The archive is extracted on a new instance with:
+
+tar -xvzf /mnt/efs/aws-lam1-ubuntu/man.tgz --directory /usr/local
+
+The following will list files changed since the archive was last rebuilt:
+
+if [ $(find /usr/local/man -newer /mnt/efs/aws-lam1-ubuntu/man.tgz -print \
+ | sed 's|^/usr/local/man/||' | wc -l) \
+ -gt 0 ]
+then
+  find /usr/local/man -newer /mnt/efs/aws-lam1-ubuntu/man.tgz \
+  | xargs ls -ld --time-style=long-iso  | sed 's|/usr/local/man/||' 
+fi
+
+PROGRAM_TEXT
+
+if [ $(find /usr/local/man -newer /mnt/efs/aws-lam1-ubuntu/man.tgz -print \
+| sed 's|^/usr/local/man/||' | grep -v '.git/' \
+| grep -v '.git$' | wc -l) -gt 0 ]; then
+
+  echo Recreating the aws-lam1-ubuntu/man.tgz archive
+
+  rm -f /mnt/efs/aws-lam1-ubuntu/man.t{gz,xt}
+
+  tar -cvzf /mnt/efs/aws-lam1-ubuntu/man.tgz \
+  --directory /usr/local man 2>&1 \
+  | tee /mnt/efs/aws-lam1-ubuntu/man.txt
+
+fi
