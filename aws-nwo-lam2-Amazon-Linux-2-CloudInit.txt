@@ -51,6 +51,7 @@ runcmd:
  - git config --system core.editor vi
  - git config --system branch.autosetuprebase always
  - git config --system init.defaultBranch master
+ - git config --system --add safe.directory /var/www/lam
  - echo
  - echo 'AWS LAM Initialize etckeeper'
  - etckeeper init
@@ -228,9 +229,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Set hostname and localhost alias in /etc/hosts'
  - sed -i '1s/localhost/lam2.duckdns.org lam2 localhost/' /etc/hosts
- - echo
- - echo 'AWS LAM Set hostname in MediaWiki LocalSettings.php'
- - sed -i 's|lam1.duckdns.org|lam2.duckdns.org|g' /var/www/lam/html/A/LocalSettings.php
  - echo
  - echo 'AWS LAM Updating lam2.duckdns.org IP address'
  - echo url="https://www.duckdns.org/update?domains=lam2&token=$(cat ~ec2-user/.duckdns)&verbose=true&ip=" | curl -s -k -K -
