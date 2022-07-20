@@ -27,6 +27,7 @@ packages:
  - texlive
  - xorg-x11-apps
  - perl-CGI
+ - perl-libwww-perl
  - xauth
  - gitweb
 
