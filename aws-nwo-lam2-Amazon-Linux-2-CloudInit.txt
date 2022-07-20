@@ -159,8 +159,8 @@ runcmd:
  - ln -s /var/www/lam/lam_status.conf /etc/httpd/conf.d/status.conf
  - sed -i 's/ReadmeName README.html/ReadmeName FOOTER.html/' /etc/httpd/conf.d/autoindex.conf
  - echo
- - echo 'AWS LAM Install MariaDB10.5 and php7.4 from amazon-linux-extras'
- - amazon-linux-extras install -y mariadb10.5 php7.4
+ - echo 'AWS LAM Install MariaDB10.5, php7.4 and kernel-5.15 from amazon-linux-extras'
+ - amazon-linux-extras install -y mariadb10.5 php7.4 kernel-5.15
  - echo
  - echo 'AWS LAM enable and start MariaDB'
  - systemctl enable mariadb
@@ -245,6 +245,9 @@ runcmd:
  - echo
  - echo 'AWS LAM Final Cloud-init etckeeper commit'
  - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
+ - echo
+ - echo 'AWS LAM Check if the system needs to be rebooted'
+ - needs-restarting --reboothint
  - echo
  - echo 'AWS LAM cloud-init complete'
 
