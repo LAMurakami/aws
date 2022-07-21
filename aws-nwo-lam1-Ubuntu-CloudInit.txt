@@ -111,10 +111,6 @@ runcmd:
  - echo 'AWS LAM Set hostname and localhost alias in /etc/hosts'
  - sed -i '1s/localhost/lam1.lam1.us lam1 localhost/' /etc/hosts
  - echo
- - echo 'AWS LAM Installing leafpad compiled for Ubuntu Server 20.04'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/leafpad-Ubuntu-20-04.tgz --directory /usr/local
- - file /usr/local/bin/leafpad
- - echo
  - echo 'AWS LAM Installing GNU which v2.21 compiled for Ubuntu Server 22.04'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/which-Ubuntu-22-04.tgz --directory /usr/local
  - file /usr/local/bin/which
@@ -239,6 +235,11 @@ runcmd:
  - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/080_aws.conf
  - a2ensite 080_aws
  - /var/www/aws/cloud-init.pl
+ - echo
+ - echo 'AWS LAM Installing leafpad compiled for Ubuntu Server 20.04'
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/leafpad-Ubuntu-20-04.tgz --directory /usr/local
+ - cp /var/www/aws/leafpad.1 /usr/local/share/man/man1/
+ - gzip /usr/local/share/man/man1/leafpad.1
  - echo
  - echo 'AWS LAM Adding blinkenshell www Content'
  # Extract blinkenshell from archive that includes date time stamps
