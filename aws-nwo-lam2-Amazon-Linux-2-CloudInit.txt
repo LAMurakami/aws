@@ -98,8 +98,8 @@ runcmd:
  - echo 'AWS LAM Check US Alaska local time for this system'
  - ls -lF --time-style=long-iso /etc/localtime
  - echo
- - echo 'AWS LAM Installing Amazon Linux 2 user bash resources'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/Amazon-Linux-2.tgz --directory /home/ec2-user
+ - echo 'AWS LAM Installing Amazon Linux 2 ec2-user bash resources'
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/ec2-user.tgz --directory /home/ec2-user
  - echo
  - echo 'AWS LAM ***** Secure site *****'
  - echo
@@ -170,7 +170,7 @@ runcmd:
  - echo 'AWS LAM Creating {lam|Mediawiki} database and user'
  - mysql --table < /var/www/lam/lam-user.sql
  - echo 'AWS LAM Restore latest lam database backup from AWS S3'
- - cp -r /home/ec2-user/.aws /root
+ - ln -s /home/ec2-user/.aws /root/.aws
  - aws s3 cp s3://lamurakami/Bk-20-MySQL.lam.sql.gz - | gunzip -c | mysql --user=lam lam
  - echo 'AWS LAM Restore latest LAM Alaska MediaWiki database backup from AWS S3'
  - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz - | gunzip -c | mysql --user=lam wikidb
