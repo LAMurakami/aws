@@ -278,7 +278,7 @@ runcmd:
  - chown -R ubuntu:www-data /var/www/no-ssl /var/www/lam /var/www/aws
  - echo
  - echo 'AWS LAM Refreshing lam database'
- - cp -r /home/ubuntu/.aws /root
+ - ln -s /home/ubuntu/.aws /root/.aws
  - aws s3 cp s3://lamurakami/Bk-20-MySQL.lam.sql.gz - | gunzip -c | mysql --user=lam lam
  - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz - | gunzip -c | mysql --user=lam wikidb
  - systemctl restart apache2
