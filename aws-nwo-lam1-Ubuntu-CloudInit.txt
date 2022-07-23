@@ -238,8 +238,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Installing leafpad compiled for Ubuntu Server 22.04'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/leafpad-Ubuntu-22-04.tgz --directory /usr/local
- - cp /var/www/aws/leafpad.1 /usr/local/share/man/man1/
- - gzip /usr/local/share/man/man1/leafpad.1
  - echo
  - echo 'AWS LAM Adding blinkenshell www Content'
  # Extract blinkenshell from archive that includes date time stamps

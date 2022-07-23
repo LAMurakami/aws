@@ -86,8 +86,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Installing leafpad compiled for Amazon Linux 2'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/leafpad-Amazon-Linux-2.tgz --directory /usr/local
- - cp /var/www/aws/leafpad.1 /usr/local/share/man/man1/
- - gzip /usr/local/share/man/man1/leafpad.1
  - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
  - cp /var/www/aws/Amazon-Linux-2-sshd_config /etc/ssh/sshd_config
