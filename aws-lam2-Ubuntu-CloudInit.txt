@@ -117,19 +117,19 @@ runcmd:
  - sed -i '1s/localhost/lam2.lam1.us lam2 localhost/' /etc/hosts
  - echo
  - echo 'AWS LAM Install leafpad compiled for Ubuntu Server 20.04'
- - wget -q -P /tmp https://github.lamurakami.com/Install/leafpad-Ubuntu-20-04.tgz
+ - wget -q -P /tmp https://lamurakami.github.io/Install/leafpad-Ubuntu-20-04.tgz
  - tar -xzf /tmp/leafpad-Ubuntu-20-04.tgz --directory /usr/local
  - rm /tmp/leafpad-Ubuntu-20-04.tgz
  - file /usr/local/bin/leafpad
  - echo
  - echo 'AWS LAM Installing GNU which v2.21 compiled for Ubuntu Server 20.04'
- - wget -q -P /tmp https://github.lamurakami.com/Install/which-Ubuntu-20-04.tgz
+ - wget -q -P /tmp https://lamurakami.github.io/Install/which-Ubuntu-20-04.tgz
  - tar -xzf /tmp/which-Ubuntu-20-04.tgz --directory /usr/local
  - rm /tmp/which-Ubuntu-20-04.tgz
  - file /usr/local/bin/which
  - echo
  - echo 'AWS LAM Installing GNU tnef 1.4.18 compiled for Ubuntu Server 20.04'
- - wget -q -P /tmp https://github.lamurakami.com/Install/tnef-Ubuntu-20-04.tgz
+ - wget -q -P /tmp https://lamurakami.github.io/Install/tnef-Ubuntu-20-04.tgz
  - tar -xzf /tmp/tnef-Ubuntu-20-04.tgz --directory /usr/local
  - file /usr/local/bin/tnef
  - echo
