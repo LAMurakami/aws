@@ -1,4 +1,3 @@
-
 #cloud-config
 
 # Tell cloud-init to log the output to a log file
@@ -115,8 +114,8 @@ runcmd:
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/which-Ubuntu-22-04.tgz --directory /usr/local
  - file /usr/local/bin/which
  - echo
- - echo 'AWS LAM Installing GNU tnef 1.4.18 compiled for Ubuntu Server 20.04'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/tnef-Ubuntu-20-04.tgz --directory /usr/local
+ - echo 'AWS LAM Installing GNU tnef 1.4.18 compiled for Ubuntu Server 22.04'
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/tnef-Ubuntu-22-04.tgz --directory /usr/local
  - file /usr/local/bin/tnef
  - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
@@ -153,7 +152,10 @@ runcmd:
  - rm /etc/apache2/mods-available/autoindex.conf
  - rm /etc/apache2/mods-available/dir.conf
  - /var/www/no-ssl/Implement_no-ssl_conf.bash
- - /var/www/no-ssl/Implement_more_apache2_stuff.bash
+ - echo
+ - echo 'AWS LAM Configuring perl to include LAM perl modules'
+ - mkdir /usr/local/lib/site_perl
+ - ln -s /var/www/no-ssl/site_perl-LAM /usr/local/lib/site_perl/LAM
  # Extract lam from archive that includes MediWiki but not git repo
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/lam.tgz --directory /var/www
  # Clone the lam repo and integrate it with MediWiki included lam archive

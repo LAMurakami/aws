@@ -157,7 +157,10 @@ runcmd:
  - rm /etc/apache2/mods-available/autoindex.conf
  - rm /etc/apache2/mods-available/dir.conf
  - /var/www/no-ssl/Implement_no-ssl_conf.bash
- - /var/www/no-ssl/Implement_more_apache2_stuff.bash
+ - echo
+ - echo 'AWS LAM Configuring perl to include LAM perl modules'
+ - mkdir /usr/local/lib/site_perl
+ - ln -s /var/www/no-ssl/site_perl-LAM /usr/local/lib/site_perl/LAM
  - echo
  - echo 'AWS LAM Update from default to LAM AWS lam2 web configuration'
  - sed -i "s|aws|lam2|" /var/www/no-ssl/apache2.conf
