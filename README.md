@@ -1,14 +1,26 @@
 # Linux Apache MariaDB in the cloud
-accessed by IP Address website for the
+The localhost / accessed by IP Address website for the
 [lamurakami.duckdns.org](http://lamurakami.duckdns.org/)
 [lam1.duckdns.org](http://lam1.duckdns.org/)
 [lam2.duckdns.org](http://lam2.duckdns.org/)
 [larryforalaska.duckdns.org](http://larryforalaska.duckdns.org/)
 Dynamic Domain Name Service subdomains possibly being served by the instance.
 
-This repo contains content in the html folder and an apache2 configuration.
+The LAMurakami/aws repo contains content in the html folder and an apache2 configuration for a named virtual host for localhost and a number of aliases.
 
-Content (DocumentRoot) is now at /var/www/&lt;site&gt;/html for all sites and
+It also includes the CloudInit files to launch a new LAM AWS instance.  A Linux Apache MariaDB (LAM) Amazon Web Services (AWS) instance includes the Perl, Python and PHP application programming languages making it a LAMP model web service software stack instance.  A LAM AWS instance also has additional prerequisites for MediaWiki and the secure site web applications in a separate private lam repo.
+
+AWS EC2 metadata values
+local-hostname, local-ipv4, public-hostname, and public-ipv4
+for the instance are used
+in the apache2 ServerAlias for the named virtual host for localhost.
+The Dynamic Domain Name Service subdomains used with DNS CNAME records
+to serve my domain names are also included in the apache2 ServerAlias.
+
+These values are used along with the instance-type on the main page for the
+virtual host in my version of the this http site is working main page.  The values for the main page and configuration fiel are applied during the CloudInit process by [cloud-init.pl](https://github.com/LAMurakami/aws/blob/master/cloud-init.pl) and [ec2-user-data.bash](https://github.com/LAMurakami/aws/blob/master/ec2-user-data.bash)
+
+Content (DocumentRoot) is now at /var/www/&lt;site&gt;/html and
 configuration and supporting files within /var/www/&lt;site&gt; but not the
 DocumentRoot.
 
@@ -24,31 +36,7 @@ content in a html/ subdirectory as outlined below:
          |-- aws-nwo-lam1-Ubuntu-CloudInit.txt
          |-- cloud-init.pl
          |-- aws_apache2.conf
-         |-- html/   DocumentRoot /var/www/aws/html/
-/var/www/no-ssl/
-         |-- apache2.conf
-         |-- Implement_no-ssl_conf.bash
-         |-- Implement_more_sites_conf.bash
-         |-- Implement_more_apache2_stuff.bash
-         |-- no-ssl_apache2.conf
-         |-- html/   DocumentRoot /var/www/no-ssl/html/
-             |-- Public/
-                 |-- Scripts/
-/var/www/&lt;additional-sites&gt;/
-         |-- &lt;site&gt;_apache2.conf
-         |-- html/   DocumentRoot /var/www/&lt;additional-sites&gt;/html/
-/var/www/lam/
-         |-- Implement_lam_conf.bash
-         |-- lam_apache2.conf
-         |-- lam_archive_rebuild.bash
-         |-- .ht{group,passwd}
-         |-- data/
-         |-- html/   DocumentRoot /var/www/lam/html/
-             |-- Private/
-                 |-- Scripts/</pre>
-
-* Implement* These four scripts will implement the configuration when run
-with root (sudo) permissions.
+         |-- html/   DocumentRoot /var/www/aws/html/</pre>
 
 * aws-nwo-lam1-Ubuntu-CloudInit.txt is the configuration for the initializaton
 of the instance during the first and subsequent boots.  During the first boot
@@ -65,12 +53,6 @@ Linux component of the LAMP model web server.  Adding epel, php7.4 and
 mariadb10.5 repositories using amazon-linux-extras enables this instance
 to support the MediaWiki installation and be an AWS LAM clone.
 
-* apache2.conf is the main apache2 configuration file.  The /Public alias is
-included here allowing no-ssl/html/Public/ content to be accessed from any
-site and a set of /var/www/no-ssl/html/Public/Scripts Directory directives
-defining .cgi-pl as scripts to be accessed from any site.
-A set of custom error handlers are also defined here.
-
 * cloud-init.pl applies the public-hostname, public-ipv4, local-hostname and
 local-ipv4 values from the /var/log/cloud-init-output.log to the
 /var/www/aws/html/index.html and /var/www/aws/aws_apache2.conf files so the
@@ -84,22 +66,6 @@ a2ensite in the Implement_more_sites_conf.bash script which also assigns
 a three digit numerical order for the sites.  Force apache2 to read any
 changes in configuration files with:
 <pre>systemctl reload apache2</pre>
-
-* lam_archive_rebuild.bash is a script to rebuild a tar archive if anything
-has changed since the archive was last rebuilt.  By not rebuilding the archive
-if nothing has changed the data transmitted to a remote copy of the backups is
-reduced.  The whole archive will be transmitted if any file changes but the
-archive is compressed.  The archive rebuild should only be run on the master
-system and not on clones.  The script is linked into the backup directory with:
-<pre>ln -s /var/www/lam/lam_archive_rebuild.bash \
-/mnt/efs/aws-lam1-ubuntu/lam</pre>
-The script will only run if the archive file already exists as it is used as
-the Newer reference.  Create a zero byte archive file with an old date with:
-<pre>touch -d 1955-05-20 /mnt/efs/aws-lam1-ubuntu/lam.tgz</pre>
-
-* site_perl-LAM contains perl modules to be linked into site_perl.
-The modules simplify a number of cgi perl routines used in both Public
-and Private scripts of the sites.
 
 See Also:
 * [no-ssl repo README.md](https://github.com/LAMurakami/no-ssl#readme)
