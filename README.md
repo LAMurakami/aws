@@ -28,8 +28,7 @@ The LAM AWS EC2 lam1 CloudInit builds a
 [LAMP](https://en.wikipedia.org/wiki/LAMP_(software_bundle))
 model web service software
 stack instance from the Latest Ubuntu Server image available.
-The configuration and content is split into several sub directories of
-/var/www/ with each being a separate git repository.  Each repo has the
+This repo has the
 content in a html/ subdirectory as outlined below:
 
 <pre>/var/www/aws/
@@ -71,4 +70,4 @@ See Also:
 * [no-ssl repo README.md](https://github.com/LAMurakami/no-ssl#readme)
 * [arsc repo README.md](https://github.com/LAMurakami/arsc#readme)
 * [ubuntu-etc repo README.md](https://github.com/LAMurakami/ubuntu-etc#readme) Ubuntu Server 20.04 configuration changes for LAM AWS VPC EC2 instances
-* [A Cloud-init script that anyone could launch on AWS](https://blog.lamurakami.com/2020/08/04/Cloud-init-script-that-anyone-could-launch-on-AWS.html)
+* [A Cloud-init script that anyone could launch on AWS](https://lamurakami.github.io/blog/2020/08/04/Cloud-init-script-that-anyone-could-launch-on-AWS.html)
