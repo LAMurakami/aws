@@ -164,6 +164,7 @@ runcmd:
  - rm -rf /tmp/lam # Remove the lam repo fragment
  - sh -c "cd /var/www/lam;git remote set-url origin git@ak20:lam"
  # Use lam1 branch to serve secure site at https://lam1.duckdns.org
+ - sh -c "cd /var/www/lam;git stash"
  - sh -c "cd /var/www/lam;git checkout lam1"
  - rm /etc/apache2/mods-available/info.conf
  - rm /etc/apache2/mods-available/status.conf
