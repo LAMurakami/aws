@@ -3,7 +3,7 @@ Description=Check in to DuckDNS for lam1ak.duckdns.org
 
 [Service]
 Type=simple
-ExecStart=/var/www/lam/systemd/duckdns-check-in lam1ak
+ExecStart=/var/www/aws/systemd/duckdns-check-in lam1ak
 Restart=no
 User=lam
 Group=staff
