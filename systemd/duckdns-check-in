@@ -1,0 +1,31 @@
+#!/bin/bash
+# This script is designed to be executed by a systemd service and timer.
+# The script checks in to the DuckDNS Dynamic Domain Name Service (DDNS)
+#  for the specified subdomain.
+# No output is produced if the check in is successful.
+# A single line of output is produced if the check in fails.
+# DuckDNS examples show checking in ever 5 minutes but I think
+#  every two hours is probably more than enough.
+# The www.DuckDNS.org website shows the last update for each of the subdomains
+#  but does not record a check in that does not result in an update.
+# The systemd journal will record the starting and stopping of the
+#  service and timer as well as the output if the check in fails.
+# --:----|----:----|----:----|----:----|----:----|----:----|----:----|----:----|
+
+if [[ $# < 1 ]]; then
+ echo "Subdomain argument is required for this script."
+ exit
+fi
+
+# The duckdns token is in a hidden file in the user's home directory
+curl_out=$( echo \
+url="https://www.duckdns.org/update?domains=$1&token=$(cat ~/.duckdns)" \
+| /usr/bin/curl --insecure --silent --config - )
+
+# The following line can be uncommented
+# echo "${curl_out} for $1.duckdns.org IP address update"
+
+if [[ ${curl_out} == "KO" ]]; then
+ echo "duckdns update failed for $1.duckdns.org IP address update"
+ exit 1
+fi
