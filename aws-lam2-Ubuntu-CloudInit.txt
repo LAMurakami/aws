@@ -82,7 +82,6 @@ packages:
  - libgtk2.0-0
  - mlocate
  - php-mbstring
- - glances
 
 ssh_import_is: [ubuntu]
 ssh_authorized_keys:
@@ -102,6 +101,7 @@ runcmd:
  - git config --system user.email GitHub@LAMurakami.com
  - git config --system core.editor vi
  - git config --system branch.autosetuprebase always
+ - git config --system init.defaultBranch master
  - echo
  - echo 'AWS LAM Install etckeeper to track configuration changes'
  - apt-get install etckeeper
@@ -182,15 +182,13 @@ runcmd:
  - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
  - echo
+ - echo 'AWS LAM Set ubuntu as owner of /var/www/{no-ssl,arsc,aws}'
+ - chown -R ubuntu:www-data /var/www/no-ssl /var/www/arsc /var/www/aws
+ - echo
  - systemctl restart apache2
  - echo
- - sh -c "cd /etc;git add apache2/mods-available/alias.conf"
- - sh -c "cd /etc;git add apache2/mods-enabled/*"
- - sh -c "cd /etc;git add apache2/sites-available/*"
- - sh -c "cd /etc;git add apache2/sites-enabled/*"
- - sh -c "cd /etc;git add profile.d/mlocate.sh ssh/Banner.txt"
- - sh -c "cd /etc;git rm apache2/sites-enabled/000-default.conf"
- - sh -c "cd /etc ; git commit -a -m 'Changes from lam2-Ubuntu-CloudInit'"
+ - echo 'AWS LAM Changes from lam2-Ubuntu-CloudInit etckeeper commit'
+ - etckeeper commit -m 'AWS LAM Changes from lam1-Ubuntu-CloudInit'
  - echo
  - echo 'AWS LAM Install dovecot-imapd after /etc/hosts has been configured'
  - apt-get install --yes dovecot-imapd
@@ -205,6 +203,15 @@ runcmd:
  - echo
  - echo 'AWS LAM Install man2html after apache has been configured'
  - apt-get install -y man2html
+ - echo
+ - echo 'AWS LAM ***** Run cron daily plocate jobs *****'
+ - ln -s /var/www/no-ssl/local_scripts/plocate-mnt-efs.sh /etc/cron.daily/plocate-mnt-efs.sh
+ - /etc/cron.daily/plocate-mnt-efs.sh
+ - chmod a+r /mnt/efs/plocate.db
+ - updatedb
+ - echo
+ - echo 'AWS LAM Final Cloud-init etckeeper commit'
+ - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
  - echo
  - echo 'AWS LAM List Installed Packages information'
  - dpkg -l
