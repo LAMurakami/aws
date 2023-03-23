@@ -16,6 +16,11 @@ packages:
  - httpd-manual
  - mod_ssl
  - whois
+ - php-fpm
+ - php-mysqli
+ - php-json
+ - php
+ - php-devel
  - php-gd
  - php-mbstring
  - php-intl
@@ -199,7 +204,7 @@ runcmd:
  - sh -c "usermod -a -G apache ec2-user"
  - echo
  - echo 'AWS LAM Create /phpinfo.php page'
- - [ sh, -c, 'echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php' ]
+ - [ sh, -c, 'echo "<?php phpinfo(); ?>" > /var/www/lam/html/phpinfo.php' ]
  - echo
  - echo 'AWS LAM Change ownership of /var/www'
  - sh -c "chown -R ec2-user:apache /var/www"
