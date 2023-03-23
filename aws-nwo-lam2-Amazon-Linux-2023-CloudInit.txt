@@ -32,6 +32,7 @@ packages:
  - mod_perl
  - gtk3
  - perl-DBD-MySQL
+ - mlocate
 
 ssh_import_is: [ec2-user]
 ssh_authorized_keys:
@@ -227,6 +228,13 @@ runcmd:
  - echo
  - echo 'AWS LAM List Installed Packages information'
  - repoquery -a --installed --qf '%-30{UI_FROM_REPO}%{NAME}-%{VERSION}-%{RELEASE}-%{ARCH}' | sort --ignore-case --key=1.31
+ - echo
+ - echo 'AWS LAM ***** Update mlocate database *****'
+ - updatedb
+ - /var/www/aws/systemd/daily-backup/mlocate-mnt-efs
+ - echo
+ - echo 'AWS LAM Use Elastic File System mlocate database'
+ - ln -s /var/www/no-ssl/mlocate.sh /etc/profile.d/mlocate.sh
  - echo
  - echo 'AWS LAM link which to /usr/local/bin *****'
  - ln -s /bin/which /usr/local/bin/which
