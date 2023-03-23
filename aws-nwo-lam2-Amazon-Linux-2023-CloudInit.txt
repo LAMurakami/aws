@@ -31,6 +31,7 @@ packages:
  - xorg-x11-utils
  - mod_perl
  - gtk3
+ - perl-DBD-MySQL
 
 ssh_import_is: [ec2-user]
 ssh_authorized_keys:
@@ -120,8 +121,8 @@ runcmd:
  - mkdir /var/www/Multicount
  - echo
  - echo 'AWS LAM Install LAM perl modules'
- - mkdir /usr/local/share/perl5
- - ln -s /var/www/no-ssl/site_perl-LAM /usr/local/share/perl5/LAM
+ - mkdir -p /usr/local/share/perl5/5.32
+ - ln -s /var/www/no-ssl/site_perl-LAM /usr/local/share/perl5/5.32/LAM
  - echo
  - echo 'AWS LAM allow Ubuntu apache2 log path or Amazon Linux 2 apache2 log path'
  - sh -c "cd /var/log;ln -s httpd apache2"
@@ -209,8 +210,10 @@ runcmd:
  - echo 'AWS LAM systemctl enable httpd'
  - systemctl enable httpd
  - echo
- - echo 'AWS LAM Update packages'
+ - echo 'AWS LAM Update packages to latest'
  - dnf -y update
+ - sh -c 'echo "latest" >> /etc/dnf/vars/releasever'
+ - dnf -y upgrade
  - echo
  - echo 'AWS LAM Set lam2.duckdns.org hostname'
  - /var/www/aws/Amazon-Linux-2-set-hostname.bash
@@ -225,10 +228,7 @@ runcmd:
  - echo 'AWS LAM List Installed Packages information'
  - repoquery -a --installed --qf '%-30{UI_FROM_REPO}%{NAME}-%{VERSION}-%{RELEASE}-%{ARCH}' | sort --ignore-case --key=1.31
  - echo
- - echo 'AWS LAM ***** Run cron daily mlocate job *****'
- - /etc/cron.daily/mlocate
- - echo
- - echo 'AWS LAM Use Elastic File System mlocate database'
- - ln -s /var/www/no-ssl/mlocate.sh /etc/profile.d/mlocate.sh
+ - echo 'AWS LAM link which to /usr/local/bin *****'
+ - ln -s /bin/which /usr/local/bin/which
  - echo
  - echo 'AWS LAM cloud-init complete'
