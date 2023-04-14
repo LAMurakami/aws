@@ -148,7 +148,7 @@ runcmd:
  - ln -s /var/www/lam/lam_apache2.conf /etc/httpd/conf.d/ssl.conf
  - echo
  - echo 'AWS LAM Update gitweb configuration'
- - sed -i '1 s|Alias /git /var/www/git|Alias /gitweb /var/www/git|' /etc/httpd/conf.d/git.conf
+ - sed -i '1 s|Alias /git /var/www/git|Alias /gitweb /var/www/git|' /etc/httpd/conf.d/gitweb.conf
  - cp /var/www/aws/Amazon-Linux-2-gitweb.conf /etc/gitweb.conf
  - echo
  - echo 'AWS LAM Configure /server-status /server-info ReadmeName'
