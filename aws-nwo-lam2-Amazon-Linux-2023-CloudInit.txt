@@ -91,8 +91,7 @@ runcmd:
  - /var/www/aws/ec2-user-data.bash
  - echo
  - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
- # Allow for either gzip compressed user-data or plain text user-data
- - (curl -s http://169.254.169.254/latest/user-data | gunzip) || curl -s http://169.254.169.254/latest/user-data
+ - /var/www/aws/ec2-instance-user-data.bash
  - echo
  - echo 'AWS LAM Check US Alaska local time for this system'
  - ls -lF --time-style=long-iso /etc/localtime
