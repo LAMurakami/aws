@@ -11,39 +11,38 @@ repo_update: true
 # Upgrade the instance on first boot
 repo_upgrade: all
 
-packages:
- - httpd
- - httpd-manual
- - mod_ssl
- - whois
- - php-fpm
- - php-mysqli
- - php-json
- - php
- - php-devel
- - php-gd
- - php-mbstring
- - php-intl
- - php-mysqlnd
- - php-xml
- - lynx
- - texlive
- - perl-CGI
- - perl-libwww-perl
- - xauth
- - gitweb
- - mariadb105-server
- - xorg-x11-utils
- - mod_perl
- - gtk3
- - perl-DBD-MySQL
- - mlocate
-
 ssh_import_is: [ec2-user]
 ssh_authorized_keys:
  - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAYEAnNqVrt71AKSIMmSAIONBx4jIEK0IIZF5fSAaB9kI4oOK+t7aSTKAZwwgKHWJ536XFdR3Ql5Xi0r2CuUEf1GVEagAxLZTXRuim5UGmS63rfSxGwq9JQVg5WDbN5ilnGxSmqsD77SApvmffcO/T2zZWd+rrjMWWRi9zQwRdQRm60bc69ajJbjIJd8SCXIggUPzTkUz5Sca7dhdffcMpGR9bdexFln+YSli1ohtvs2zVBM4ncpufGS+Auax8+gQNr32QeSszlKuKsXYorZ9gl+Z8s62mX5yCXIrH2hWoHsCTUX38iVM8/wI6sPVosarkng7mPOOQLy5k50Y0cb9FRQGlrvmQqsc3fI7tC1fblhKL0HaY844kIZRHwFuOI04ik+b8Swdjed6+FH/RIKppuOY+qfdmv8gcX4ZhpbKg+JN+u5Xy5awpUFqhsbBdCz0MvLNPKEbDNCFokX8nL0HqGeABk2DOJ1+IOFz5pIiCL31LTVGTQ0AwXp3nkaHZykJNrcB Authentication from lam@laptop.lam1.us
 
 runcmd:
+ - echo
+ - echo 'AWS LAM Add a swapfile'
+ - dd if=/dev/zero of=/swapfile bs=32M count=24
+ - chmod 600 /swapfile
+ - mkswap /swapfile
+ - swapon /swapfile
+ - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+ - echo
+ - echo 'AWS LAM Install LAMipedia packages'
+ - echo
+ - echo 'AWS LAM dnf Install httpd httpd-manual mod_ssl'
+ - dnf -y install httpd httpd-manual mod_ssl
+ - echo
+ - echo 'AWS LAM dnf Install whois lynx perl-CGI perl-libwww-perl xauth'
+ - dnf -y install whois lynx perl-CGI perl-libwww-perl xauth
+ - echo
+ - echo 'AWS LAM dnf Install php php-devel php-gd php-mbstring and more'
+ - dnf -y install php-fpm php-mysqli php-json php php-devel php-gd php-mbstring php-intl php-mysqlnd php-xml
+ - echo
+ - echo 'AWS LAM dnf Install mariadb105-server'
+ - dnf -y install mariadb105-server
+ - echo
+ - echo 'AWS LAM dnf Install gitweb xorg-x11-utils mod_perl gtk3 perl-DBD-MySQL mlocate'
+ - dnf -y install gitweb xorg-x11-utils mod_perl gtk3 perl-DBD-MySQL mlocate
+ - echo
+ - echo 'AWS LAM dnf Install texlive'
+ - dnf -y install texlive
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
@@ -68,13 +67,6 @@ runcmd:
  - nfsOpt="nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
  - echo "172.31.14.159:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
  - mount -a -t nfs4
- - echo
- - echo 'AWS LAM Add a swapfile'
- - dd if=/dev/zero of=/swapfile bs=32M count=8
- - chmod 600 /swapfile
- - mkswap /swapfile
- - swapon /swapfile
- - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
  - echo
  - echo 'AWS LAM Install aws.lam1.us web site'
  - git clone /mnt/efs/git/aws /var/www/aws
@@ -231,7 +223,7 @@ runcmd:
  - echo " for lam2.duckdns.org IP address update"
  - echo
  - echo 'AWS LAM List Installed Packages information'
- - repoquery -a --installed --qf '%-30{UI_FROM_REPO}%{NAME}-%{VERSION}-%{RELEASE}-%{ARCH}' | sort --ignore-case --key=1.31
+ - dnf repoquery -a --installed
  - echo
  - echo 'AWS LAM ***** Update mlocate database *****'
  - updatedb
