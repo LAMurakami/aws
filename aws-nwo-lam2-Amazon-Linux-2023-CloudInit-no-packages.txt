@@ -68,6 +68,9 @@ runcmd:
  - echo "172.31.14.159:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
  - mount -a -t nfs4
  - echo
+ - echo 'AWS LAM Install man2html'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-man2html.tgz --directory /usr/local
+ - echo
  - echo 'AWS LAM Install aws.lam1.us web site'
  - git clone /mnt/efs/git/aws /var/www/aws
  - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
