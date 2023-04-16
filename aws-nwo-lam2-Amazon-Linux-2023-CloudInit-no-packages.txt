@@ -44,6 +44,9 @@ runcmd:
  - echo 'AWS LAM dnf Install texlive'
  - dnf -y install texlive
  - echo
+ - echo 'AWS LAM dnf Install libxkbfile xorg-x11-xbitmaps'
+ - dnf -y install libxkbfile xorg-x11-xbitmaps
+ - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
  - echo
@@ -70,6 +73,15 @@ runcmd:
  - echo
  - echo 'AWS LAM Install man2html'
  - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-man2html.tgz --directory /usr/local
+ - echo
+ - echo 'AWS LAM Install xeyes'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-xeyes.tgz --directory /usr/local
+ - echo
+ - echo 'AWS LAM Install xclock'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-xclock.tgz --directory /usr/local
+ - echo
+ - echo 'AWS LAM Install xlogo'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-xlogo.tgz --directory /usr/local
  - echo
  - echo 'AWS LAM Install aws.lam1.us web site'
  - git clone /mnt/efs/git/aws /var/www/aws
