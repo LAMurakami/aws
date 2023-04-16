@@ -38,6 +38,8 @@ packages:
  - gtk3
  - perl-DBD-MySQL
  - mlocate
+ - libxkbfile
+ - xorg-x11-xbitmaps
 
 ssh_import_is: [ec2-user]
 ssh_authorized_keys:
@@ -75,6 +77,18 @@ runcmd:
  - mkswap /swapfile
  - swapon /swapfile
  - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+ - echo
+ - echo 'AWS LAM Install man2html'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-man2html.tgz --directory /usr/local
+ - echo
+ - echo 'AWS LAM Install xeyes'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-xeyes.tgz --directory /usr/local
+ - echo
+ - echo 'AWS LAM Install xclock'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-xclock.tgz --directory /usr/local
+ - echo
+ - echo 'AWS LAM Install xlogo'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-xlogo.tgz --directory /usr/local
  - echo
  - echo 'AWS LAM Install aws.lam1.us web site'
  - git clone /mnt/efs/git/aws /var/www/aws
@@ -231,7 +245,7 @@ runcmd:
  - echo " for lam2.duckdns.org IP address update"
  - echo
  - echo 'AWS LAM List Installed Packages information'
- - repoquery -a --installed --qf '%-30{UI_FROM_REPO}%{NAME}-%{VERSION}-%{RELEASE}-%{ARCH}' | sort --ignore-case --key=1.31
+ - dnf repoquery -a --installed
  - echo
  - echo 'AWS LAM ***** Update mlocate database *****'
  - updatedb
