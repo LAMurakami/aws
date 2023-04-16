@@ -83,6 +83,9 @@ runcmd:
  - echo 'AWS LAM Install xlogo'
  - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-xlogo.tgz --directory /usr/local
  - echo
+ - echo 'AWS LAM Install glances for ec2-user'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-glances.tgz --directory /home/ec2-user
+ - echo
  - echo 'AWS LAM Install aws.lam1.us web site'
  - git clone /mnt/efs/git/aws /var/www/aws
  - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
@@ -104,7 +107,7 @@ runcmd:
  - ls -lF --time-style=long-iso /etc/localtime
  - echo
  - echo 'AWS LAM Installing Amazon Linux 2 ec2-user bash resources'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/ec2-user.tgz --directory /home/ec2-user
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-ec2-user.tgz --directory /home/ec2-user
  - echo
  - echo 'AWS LAM ***** Secure site *****'
  - echo
