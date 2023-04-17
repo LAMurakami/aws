@@ -86,6 +86,13 @@ runcmd:
  - echo 'AWS LAM Install glances for ec2-user'
  - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-glances.tgz --directory /home/ec2-user
  - echo
+ - echo 'AWS LAM Install etckeeper and perform intitial commit'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-bin-etckeeper.tgz --directory /usr
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-etc-etckeeper.tgz --directory /etc
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-lib-systemd-system-etckeeper.tgz --directory /lib/systemd/system
+ - etckeeper init
+ - etckeeper commit -m 'AWS LAM Amazon Linux 2023'
+ - echo
  - echo 'AWS LAM Install aws.lam1.us web site'
  - git clone /mnt/efs/git/aws /var/www/aws
  - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
@@ -252,5 +259,8 @@ runcmd:
  - echo
  - echo 'AWS LAM link which to /usr/local/bin *****'
  - ln -s /bin/which /usr/local/bin/which
+ - echo
+ - echo 'AWS LAM Final Cloud-init etckeeper commit'
+ - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
  - echo
  - echo 'AWS LAM cloud-init complete'
