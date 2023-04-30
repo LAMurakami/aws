@@ -63,6 +63,10 @@ runcmd:
  - echo 'AWS LAM Install xlogo'
  - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-xlogo.tgz --directory /usr/local
  - echo
+ - echo 'AWS LAM Install geany'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/geany.tgz --directory /usr/local
+ - ldconfig /usr/local/lib
+ - echo
  - echo 'AWS LAM Install glances for ec2-user'
  - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-glances.tgz --directory /home/ec2-user
  - echo
