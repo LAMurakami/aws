@@ -51,6 +51,28 @@ runcmd:
  - echo "172.31.14.159:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
  - mount -a -t nfs4
  - echo
+ - echo 'AWS LAM Install man2html'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/man2html-Arm.tgz --directory /usr/local
+ - echo
+ - echo 'AWS LAM Install xeyes, xclock, xlogo'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/xapps-Arm.tgz --directory /usr/local
+ - echo
+ - echo 'AWS LAM Install geany'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/geany-Arm.tgz --directory /usr/local
+ - ldconfig /usr/local/lib
+ - echo
+ - echo 'AWS LAM Install glances for ec2-user'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/glances-ec2-user-Arm.tgz --directory /home/ec2-user
+ - echo
+ - echo 'AWS LAM Install etckeeper and perform intitial commit'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/etckeeper-bin-Arm.tgz --directory /usr
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/etckeeper-etc-Arm.tgz --directory /etc
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/etckeeper-lib-systemd-system-Arm.tgz --directory /lib/systemd/system
+ - etckeeper init
+ - etckeeper commit -m 'AWS LAM Amazon Linux 2023'
+ - systemctl enable etckeeper.timer
+ - systemctl start etckeeper.timer
+ - echo
  - echo 'AWS LAM Install aws.lam1.us web site'
  - git clone /mnt/efs/git/aws /var/www/aws
  - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
@@ -217,5 +239,8 @@ runcmd:
  - echo
  - echo 'AWS LAM link which to /usr/local/bin *****'
  - ln -s /bin/which /usr/local/bin/which
+ - echo
+ - echo 'AWS LAM Final Cloud-init etckeeper commit'
+ - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
  - echo
  - echo 'AWS LAM cloud-init complete'
