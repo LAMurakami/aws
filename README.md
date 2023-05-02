@@ -37,7 +37,8 @@ content in a html/ subdirectory as outlined below:
          |-- aws_apache2.conf
          |-- html/   DocumentRoot /var/www/aws/html/</pre>
 
-* aws-nwo-lam1-Ubuntu-CloudInit.txt is the configuration for the initializaton
+* [aws-nwo-lam1-Ubuntu-CloudInit.txt](https://github.com/LAMurakami/aws/blob/master/aws-nwo-lam1-Ubuntu-CloudInit.txt)
+is the configuration for the initializaton
 of the instance during the first and subsequent boots.  During the first boot
 it updates all the installed packages and then installs additional packages
 to support LAMP model web services including a MediaWiki installation.
@@ -46,13 +47,29 @@ instance shared with all the LAM AWS EC2 instances is mounted by nfs4.
 The site subdirectories and additional software is installed from git
 repositories and tgz archives on this persistant shared filesystem.
 
-* aws-nwo-lam2-Amazon-Linux-2-CloudInit.txt is an alternate initialization
+* [aws-nwo-lam2-Amazon-Linux-2-CloudInit.txt](https://github.com/LAMurakami/aws/blob/master/aws-nwo-lam2-Amazon-Linux-2-CloudInit.txt)
+is an alternate initialization
 for an LAM AWS EC2 using Amazon Linux 2 rather than Ubuntu Server as the
 Linux component of the LAMP model web server.  Adding epel, php7.4 and
 mariadb10.5 repositories using amazon-linux-extras enables this instance
 to support the MediaWiki installation and be an AWS LAM clone.
 
-* cloud-init.pl applies the public-hostname, public-ipv4, local-hostname and
+* [aws-nwo-lam2-Amazon-Linux-2023-CloudInit-no-packages.txt](https://github.com/LAMurakami/aws/blob/master/aws-nwo-lam2-Amazon-Linux-2023-CloudInit-no-packages.txt)
+is an alternate initialization for an LAM AWS EC2 using Amazon Linux 2023
+on the x86-64 architecture.  This CloudInit omits the "packages:" section
+so that it can be used on a t3.nano instance with only 0.5 GiB of memory.
+To overcome the
+[dnf Out of Memory bug](https://bugzilla.redhat.com/show_bug.cgi?id=1907030)
+on swapless machines with 1G or less
+of RAM "dnf -y install" is performed in the "runcmd:" section after a 768M
+swap file is created and enabled.
+
+* [aws-nwo-lam2-Amazon-Linux-2023-CloudInit-Arm.txt](https://github.com/LAMurakami/aws/blob/master/aws-nwo-lam2-Amazon-Linux-2023-CloudInit-Arm.txt)
+ is an alternate initialization for an LAM AWS EC2 using Amazon Linux
+2023 on the ARM rather than x86-64 architecture.
+
+* [cloud-init.pl](https://github.com/LAMurakami/aws/blob/master/cloud-init.pl)
+applies the public-hostname, public-ipv4, local-hostname and
 local-ipv4 values from the /var/log/cloud-init-output.log to the
 /var/www/aws/html/index.html and /var/www/aws/aws_apache2.conf files so the
 Dynamic Domain Name Service page is displayed when the AWS public domain name
