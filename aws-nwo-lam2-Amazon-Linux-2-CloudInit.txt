@@ -84,8 +84,8 @@ runcmd:
  - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
  - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
  - echo
- - echo 'AWS LAM Installing leafpad compiled for Amazon Linux 2'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/leafpad-Amazon-Linux-2.tgz --directory /usr/local
+ - echo 'AWS LAM Installing leafpad compiled for x86 Amazon Linux 2'
+ - tar -xzf /mnt/efs/Amazon-Linux-2/leafpad-x86.tgz --directory /usr/local
  - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
  - cp /var/www/aws/Amazon-Linux-2-sshd_config /etc/ssh/sshd_config
