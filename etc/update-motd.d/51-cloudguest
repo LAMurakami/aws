@@ -1,0 +1,8 @@
+#!/bin/sh
+#
+# 51-cloudguest: This file was created/modified by the Cloud Image build process
+# If you no longer want to see this message you can safely remove the file.
+echo ""
+echo "  This instance is an AWS LAM Cloud Guest:"
+echo "    http://aws.lam1.us/About http://lamurakami.duckdns.org"
+echo ""
