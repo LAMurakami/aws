@@ -136,12 +136,20 @@ runcmd:
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/tnef-Ubuntu-22-04.tgz --directory /usr/local
  - file /usr/local/bin/tnef
  - echo
+ - echo 'AWS LAM Installing aws.lam1.us web site'
+ - git clone /mnt/efs/git/aws /var/www/aws
+ - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
+ - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
+ - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/080_aws.conf
+ - a2ensite 080_aws
+ - /var/www/aws/cloud-init.pl
+ - echo
+ - echo 'AWS LAM Cloud Guest motd'
+ - ln -s /var/www/aws/etc/update-motd.d/51-cloudguest /etc/update-motd.d
+ - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
- - git clone /mnt/efs/git/etc.git /tmp/ubuntu-etc
- - sh -c "cd /tmp/ubuntu-etc;git remote set-url origin git@github.com:LAMurakami/ubuntu-etc"
- - sh -c "cd /tmp/ubuntu-etc;git checkout lam2"
- - cp /tmp/ubuntu-etc/ssh/sshd_config /etc/ssh
- - cp /tmp/ubuntu-etc/ssh/Banner.txt /etc/ssh
+ - cp /mnt/efs/aws-lam1-ubuntu/sshd_config-443 /etc/ssh/sshd_config
+ - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
  - systemctl restart sshd
  - echo
  - echo 'AWS LAM Check US Alaska local time for this system'
@@ -217,14 +225,6 @@ runcmd:
  - a2ensite 050_z
  - chown -R ubuntu:www-data /var/www/z
  - echo
- - echo 'AWS LAM Installing aws.lam1.us web site'
- - git clone /mnt/efs/git/aws /var/www/aws
- - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
- - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
- - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/080_aws.conf
- - a2ensite 080_aws
- - /var/www/aws/cloud-init.pl
- - echo
  - echo 'AWS LAM Adding blinkenshell www Content'
  # Extract blinkenshell from archive that includes date time stamps
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/blinkenshell.tgz --directory /var/www
@@ -274,6 +274,9 @@ runcmd:
  - apt-get install --yes dovecot-imapd
  - echo
  - echo 'AWS LAM Add root alias so default AWS ubuntu user gets root mail'
+ - git clone /mnt/efs/git/etc.git /tmp/ubuntu-etc
+ - sh -c "cd /tmp/ubuntu-etc;git remote set-url origin git@github.com:LAMurakami/ubuntu-etc"
+ - sh -c "cd /tmp/ubuntu-etc;git checkout lam2"
  - cp /tmp/ubuntu-etc/aliases /etc/aliases
  - cp /tmp/ubuntu-etc/dovecot/conf.d/10-master.conf /etc/dovecot/conf.d/10-master.conf
  - newaliases

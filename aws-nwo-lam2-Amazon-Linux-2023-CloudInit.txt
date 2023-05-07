@@ -90,6 +90,10 @@ runcmd:
  - echo 'AWS LAM Install xlogo'
  - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-xlogo.tgz --directory /usr/local
  - echo
+ - echo 'AWS LAM Install geany'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/geany.tgz --directory /usr/local
+ - ldconfig /usr/local/lib
+ - echo
  - echo 'AWS LAM Install glances for ec2-user'
  - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-glances.tgz --directory /home/ec2-user
  - echo
@@ -105,10 +109,12 @@ runcmd:
  - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
  - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
  - echo
+ - echo 'AWS LAM Cloud Guest motd'
+ - ln -s /var/www/aws/etc/update-motd.d/51-cloudguest /etc/update-motd.d
  - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
  - cp /mnt/efs/Amazon-Linux-2023/sshd_config /etc/ssh/sshd_config
- - cp /var/www/aws/Amazon-Linux-2-Banner.txt /etc/ssh/Banner.txt
+ - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
  - systemctl restart sshd
  - echo
  - echo 'AWS LAM Report AWS EC2 metadata for this instance'
