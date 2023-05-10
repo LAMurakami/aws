@@ -1,0 +1,15 @@
+# See man 5 aliases for format
+mailer-daemon: postmaster
+postmaster:    root
+
+# Person who should get the web user's mail
+www-data:      ubuntu
+
+# Person who should get root's mail
+root:          ubuntu
+
+# My #blinkenshell identity
+The_One:       ubuntu
+
+# A backup user
+q:             ubuntu
