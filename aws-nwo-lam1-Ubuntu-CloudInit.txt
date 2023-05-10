@@ -298,9 +298,8 @@ runcmd:
  - apt-get install --yes dovecot-imapd
  - echo
  - echo 'AWS LAM Add root alias so default AWS ubuntu user gets root mail'
- - git clone /mnt/efs/git/etc.git /tmp/ubuntu-etc
- - cp /tmp/ubuntu-etc/aliases /etc/aliases
- - cp /tmp/ubuntu-etc/dovecot/conf.d/10-master.conf /etc/dovecot/conf.d/10-master.conf
+ - cp /var/www/aws/etc/aliases /etc/aliases
+ - cp /var/www/aws/etc/dovecot/conf.d/10-master.conf /etc/dovecot/conf.d/10-master.conf
  - newaliases
  - echo
  - sh -c "cd /etc ; git commit -a -m 'Changes from lam1-Ubuntu-CloudInit'"
@@ -308,8 +307,7 @@ runcmd:
  - echo 'AWS LAM Install gitweb after apache has been configured'
  - apt-get install -y gitweb
  - a2disconf gitweb
- - cp /tmp/ubuntu-etc/gitweb.conf /etc/gitweb.conf
- - rm -rf /tmp/ubuntu-etc
+ - cp /var/www/aws/etc/gitweb.conf /etc/gitweb.conf
  - echo
  - echo 'AWS LAM Install man2html after apache has been configured'
  - apt-get install -y man2html

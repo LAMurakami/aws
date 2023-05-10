@@ -274,13 +274,9 @@ runcmd:
  - apt-get install --yes dovecot-imapd
  - echo
  - echo 'AWS LAM Add root alias so default AWS ubuntu user gets root mail'
- - git clone /mnt/efs/git/etc.git /tmp/ubuntu-etc
- - sh -c "cd /tmp/ubuntu-etc;git remote set-url origin git@github.com:LAMurakami/ubuntu-etc"
- - sh -c "cd /tmp/ubuntu-etc;git checkout lam2"
- - cp /tmp/ubuntu-etc/aliases /etc/aliases
- - cp /tmp/ubuntu-etc/dovecot/conf.d/10-master.conf /etc/dovecot/conf.d/10-master.conf
+ - cp /var/www/aws/etc/aliases /etc/aliases
+ - cp /var/www/aws/etc/dovecot/conf.d/10-master.conf /etc/dovecot/conf.d/10-master.conf
  - newaliases
- - rm -rf /tmp/ubuntu-etc
  - echo
  - sh -c "cd /etc ; git commit -a -m 'Changes from lam2-Ubuntu-CloudInit'"
  - echo
