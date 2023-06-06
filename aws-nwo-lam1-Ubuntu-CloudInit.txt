@@ -58,14 +58,11 @@ packages:
  - libbsd-resource-perl
  - libapache2-reload-perl
  - apache2-suexec-custom
- - mariadb-client
- - mariadb-server
  - php-mysql
  - libapache2-mod-php
  - x11-apps
  - whois
  - libgtk2.0-0
- - plocate
  - php-mbstring
  - php-intl
  - php-apcu
@@ -101,7 +98,7 @@ runcmd:
  - mount -a -t nfs4
  - echo
  - echo 'AWS LAM Adding a swapfile'
- - dd if=/dev/zero of=/swapfile bs=32M count=8
+ - dd if=/dev/zero of=/swapfile bs=32M count=16
  - chmod 600 /swapfile
  - mkswap /swapfile
  - swapon /swapfile
@@ -184,6 +181,9 @@ runcmd:
  - sed -i "s|aws|lam1|" /var/www/no-ssl/apache2.conf
  - mkdir /var/www/Multicount
  - chown www-data:www-data /var/www/Multicount
+ - echo
+ - echo 'AWS LAM Install mariadb after swap has been configured'
+ - apt-get install -y mariadb-client mariadb-server
  - echo
  - echo 'AWS LAM Creating {lam|Mediawiki} database and user'
  - mysql --table < /var/www/lam/lam-user.sql
@@ -311,6 +311,9 @@ runcmd:
  - echo
  - echo 'AWS LAM Install man2html after apache has been configured'
  - apt-get install -y man2html
+ - echo
+ - echo 'AWS LAM Install plocate after swap has been configured'
+ - apt-get install -y plocate
  - echo
  - echo 'AWS LAM ***** Run cron daily plocate jobs *****'
  - ln -s /var/www/no-ssl/local_scripts/plocate-mnt-efs.sh /etc/cron.daily/plocate-mnt-efs.sh
