@@ -73,6 +73,9 @@ runcmd:
  - systemctl enable etckeeper.timer
  - systemctl start etckeeper.timer
  - echo
+ - echo 'AWS LAM Set vim as default editor for system'
+ - dnf remove -y nano
+ - echo
  - echo 'AWS LAM Install aws.lam1.us web site'
  - git clone /mnt/efs/git/aws /var/www/aws
  - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
