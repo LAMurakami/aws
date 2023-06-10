@@ -94,6 +94,9 @@ runcmd:
  - git config --system branch.autosetuprebase always
  - git config --system init.defaultBranch master
  - echo
+ - echo 'AWS LAM Set vim as default editor for system'
+ - update-alternatives --set editor /usr/bin/vim.basic
+ - echo
  - echo 'AWS LAM Install etckeeper to track configuration changes'
  - apt-get install etckeeper
  - echo
