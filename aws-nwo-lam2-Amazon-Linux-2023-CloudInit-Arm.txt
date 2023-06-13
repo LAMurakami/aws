@@ -73,6 +73,9 @@ runcmd:
  - systemctl enable etckeeper.timer
  - systemctl start etckeeper.timer
  - echo
+ - echo 'QEMU LAM use colors with systemctl'
+ - echo 'export SYSTEMD_COLORS=1' > /etc/profile.d/systemd_colors.sh
+ - echo
  - echo 'AWS LAM Set vim as default editor for system'
  - dnf remove -y nano
  - echo
@@ -244,6 +247,9 @@ runcmd:
  - echo
  - echo 'AWS LAM link which to /usr/local/bin *****'
  - ln -s /bin/which /usr/local/bin/which
+ - echo
+ - echo 'AWS LAM Create lam murakami staff credentials.'
+ - /var/www/lam/Create-lam-murakami-staff.bash
  - echo
  - echo 'AWS LAM Final Cloud-init etckeeper commit'
  - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
