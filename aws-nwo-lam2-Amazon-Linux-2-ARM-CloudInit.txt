@@ -255,6 +255,10 @@ runcmd:
  - echo 'AWS LAM Use Elastic File System mlocate database'
  - ln -s /var/www/no-ssl/mlocate.sh /etc/profile.d/mlocate.sh
  - echo
+ - echo 'AWS LAM Create lam murakami staff credentials.'
+ - /var/www/lam/Create-lam-murakami-staff.bash
+ - sed -i 's|/usr/bin/dnf|/usr/bin/yum|' /etc/sudoers.d/staff-users
+ - echo
  - echo 'AWS LAM Final Cloud-init etckeeper commit'
  - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
  - echo
