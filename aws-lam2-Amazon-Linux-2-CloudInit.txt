@@ -159,6 +159,9 @@ runcmd:
  - echo 'AWS LAM ***** Run cron daily mlocate job *****'
  - updatedb
  - echo
+ - echo 'AWS LAM Enable x11 forwarding over ssh for sudo'
+ - ln -s /var/www/no-ssl/xauthority.sh /etc/profile.d
+ - echo
  - echo 'AWS LAM Final Cloud-init etckeeper commit'
  - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
  - echo
