@@ -89,6 +89,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Installing leafpad compiled for x86 Amazon Linux 2'
  - tar -xzf /mnt/efs/Amazon-Linux-2/leafpad-x86.tgz --directory /usr/local
+ - ln -s /usr/local/bin/leafpad /usr/bin
  - echo
  - echo 'AWS LAM Installing tnef compiled for x86 Amazon Linux 2'
  - tar -xzf /mnt/efs/Amazon-Linux-2/tnef-x86.tgz --directory /usr/local
