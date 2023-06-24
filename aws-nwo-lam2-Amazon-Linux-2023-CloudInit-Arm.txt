@@ -138,7 +138,7 @@ runcmd:
  - tar -xzf /mnt/efs/Amazon-Linux-2023/man2html-Arm.tgz --directory /usr/local
  - echo
  - echo 'AWS LAM Install xeyes, xclock, xlogo'
- - tar -xzf /mnt/efs/Amazon-Linux-2023/xapps-Arm.tgz --directory /usr/local
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/xapps-AL2023-ARM.tgz --directory /usr
  - echo
  - echo 'AWS LAM Install geany'
  - tar -xzf /mnt/efs/Amazon-Linux-2023/geany-Arm.tgz --directory /usr/local
