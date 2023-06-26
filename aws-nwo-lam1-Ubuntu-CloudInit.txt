@@ -76,6 +76,13 @@ runcmd:
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
  - echo
+ - echo 'AWS LAM Adding a swapfile'
+ - dd if=/dev/zero of=/swapfile bs=32M count=16
+ - chmod 600 /swapfile
+ - mkswap /swapfile
+ - swapon /swapfile
+ - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+ - echo
  - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
  # Allow for either gzip compressed user-data or plain text user-data
  - (curl -s http://169.254.169.254/latest/user-data | gunzip) || curl -s http://169.254.169.254/latest/user-data
@@ -99,13 +106,6 @@ runcmd:
  - nfsOpt="nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
  - echo "172.31.14.159:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
  - mount -a -t nfs4
- - echo
- - echo 'AWS LAM Adding a swapfile'
- - dd if=/dev/zero of=/swapfile bs=32M count=16
- - chmod 600 /swapfile
- - mkswap /swapfile
- - swapon /swapfile
- - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
  - echo
  - echo 'AWS LAM Set hostname and localhost alias in /etc/hosts'
  - sed -i '1s/localhost/lam1.lam1.us lam1 localhost/' /etc/hosts
