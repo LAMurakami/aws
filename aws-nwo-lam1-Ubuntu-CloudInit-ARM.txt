@@ -37,6 +37,10 @@ package_update: true
 # Upgrade the instance on first boot
 package_upgrade: true
 
+ssh_import_is: [ubuntu]
+ssh_authorized_keys:
+ - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAYEAnNqVrt71AKSIMmSAIONBx4jIEK0IIZF5fSAaB9kI4oOK+t7aSTKAZwwgKHWJ536XFdR3Ql5Xi0r2CuUEf1GVEagAxLZTXRuim5UGmS63rfSxGwq9JQVg5WDbN5ilnGxSmqsD77SApvmffcO/T2zZWd+rrjMWWRi9zQwRdQRm60bc69ajJbjIJd8SCXIggUPzTkUz5Sca7dhdffcMpGR9bdexFln+YSli1ohtvs2zVBM4ncpufGS+Auax8+gQNr32QeSszlKuKsXYorZ9gl+Z8s62mX5yCXIrH2hWoHsCTUX38iVM8/wI6sPVosarkng7mPOOQLy5k50Y0cb9FRQGlrvmQqsc3fI7tC1fblhKL0HaY844kIZRHwFuOI04ik+b8Swdjed6+FH/RIKppuOY+qfdmv8gcX4ZhpbKg+JN+u5Xy5awpUFqhsbBdCz0MvLNPKEbDNCFokX8nL0HqGeABk2DOJ1+IOFz5pIiCL31LTVGTQ0AwXp3nkaHZykJNrcB Authentication from lam@laptop.lam1.us
+
 # Install additional packages on first boot
 packages:
  - rcs
@@ -67,10 +71,6 @@ packages:
  - php-intl
  - php-apcu
 
-ssh_import_is: [ubuntu]
-ssh_authorized_keys:
- - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAYEAnNqVrt71AKSIMmSAIONBx4jIEK0IIZF5fSAaB9kI4oOK+t7aSTKAZwwgKHWJ536XFdR3Ql5Xi0r2CuUEf1GVEagAxLZTXRuim5UGmS63rfSxGwq9JQVg5WDbN5ilnGxSmqsD77SApvmffcO/T2zZWd+rrjMWWRi9zQwRdQRm60bc69ajJbjIJd8SCXIggUPzTkUz5Sca7dhdffcMpGR9bdexFln+YSli1ohtvs2zVBM4ncpufGS+Auax8+gQNr32QeSszlKuKsXYorZ9gl+Z8s62mX5yCXIrH2hWoHsCTUX38iVM8/wI6sPVosarkng7mPOOQLy5k50Y0cb9FRQGlrvmQqsc3fI7tC1fblhKL0HaY844kIZRHwFuOI04ik+b8Swdjed6+FH/RIKppuOY+qfdmv8gcX4ZhpbKg+JN+u5Xy5awpUFqhsbBdCz0MvLNPKEbDNCFokX8nL0HqGeABk2DOJ1+IOFz5pIiCL31LTVGTQ0AwXp3nkaHZykJNrcB Authentication from lam@laptop.lam1.us
-
 runcmd:
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
@@ -83,6 +83,9 @@ runcmd:
  - swapon /swapfile
  - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
  - echo
+ - echo 'AWS LAM Check US Alaska local time for this system'
+ - ls -lF --time-style=long-iso /etc/localtime
+ - echo
  - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
  # Allow for either gzip compressed user-data or plain text user-data
  - (curl -s http://169.254.169.254/latest/user-data | gunzip) || curl -s http://169.254.169.254/latest/user-data
@@ -94,21 +97,102 @@ runcmd:
  - git config --system branch.autosetuprebase always
  - git config --system init.defaultBranch master
  - echo
- - echo 'AWS LAM Set vim as default editor for system'
- - update-alternatives --set editor /usr/bin/vim.basic
- - echo
  - echo 'AWS LAM Install etckeeper to track configuration changes'
  - apt-get install etckeeper
  - echo
- - echo 'AWS LAM Adding nfs4 mount to AWS NW-O VPC Elastic File System'
- - mkdir /mnt/efs
- - chown ubuntu:ubuntu /mnt/efs
- - nfsOpt="nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
- - echo "172.31.14.159:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
- - mount -a -t nfs4
+ - echo 'AWS LAM Set vim as default editor for system'
+ - update-alternatives --set editor /usr/bin/vim.basic
  - echo
  - echo 'AWS LAM Set hostname and localhost alias in /etc/hosts'
  - sed -i '1s/localhost/lam1.lam1.us lam1 localhost/' /etc/hosts
+ - echo
+ - echo 'AWS LAM Installing aws.lam1.us web site'
+ - git clone https://github.com/LAMurakami/aws /var/www/aws
+ - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
+ - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
+ - echo
+ - echo 'AWS LAM Cloud Guest motd'
+ - ln -s /var/www/aws/etc/update-motd.d/51-cloudguest /etc/update-motd.d
+ - echo
+ - echo 'AWS LAM update aws site with current public local name ipv4'
+ - /var/www/aws/cloud-init.pl
+ - echo
+ - echo 'AWS LAM enable aws site'
+ - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/080_aws.conf
+ - a2ensite 080_aws
+ - echo
+ - echo 'AWS LAM Install no-ssl web site'
+ - git clone https://github.com/LAMurakami/no-ssl /var/www/no-ssl
+ - sh -c "cd /var/www/no-ssl;git remote set-url origin git@github.com:LAMurakami/no-ssl"
+ - sh -c "cd /var/www/no-ssl;git remote add ak20 git@ak20:no-ssl"
+ - rm /etc/apache2/apache2.conf
+ - rm /etc/apache2/mods-available/alias.conf
+ - rm /etc/apache2/mods-available/autoindex.conf
+ - rm /etc/apache2/mods-available/dir.conf
+ - a2enmod rewrite
+ - /var/www/no-ssl/Implement_no-ssl_conf.bash
+ - echo
+ - echo 'AWS LAM Update from default to LAM AWS lam1 web configuration'
+ - sed -i "s|aws|lam1|" /var/www/no-ssl/apache2.conf
+ - sed -i 's|aws.ServerAdmin|lam1.ServerAdmin|' /etc/apache2/apache2.conf
+ - sed -i 's|aws.lam1.us|lam1.duckdns.org|' /etc/apache2/apache2.conf
+ - echo
+ - echo 'AWS LAM Configuring perl to include LAM perl modules'
+ - mkdir /usr/local/lib/site_perl
+ - ln -s /var/www/no-ssl/site_perl-LAM /usr/local/lib/site_perl/LAM
+ - echo
+ - echo 'AWS LAM create Multicount directory'
+ - mkdir /var/www/Multicount
+ - echo
+ - echo 'AWS LAM Installing z.lam1.us web site'
+ - git clone https://github.com/LAMurakami/z /var/www/z
+ - sh -c "cd /var/www/z;git remote set-url origin git@ak20:z"
+ - ln -s /var/www/z/z_apache2.conf /etc/apache2/sites-available/050_z.conf
+ - a2ensite 050_z
+ - echo
+ - echo 'AWS LAM Enable x11 forwarding over ssh for sudo'
+ - ln -s /var/www/no-ssl/xauthority.sh /etc/profile.d
+ - echo
+ - echo 'AWS LAM ***** Additional sites *****'
+ - echo
+ - echo 'AWS LAM Installing arsc.lam1.us web site'
+ - git clone https://github.com/LAMurakami/arsc /var/www/arsc
+ - sh -c "cd /var/www/arsc;git remote set-url origin git@github.com:LAMurakami/arsc"
+ - sh -c "cd /var/www/arsc;git remote add ak20 git@ak20:arsc"
+ - ln -s /var/www/arsc/arsc_apache2.conf /etc/apache2/sites-available/060_arsc.conf
+ - a2ensite 060_arsc
+ - echo
+ - echo 'AWS LAM Installing sites.lam1.us web site'
+ - git clone https://github.com/LAMurakami/sites /var/www/sites
+ - sh -c "cd /var/www/sites;git remote set-url origin git@ak20:sites"
+ - ln -s /var/www/sites/sites_apache2.conf /etc/apache2/sites-available/030_sites.conf
+ - a2ensite 030_sites
+ - echo
+ - echo 'AWS LAM Installing cabo.lam1.us web site'
+ - git clone https://github.com/LAMurakami/cabo /var/www/cabo
+ - sh -c "cd /var/www/cabo;git remote set-url origin git@ak20:cabo"
+ - ln -s /var/www/cabo/cabo_apache2.conf /etc/apache2/sites-available/040_cabo.conf
+ - a2ensite 040_cabo
+ - echo
+ - echo 'AWS LAM Adding olnes www Content'
+ - git clone https://github.com/LAMurakami/olnes /var/www/olnes
+ - sh -c "cd /var/www/olnes;git remote set-url origin git@ak20:olnes"
+ - ln -s /var/www/olnes/olnes_apache2.conf /etc/apache2/sites-available/052_olnes.conf
+ - a2ensite 052_olnes
+ - echo
+ - echo 'AWS LAM Adding larryforalaska www Content'
+ - git clone https://github.com/LAMurakami/larryforalaska /var/www/larryforalaska
+ - sh -c "cd /var/www/larryforalaska;git remote set-url origin git@ak20:larryforalaska"
+ - ln -s /var/www/larryforalaska/larryforalaska_apache2.conf /etc/apache2/sites-available/070_larryforalaska.conf
+ - a2ensite 070_larryforalaska
+ - echo
+ - echo 'AWS LAM ***** Use private LAM Alaska resources *****'
+ - echo
+ - echo 'AWS LAM Adding nfs4 mount to AWS NW-O VPC Elastic File System'
+ - mkdir /mnt/efs
+ - nfsOpt="nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
+ - echo "172.31.14.159:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
+ - mount -a -t nfs4
  - echo
  - echo 'AWS LAM Installing GNU which v2.21 compiled for ARM Ubuntu Server 22.04'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/which-Ubuntu-22-04-ARM.tgz --directory /usr/local
@@ -118,24 +202,13 @@ runcmd:
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/tnef-Arm-Ubuntu-22-04.tgz --directory /usr/local
  - file /usr/local/bin/tnef
  - echo
- - echo 'AWS LAM Installing aws.lam1.us web site'
- - git clone /mnt/efs/git/aws /var/www/aws
- - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
- - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
- - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/080_aws.conf
- - a2ensite 080_aws
- - /var/www/aws/cloud-init.pl
- - echo
- - echo 'AWS LAM Cloud Guest motd'
- - ln -s /var/www/aws/etc/update-motd.d/51-cloudguest /etc/update-motd.d
+ - echo 'AWS LAM Installing leafpad compiled for ARM Ubuntu Server 22.04'
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/leafpad-Arm-Ubuntu-22-04.tgz --directory /usr/local
  - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
  - cp /mnt/efs/aws-lam1-ubuntu/sshd_config /etc/ssh
  - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
  - systemctl restart sshd
- - echo
- - echo 'AWS LAM Check US Alaska local time for this system'
- - ls -lF --time-style=long-iso /etc/localtime
  - echo
  - echo 'AWS LAM Installing ubuntu user bash resources'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/ubuntu.tgz --directory /home/ubuntu
@@ -149,23 +222,10 @@ runcmd:
  - a2enmod ssl
  - a2enmod info
  - a2enmod authz_groupfile.load
- - a2enmod rewrite
  - a2enmod cgi
  - echo
  - echo 'AWS LAM Tell git installing in /var/www/lam is O.K.'
  - git config --system --add safe.directory /var/www/lam
- - git clone /mnt/efs/git/no-ssl.git /var/www/no-ssl
- - sh -c "cd /var/www/no-ssl;git remote set-url origin git@github.com:LAMurakami/no-ssl"
- - sh -c "cd /var/www/no-ssl;git remote add ak20 git@ak20:no-ssl"
- - rm /etc/apache2/apache2.conf
- - rm /etc/apache2/mods-available/alias.conf
- - rm /etc/apache2/mods-available/autoindex.conf
- - rm /etc/apache2/mods-available/dir.conf
- - /var/www/no-ssl/Implement_no-ssl_conf.bash
- - echo
- - echo 'AWS LAM Configuring perl to include LAM perl modules'
- - mkdir /usr/local/lib/site_perl
- - ln -s /var/www/no-ssl/site_perl-LAM /usr/local/lib/site_perl/LAM
  # Extract lam from archive that includes MediWiki but not git repo
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/lam.tgz --directory /var/www
  # Clone the lam repo and integrate it with MediWiki included lam archive
@@ -180,10 +240,8 @@ runcmd:
  - rm /etc/apache2/mods-available/status.conf
  - /var/www/lam/Implement_lam_conf.bash
  - echo
- - echo 'AWS LAM Update from default to LAM AWS lam1 web configuration'
- - sed -i "s|aws|lam1|" /var/www/no-ssl/apache2.conf
- - mkdir /var/www/Multicount
- - chown www-data:www-data /var/www/Multicount
+ - echo 'AWS LAM Create lam murakami staff credentials.'
+ - /var/www/lam/Create-lam-murakami-staff.bash
  - echo
  - echo 'AWS LAM Install mariadb after swap has been configured'
  - apt-get install -y mariadb-client mariadb-server
@@ -191,19 +249,17 @@ runcmd:
  - echo 'AWS LAM Creating {lam|Mediawiki} database and user'
  - mysql --table < /var/www/lam/lam-user.sql
  - echo
- - echo 'AWS LAM ***** Additional sites *****'
+ - echo 'AWS LAM ***** Private Additional sites *****'
  - echo
  - echo 'AWS LAM Installing {new|old}.interiordems.com web sites'
  - git clone /mnt/efs/git/interiordems.git /var/www/interiordems
  - sh -c "cd /var/www/interiordems;git remote set-url origin git@ak20:interiordems"
  - ln -s /var/www/interiordems/interiordems_apache2.conf /etc/apache2/sites-available/020_interiordems.conf
  - a2ensite 020_interiordems
- - chown -R ubuntu:www-data /var/www/interiordems
  - git clone /mnt/efs/git/oldinteriordems.git /var/www/oldinteriordems
  - sh -c "cd /var/www/oldinteriordems;git remote set-url origin git@ak20:oldinteriordems"
  - ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf /etc/apache2/sites-available/010_oldinteriordems.conf
  - a2ensite 010_oldinteriordems
- - chown -R ubuntu:www-data /var/www/oldinteriordems
  - echo
  - echo 'AWS LAM Adding mike@mike.lam1.us user, group and www Content'
  - useradd --shell /bin/bash --create-home --groups users --uid 55501 mike
@@ -213,39 +269,6 @@ runcmd:
  - sh -c "cd /var/www/mike;git remote set-url origin git@ak20:mike"
  - ln -s /var/www/mike/mike_apache2.conf /etc/apache2/sites-available/081_mike.conf
  - a2ensite 081_mike
- - chown -R ubuntu:www-data /var/www/mike
- - echo
- - echo 'AWS LAM Installing arsc.lam1.us web site'
- - git clone /mnt/efs/git/arsc /var/www/arsc
- - sh -c "cd /var/www/arsc;git remote set-url origin git@github.com:LAMurakami/arsc"
- - sh -c "cd /var/www/arsc;git remote add ak20 git@ak20:arsc"
- - ln -s /var/www/arsc/arsc_apache2.conf /etc/apache2/sites-available/060_arsc.conf
- - a2ensite 060_arsc
- - chown -R ubuntu:www-data /var/www/arsc
- - echo
- - echo 'AWS LAM Installing sites.lam1.us web site'
- - git clone /mnt/efs/git/sites.git /var/www/sites
- - sh -c "cd /var/www/sites;git remote set-url origin git@ak20:sites"
- - ln -s /var/www/sites/sites_apache2.conf /etc/apache2/sites-available/030_sites.conf
- - a2ensite 030_sites
- - chown -R ubuntu:www-data /var/www/sites
- - echo
- - echo 'AWS LAM Installing cabo.lam1.us web site'
- - git clone /mnt/efs/git/cabo.git /var/www/cabo
- - sh -c "cd /var/www/cabo;git remote set-url origin git@ak20:cabo"
- - ln -s /var/www/cabo/cabo_apache2.conf /etc/apache2/sites-available/040_cabo.conf
- - a2ensite 040_cabo
- - chown -R ubuntu:www-data /var/www/cabo
- - echo
- - echo 'AWS LAM Installing z.lam1.us web site'
- - git clone /mnt/efs/git/z.git /var/www/z
- - sh -c "cd /var/www/z;git remote set-url origin git@ak20:z"
- - ln -s /var/www/z/z_apache2.conf /etc/apache2/sites-available/050_z.conf
- - a2ensite 050_z
- - chown -R ubuntu:www-data /var/www/z
- - echo
- - echo 'AWS LAM Installing leafpad compiled for ARM Ubuntu Server 22.04'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/leafpad-Arm-Ubuntu-22-04.tgz --directory /usr/local
  - echo
  - echo 'AWS LAM Adding blinkenshell www Content'
  # Extract blinkenshell from archive that includes date time stamps
@@ -256,33 +279,19 @@ runcmd:
  - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
  - ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf /etc/apache2/sites-available/051_blinkenshell.conf
  - a2ensite 051_blinkenshell
- - chown -R ubuntu:www-data /var/www/blinkenshell
- - echo
- - echo 'AWS LAM Adding olnes www Content'
- - git clone /mnt/efs/git/olnes.git /var/www/olnes
- - sh -c "cd /var/www/olnes;git remote set-url origin git@ak20:olnes"
- - ln -s /var/www/olnes/olnes_apache2.conf /etc/apache2/sites-available/052_olnes.conf
- - a2ensite 052_olnes
- - chown -R ubuntu:www-data /var/www/olnes
  - echo
  - echo 'AWS LAM Adding alaskademocrat www Content'
  - git clone /mnt/efs/git/alaskademocrat.git /var/www/alaskademocrat
  - sh -c "cd /var/www/alaskademocrat;git remote set-url origin git@ak20:alaskademocrat"
  - ln -s /var/www/alaskademocrat/alaskademocrat_apache2.conf /etc/apache2/sites-available/071_alaskademocrat.conf
  - a2ensite 071_alaskademocrat
- - chown -R ubuntu:www-data /var/www/alaskademocrat
- - echo
- - echo 'AWS LAM Adding larryforalaska www Content'
- - git clone /mnt/efs/git/larryforalaska.git /var/www/larryforalaska
- - sh -c "cd /var/www/larryforalaska;git remote set-url origin git@ak20:larryforalaska"
- - ln -s /var/www/larryforalaska/larryforalaska_apache2.conf /etc/apache2/sites-available/070_larryforalaska.conf
- - a2ensite 070_larryforalaska
- - chown -R ubuntu:www-data /var/www/larryforalaska
  - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
  - echo
- - echo 'AWS LAM Set ubuntu as owner of /var/www/{no-ssl,lam,aws}'
- - chown -R ubuntu:www-data /var/www/no-ssl /var/www/lam /var/www/aws
+ - echo 'AWS LAM Change ownership of /var/www /mnt/efs'
+ - sh -c "chown -R lam:www-data /var/www"
+ - chown www-data:www-data /var/www/Multicount
+ - chown lam:staff /mnt/efs
  - echo
  - echo 'AWS LAM Refreshing lam database'
  - ln -s /home/ubuntu/.aws /root/.aws
@@ -326,12 +335,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Use Elastic File System plocate database'
  - ln -s /var/www/no-ssl/plocate.sh /etc/profile.d/plocate.sh
- - echo
- - echo 'AWS LAM Create lam murakami staff credentials.'
- - /var/www/lam/Create-lam-murakami-staff.bash
- - echo
- - echo 'AWS LAM Enable x11 forwarding over ssh for sudo'
- - ln -s /var/www/no-ssl/xauthority.sh /etc/profile.d
  - echo
  - echo 'AWS LAM Final Cloud-init etckeeper commit'
  - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
