@@ -6,5 +6,5 @@ RequiresMountsFor=/mnt/efs
 Type=simple
 ExecStart=/var/www/aws/systemd/blinkenshell-sync-clone
 Restart=no
-User=ubuntu
-Group=ubuntu
+User=lam
+Group=staff

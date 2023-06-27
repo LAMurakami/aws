@@ -5,5 +5,5 @@ Description=Refresh the clone lam and wikidb databases from the aws s3 backup
 Type=simple
 ExecStart=/var/www/aws/systemd/lam-wikidb-refresh-clone
 Restart=no
-User=ubuntu
-Group=ubuntu
+User=lam
+Group=staff
