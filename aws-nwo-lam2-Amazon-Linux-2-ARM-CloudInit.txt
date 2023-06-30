@@ -194,7 +194,7 @@ runcmd:
  - sh -c "cd /var/www/lam;git checkout lam2"
  - echo
  - echo 'AWS LAM Create lam murakami staff credentials.'
- - /var/www/lam/Create-lam-murakami-staff.bash
+ - /var/www/lam/Create-lam-murakami-staff.bash AL2
  - sed -i 's|/usr/bin/dnf|/usr/bin/yum|' /etc/sudoers.d/staff-users
  - echo
  - echo 'AWS LAM Update apache2 ssl configuration'
