@@ -1,4 +1,3 @@
-
 #cloud-config
 
 # Tell cloud-init to log the output to a log file
