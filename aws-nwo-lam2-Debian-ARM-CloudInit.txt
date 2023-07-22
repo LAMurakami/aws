@@ -51,12 +51,12 @@ packages:
  - x11-apps
  - whois
  - libgtk2.0-0
- - plocate
  - php-mbstring
  - php-intl
  - php-apcu
  - git
  - xauth
+ - l3afpad
 
 runcmd:
  - echo
@@ -137,6 +137,9 @@ runcmd:
  - echo 'AWS LAM Enable x11 forwarding over ssh for sudo'
  - ln -s /var/www/no-ssl/xauthority.sh /etc/profile.d
  - echo
+ - echo 'AWS LAM Use l3afpad fork of leafpad'
+ - ln -s /usr/bin/l3afpad /usr/bin/leafpad
+ - echo
  - echo 'AWS LAM ***** Use private LAM Alaska resources *****'
  - echo
  - echo 'AWS LAM Adding nfs4 mount to AWS NW-O VPC Elastic File System'
@@ -209,6 +212,18 @@ runcmd:
  - echo
  - echo 'AWS LAM Install man2html after apache has been configured'
  - apt-get install -y man2html
+ - echo
+ - echo 'AWS LAM Install plocate after swap has been configured'
+ - apt-get install -y plocate
+ - echo
+ - echo 'AWS LAM ***** Run cron daily plocate jobs *****'
+ - ln -s /var/www/no-ssl/local_scripts/plocate-mnt-efs.sh /etc/cron.daily/plocate-mnt-efs.sh
+ - /etc/cron.daily/plocate-mnt-efs.sh
+ - chmod a+r /mnt/efs/plocate.db
+ - updatedb
+ - echo
+ - echo 'AWS LAM Use Elastic File System plocate database'
+ - ln -s /var/www/no-ssl/plocate.sh /etc/profile.d/plocate.sh
  - echo
  - echo 'AWS LAM Install gitweb after apache has been configured'
  - apt-get install -y gitweb
