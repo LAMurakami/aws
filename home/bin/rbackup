@@ -1,0 +1,252 @@
+#!/usr/bin/perl
+use warnings;  # Enable all warnings.
+
+# (1) quit unless we have command-line args
+my $numArgs = $#ARGV + 1;
+if ($numArgs < 1) {
+    print "\nUsage: $0 file_name [file_name ...] \n";
+    exit;
+}
+
+# (2) we got command line args, so assume they are the
+# variable names to test
+
+my $errorsSoFar = 0; # Test all names before
+
+foreach $argnum (0 .. $#ARGV) {
+    if ($ARGV[$argnum] !~ /^[a-zA-Z_.][a-zA-Z0-9_.-]{0,31}$/) {
+        print "$ARGV[$argnum] is NOT a valid name\n";
+        $errorsSoFar = $errorsSoFar + 1;
+    } else {
+
+        if (!-f $ARGV[$argnum]) # Backup configuraton file NOT found
+            {
+print "Error: $0\nBackup configuration file: $ARGV[$argnum] NOT found!\n$!\n\n";
+
+                $errorsSoFar = $errorsSoFar + 1;
+            }
+    }
+}
+if ($errorsSoFar > $#ARGV) { # If more errors than arguments
+   print "$errorsSoFar errors so far of $numArgs arguments"
+       . " = Nothing to do!\n";
+   exit;
+}
+if ($errorsSoFar > 0) {
+    print "$errorsSoFar errors so far!\n";
+}
+
+foreach $argnum (0 .. $#ARGV) { # For each  configuration file
+
+open (CONFIG, $ARGV[$argnum]) # Open the configuration file.
+ or die "\nRun time error: $0\nConfiguration file: $ARGV[$argnum] NOT opened!\n$!\n\n";
+my %cF = loadConfigHash();                  # Load Configuration Parameters hash!
+close(CONFIG);
+
+print "Backup configuration file: $ARGV[$argnum]\n";
+
+my $rpError = 0; # Test existance of each required parameter
+my @rP =
+ qw(BK_SOURCE_MACHINE BK_SOURCE_DIR BK_TARGET_DIR BK_RSYNC_OPTS LOG_TARGET LOG_NAME LL);
+foreach my $requiredParameter (@rP) {
+  if (exists($cF{$requiredParameter})) {
+    my $value = $cF{$requiredParameter}; # retrieve value for name
+    print "$requiredParameter = $value\n" # print the name value pair
+  } else { $rpError = 1;
+    print "$requiredParameter NOT found in configuration file\n"
+  }
+} if (!$rpError) { # If all required parameters defined
+
+  my $hourMinute = '';
+  my $logTarget = $cF{'LOG_TARGET'} ;
+  if ($logTarget =~ m|zYY/zYYMM/YYYY-MM-DD|) {
+      (my $Second, my $Minute, my $Hour, my $Day_Of_Month, my $Month,
+       my $Year, my $Day_Of_Week) = localtime();
+      my $dayDir = sprintf "z%.2d/z%.2d%.2d/%.4d-%.2d-%.2d", $Year - 100,
+          $Year - 100, $Month + 1, $Year + 1900, $Month + 1, $Day_Of_Month;
+      $logTarget =~ s|zYY/zYYMM/YYYY-MM-DD|$dayDir|;
+      $hourMinute = sprintf "%.2d-%.2d", $Hour, $Minute;
+  }
+  print "LOG_TARGET = $logTarget\n";
+
+  if (!-d $logTarget) { # If LOG_TARGET directory NOT found
+      print "LOG_TARGET: $logTarget directory NOT found!\n$!\n\n";
+      unless(mkdir $logTarget) {print "Unable to create $logTarget\n$!\n\n"}
+  }
+
+  if (-d $logTarget) { # If LOG_TARGET directory found
+# We have a LOG_TARGET directory
+
+my $logFile = "Bk-$cF{'LOG_NAME'}-$hourMinute-log.txt";
+print "LOG_TARGET/LOG_FILE: $logTarget/$logFile\n\n";
+
+open BKLOGFILE, ">>$logTarget/$logFile" or die
+"\nRun time error: $0\nBackup logTarget/logFile: $logTarget/$logFile NOT opened!\n$!\n\n";
+
+print BKLOGFILE "Backup configuration file: $ARGV[$argnum]\n";
+foreach my $requiredParameter (@rP) {
+  my $value = $cF{$requiredParameter}; # retrieve value for name
+  print BKLOGFILE "$requiredParameter = $value\n"; # print the name value pair
+}
+print BKLOGFILE "\nLOG_TARGET/LOG_FILE: $logTarget/$logFile\n\n";
+
+my $command = "ssh -q $cF{'BK_SOURCE_MACHINE'} " . '"uname -n '
+              . "; $cF{'LL'} $cF{'BK_SOURCE_DIR'}" . ' ; id' . '"' ;
+
+do_block($command); # Test ssh to target machine and listing source directory
+
+$command = "ls -ld --time-style=long-iso $cF{'BK_TARGET_DIR'} ; id";
+do_block($command); # Test read access to the target directory
+
+$command = "rsync $cF{'BK_RSYNC_OPTS'} $cF{'BK_SOURCE_MACHINE'}" 
+          . ":$cF{'BK_SOURCE_DIR'} $cF{'BK_TARGET_DIR'}" ;
+do_block($command);
+
+close(BKLOGFILE);
+
+  } # end - If LOG_TARGET directory NOT found
+
+} # end - If all required parameters defined
+
+} # end - For each  configuration file
+# ..:....|....:....|....:....|....:....|....:....|....:....|....:....|....:....|
+sub loadConfigHash { my %configParameters = (); # Define a hash!
+
+# modified from Perl Cookbook 8.16 Reading Configuration files
+
+while(<CONFIG>) {          # Load parameters from configuration file into a hash
+    chomp;        # strip newline
+    s/#.*//;      # strip comments
+    s/^\s+//;     # strip leading white space
+    s/\s+$//;     # strip trailing white space
+    next unless length; # skip empty lines
+    next unless (m/\s*=\s*/); # skip lines without an equal sign
+    my ($var, $value) = split(/\s*=\s*/, $_, 2);
+    $configParameters{$var} = $value;
+}                    # End - Load parameters from configuration file into a hash
+return %configParameters
+}
+# ..:....|....:....|....:....|....:....|....:....|....:....|....:....|....:....|
+sub do_block { # Execute the command block and print output
+
+my $cmd = shift;
+my $startTime = time();
+
+print "Command: $cmd\n";
+print BKLOGFILE "Command: $cmd\n";
+
+use IO::CaptureOutput qw(capture_exec);
+
+my($stdout, $stderr, $success, $rc) = capture_exec($cmd);
+
+if ($stdout) {
+print "$stdout\n";
+print BKLOGFILE "$stdout\n";
+}
+
+if ($rc == -1) {
+    print "Block failed to execute: $stderr\n";
+    print BKLOGFILE "Block failed to execute: $stderr\n";
+    exit -1;
+} elsif ($rc & 127) {
+    printf "Block died - signal %d, %s coredump\n",
+           ($rc & 127), ($rc & 128) ? 'with' : 'without';
+    printf BKLOGFILE "Block died - signal %d, %s coredump\n",
+           ($rc & 127), ($rc & 128) ? 'with' : 'without';
+    if ($stderr) {
+        print "$stderr\n";
+        print BKLOGFILE "$stderr\n";
+    }
+    exit $rc >> 8;
+} elsif ($rc) {
+    printf "ERROR: Block exited with Return Code: %d\n", $rc >> 8;
+    printf BKLOGFILE "ERROR: Block exited with Return Code: %d\n", $rc >> 8;
+    if ($stderr) {
+        print "$stderr\n";
+        print BKLOGFILE "$stderr\n";
+    }
+    exit $rc >> 8;
+} else {
+    if ($stderr) {
+        if (!$rc) {
+            print "SUCCESS: $success\nERROR: Block exited with Error Text:\n";
+            print BKLOGFILE "SUCCESS: $success\nERROR: Block exited with Error Text:\n"
+        }
+    print "$stderr\n";
+    print BKLOGFILE "$stderr\n";
+    }
+}
+my $stepTime = 'Step complete ' . timemark() . ' - '
+ . elapsedTime(time() - $startTime) . "\n\n";
+
+print $stepTime;
+print BKLOGFILE $stepTime;
+}
+# ..:....|....:....|....:....|....:....|....:....|....:....|....:....|....:....|
+sub timemark {
+# Get the date and time
+($Second, $Minute, $Hour, $Day_Of_Month, $Month, $Year,
+  $Day_Of_Week)
+  = localtime(time);
+#
+# Define a list with months of the year as it's contents.
+@Month = ('January', 'February', 'March', 'April', 'May',
+          'June', 'July', 'August', 'September', 'October',
+          'November', 'December');
+#
+# Define a list with days of the week as it's contents.
+@Days = ('Sunday', 'Monday', 'Tuesday', 'Wednesday',
+         'Thursday', 'Friday', 'Saturday');
+#
+# Define values	for a 12 hour clock
+if($Hour < 1)     { $H12 = $Hour + 12; $AM_PM = 'AM'; }
+elsif($Hour < 12) { $H12 = $Hour;      $AM_PM = 'AM'; }
+elsif($Hour < 13) { $H12 = $Hour;      $AM_PM = 'PM'; }
+else              { $H12 = $Hour - 12; $AM_PM = 'PM'; }
+#
+my $rValue = '';
+# Return the formatted date and time
+$rValue = "$Days[$Day_Of_Week], $Month[$Month] ". $Day_Of_Month;
+$rValue .= ', '. ($Year + 1900) . ' @ ' . $H12;
+$rValue .= sprintf(":%.2d:%.2d ", $Minute, $Second);
+$rValue .= $AM_PM;
+return $rValue;
+}
+# ..:....|....:....|....:....|....:....|....:....|....:....|....:....|....:....|
+sub elapsedTime # format seconds into days, hours, minutes, seconds elapsed.
+{
+my $s = shift(@_);
+my $r = '';
+if ($s > 86399) # ((60*60*24)-1) = 86399 then calculate days
+ {
+   my $t = int($s / 86400);
+   if ($t > 1) { $r = "$t days"}
+   else { $r = "$t day"}
+   $s = $s % 86400;
+ }
+if ($s > 3599) # ((60*60)-1) = 3599 then calculate hours
+ {
+   my $t = int($s / 3600);
+   if ((length $r) > 1) {$r .= ", "}
+   if ($t > 1) { $r .= "$t hours"}
+   else { $r .= "$t hour"}
+   $s = $s % 3600;
+ }
+if ($s > 59) # then calculate minutes
+ {
+   my $t = int($s / 60);
+   if ((length $r) > 1) {$r .= ", "}
+   if ($t > 1) { $r .= "$t minutes"}
+   else { $r .= "$t minute"}
+   $s = $s % 60;
+ }
+if ($s >= 0) # then calculate seconds
+ {
+   if ((length $r) > 1) {$r .= ", "}
+   if ($s > 1) { $r .= "$s seconds"}
+   else { $r .= "$s second"}
+ }
+if ((length $r) > 1) {$r .= " elapsed"}
+return($r);
+}
+# ..:....|....:....|....:....|....:....|....:....|....:....|....:....|....:....|
