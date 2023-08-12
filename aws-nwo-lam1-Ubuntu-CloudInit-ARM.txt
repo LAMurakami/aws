@@ -24,6 +24,8 @@ bootcmd:
  - echo
  - echo 'AWS LAM List Installed Packages information'
  - dpkg -l
+ - echo
+ - echo 'AWS LAM cloud-config YAML bootcmd complete'
 
 # Set hostname
 hostname: lam1
@@ -342,4 +344,4 @@ runcmd:
  - echo 'AWS LAM List Installed Packages information'
  - dpkg -l
  - echo
- - echo 'AWS LAM cloud-init complete'
+ - echo 'AWS LAM cloud-config YAML runcmd complete'
