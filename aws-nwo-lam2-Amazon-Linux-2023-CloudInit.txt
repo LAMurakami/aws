@@ -3,6 +3,17 @@
 # Tell cloud-init to log the output to a log file
 output : { all : '| tee -a /var/log/cloud-init-output.log' }
 
+bootcmd:
+ - echo
+ - echo 'AWS LAM Report kernel version'
+ - uname -a
+ - echo
+ - echo 'AWS LAM Report Release version'
+ - head /etc/*release
+ - echo
+ - echo 'AWS LAM cloud-config YAML bootcmd complete'
+ - date
+
 # Set timezone
 timezone: US/Alaska
 
@@ -67,12 +78,6 @@ runcmd:
  - git config --system branch.autosetuprebase always
  - git config --system init.defaultBranch master
  - git config --system --add safe.directory /var/www/lam
- - echo
- - echo 'AWS LAM Report kernel version'
- - uname -a
- - echo
- - echo 'AWS LAM Report Release version'
- - head /etc/*release
  - echo
  - echo 'AWS LAM use colors with systemctl'
  - echo 'export SYSTEMD_COLORS=1' > /etc/profile.d/systemd_colors.sh
@@ -287,4 +292,5 @@ runcmd:
  - echo 'AWS LAM Final Cloud-init etckeeper commit'
  - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
  - echo
- - echo 'AWS LAM cloud-init complete'
+ - echo 'AWS LAM cloud-config YAML runcmd complete'
+ - date

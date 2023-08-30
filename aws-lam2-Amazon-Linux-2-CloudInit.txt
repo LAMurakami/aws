@@ -3,6 +3,17 @@
 # Tell cloud-init to log the output to a log file
 output : { all : '| tee -a /var/log/cloud-init-output.log' }
 
+bootcmd:
+ - echo
+ - echo 'AWS LAM Report kernel version'
+ - uname -a
+ - echo
+ - echo 'AWS LAM Report Release version'
+ - head /etc/*release
+ - echo
+ - echo 'AWS LAM cloud-config YAML bootcmd complete'
+ - date
+
 # Set timezone
 timezone: US/Alaska
 
@@ -54,12 +65,6 @@ runcmd:
  - echo 'AWS LAM Initialize etckeeper'
  - etckeeper init
  - etckeeper commit -m 'AWS LAM Initial Cloud-init commit'
- - echo
- - echo 'AWS LAM Report kernel version'
- - uname -a
- - echo
- - echo 'AWS LAM Report Release version'
- - head /etc/*release
  - echo
  - echo 'AWS LAM Add a swapfile'
  - dd if=/dev/zero of=/swapfile bs=32M count=8
@@ -165,5 +170,5 @@ runcmd:
  - echo 'AWS LAM Final Cloud-init etckeeper commit'
  - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
  - echo
- - echo 'AWS LAM cloud-init complete'
-
+ - echo 'AWS LAM cloud-config YAML runcmd complete'
+ - date

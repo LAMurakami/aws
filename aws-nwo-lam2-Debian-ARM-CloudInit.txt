@@ -8,6 +8,17 @@ output: {all: '| tee -a /var/log/cloud-init-output.log'}
 # https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
 #
 
+bootcmd:
+ - echo
+ - echo 'AWS LAM Report kernel version'
+ - uname -a
+ - echo
+ - echo 'AWS LAM Report Release version'
+ - head /etc/*release
+ - echo
+ - echo 'AWS LAM cloud-config YAML bootcmd complete'
+ - date
+
 # Set hostname
 hostname: lam2
 
@@ -244,5 +255,5 @@ runcmd:
  - echo 'AWS LAM Alaska List Installed Packages information'
  - dpkg -l
  - echo
- - echo 'AWS LAM cloud-init complete'
- - echo
+ - echo 'AWS LAM cloud-config YAML runcmd complete'
+ - date

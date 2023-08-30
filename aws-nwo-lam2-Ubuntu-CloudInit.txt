@@ -34,11 +34,11 @@ bootcmd:
  - echo 'AWS LAM Report Release version'
  - head /etc/*release
  - echo
- - echo 'AWS LAM Report AWS EC2 metadata for this instance'
- - ec2metadata | grep -v '^user-data'
- - echo
  - echo 'AWS LAM List Installed Packages information'
  - dpkg -l
+ - echo
+ - echo 'AWS LAM cloud-config YAML bootcmd complete'
+ - date
 
 # Set hostname
 hostname: lam2
@@ -88,6 +88,9 @@ runcmd:
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
+ - echo
+ - echo 'AWS LAM Report AWS EC2 metadata for this instance'
+ - ec2metadata | grep -v '^user-data'
  - echo
  - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
  # Allow for either gzip compressed user-data or plain text user-data
@@ -309,4 +312,5 @@ runcmd:
  - echo 'AWS LAM List Installed Packages information'
  - dpkg -l
  - echo
- - echo 'AWS LAM cloud-init complete'
+ - echo 'AWS LAM cloud-config YAML runcmd complete'
+ - date

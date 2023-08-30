@@ -3,6 +3,17 @@
 # Tell cloud-init to log the output to a log file
 output : { all : '| tee -a /var/log/cloud-init-output.log' }
 
+bootcmd:
+ - echo
+ - echo 'AWS LAM Report kernel version'
+ - uname -a
+ - echo
+ - echo 'AWS LAM Report Release version'
+ - head /etc/*release
+ - echo
+ - echo 'AWS LAM cloud-config YAML bootcmd complete'
+ - date
+
 # Set timezone
 timezone: US/Alaska
 
@@ -68,12 +79,6 @@ runcmd:
  - echo 'AWS LAM Initialize etckeeper'
  - etckeeper init
  - etckeeper commit -m 'AWS LAM Initial Cloud-init commit'
- - echo
- - echo 'AWS LAM Report kernel version'
- - uname -a
- - echo
- - echo 'AWS LAM Report Release version'
- - head /etc/*release
  - echo
  - echo 'AWS LAM Install aws.lam1.us web site'
  - git clone https://github.com/LAMurakami/aws /var/www/aws
@@ -271,5 +276,5 @@ runcmd:
  - echo 'AWS LAM Check if the system needs to be rebooted'
  - needs-restarting --reboothint
  - echo
- - echo 'AWS LAM cloud-init complete'
-
+ - echo 'AWS LAM cloud-config YAML runcmd complete'
+ - date

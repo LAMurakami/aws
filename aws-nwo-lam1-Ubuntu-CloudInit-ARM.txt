@@ -26,6 +26,7 @@ bootcmd:
  - dpkg -l
  - echo
  - echo 'AWS LAM cloud-config YAML bootcmd complete'
+ - date
 
 # Set hostname
 hostname: lam1
@@ -345,3 +346,4 @@ runcmd:
  - dpkg -l
  - echo
  - echo 'AWS LAM cloud-config YAML runcmd complete'
+ - date
