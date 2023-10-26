@@ -121,6 +121,8 @@ runcmd:
  - /var/www/aws/cloud-init.pl
  - echo
  - echo 'AWS LAM enable aws site'
+ - ln -s /var/www/aws/aws_apache2_ipv6.conf /etc/apache2/sites-available/079_aws_ipv6.conf
+ - a2ensite 079_aws_ipv6
  - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/080_aws.conf
  - a2ensite 080_aws
  - echo

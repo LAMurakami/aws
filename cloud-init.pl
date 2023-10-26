@@ -33,8 +33,8 @@ print "
            ami-id: $cB{'ami-id'}
                 -> $cA{'ami-id'}
 
-availability-zone: $cB{'instance-type'}
-                -> $cA{'instance-type'}
+availability-zone: $cB{'availability-zone'}
+                -> $cA{'availability-zone'}
 
   public-hostname: $cB{'public-hostname'}
                 -> $cA{'public-hostname'}
