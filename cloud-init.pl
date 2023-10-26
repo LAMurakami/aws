@@ -27,22 +27,33 @@ our %cB = loadConfigHash(); # Load Configuration Parameters hash!
 close(CONFIG);
 
 print "
-  instance-type: $cB{'instance-type'}
-              -> $cA{'instance-type'}
+    instance-type: $cB{'instance-type'}
+                -> $cA{'instance-type'}
 
-public-hostname: $cB{'public-hostname'}
-              -> $cA{'public-hostname'}
-    public-ipv4: $cB{'public-ipv4'}
-              -> $cA{'public-ipv4'}
+           ami-id: $cB{'ami-id'}
+                -> $cA{'ami-id'}
 
- local-hostname: $cB{'local-hostname'}
-              -> $cA{'local-hostname'}
-     local-ipv4: $cB{'local-ipv4'}
-              -> $cA{'local-ipv4'}
+availability-zone: $cB{'instance-type'}
+                -> $cA{'instance-type'}
+
+  public-hostname: $cB{'public-hostname'}
+                -> $cA{'public-hostname'}
+      public-ipv4: $cB{'public-ipv4'}
+                -> $cA{'public-ipv4'}
+
+   local-hostname: $cB{'local-hostname'}
+                -> $cA{'local-hostname'}
+       local-ipv4: $cB{'local-ipv4'}
+                -> $cA{'local-ipv4'}
+
+      public-ipv6: $cB{'public-ipv6'}
+                -> $cA{'public-ipv6'}
+
 ";
 
 updateFile($updateFile);
 updateFile('/var/www/aws/aws_apache2.conf');
+updateFile('/var/www/aws/aws_apache2_ipv6.conf');
 # ..:....|....:....|....:....|....:....|....:....|....:....|....:....|....:....|
 sub updateFile { # Update specified file.
 my $fileName = my $textFileString = ''; my $parameterCount = @_;
@@ -62,6 +73,12 @@ $textFileString =~ s/$cB{'local-hostname'}/$cA{'local-hostname'}/g;
 $textFileString =~ s/$cB{'local-ipv4'}/$cA{'local-ipv4'}/g;
 
 $textFileString =~ s/$cB{'instance-type'}/$cA{'instance-type'}/g;
+
+$textFileString =~ s/$cB{'public-ipv6'}/$cA{'public-ipv6'}/g;
+
+$textFileString =~ s/$cB{'ami-id'}/$cA{'ami-id'}/g;
+
+$textFileString =~ s/$cB{'availability-zone'}/$cA{'availability-zone'}/g;
 
 open (UPDATEFILE, ">$fileName")
  or
@@ -88,7 +105,7 @@ while(<CONFIG>) {          # Load parameters from configuration file into a hash
     s/\s+$//;     # strip trailing white space
     next unless length; # skip empty lines
     last unless not m/Report AWS EC2 user-data for this instance/;
-    my ($var, $value) = split(/\s*:\s+/, $_, 2);
+    my ($var, $value) = split(/\s*=\s+/, $_, 2);
     $configParameter{$var} = $value;
 }                    # End - Load parameters from configuration file into a hash
 return %configParameter
