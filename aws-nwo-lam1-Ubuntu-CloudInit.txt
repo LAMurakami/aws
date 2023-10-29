@@ -33,45 +33,9 @@ hostname: lam1
 # Set timezone
 timezone: US/Alaska
 
-# Upgrade apt database on first boot
-package_update: true
-
-# Upgrade the instance on first boot
-package_upgrade: true
-
 ssh_import_is: [ubuntu]
 ssh_authorized_keys:
  - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAYEAnNqVrt71AKSIMmSAIONBx4jIEK0IIZF5fSAaB9kI4oOK+t7aSTKAZwwgKHWJ536XFdR3Ql5Xi0r2CuUEf1GVEagAxLZTXRuim5UGmS63rfSxGwq9JQVg5WDbN5ilnGxSmqsD77SApvmffcO/T2zZWd+rrjMWWRi9zQwRdQRm60bc69ajJbjIJd8SCXIggUPzTkUz5Sca7dhdffcMpGR9bdexFln+YSli1ohtvs2zVBM4ncpufGS+Auax8+gQNr32QeSszlKuKsXYorZ9gl+Z8s62mX5yCXIrH2hWoHsCTUX38iVM8/wI6sPVosarkng7mPOOQLy5k50Y0cb9FRQGlrvmQqsc3fI7tC1fblhKL0HaY844kIZRHwFuOI04ik+b8Swdjed6+FH/RIKppuOY+qfdmv8gcX4ZhpbKg+JN+u5Xy5awpUFqhsbBdCz0MvLNPKEbDNCFokX8nL0HqGeABk2DOJ1+IOFz5pIiCL31LTVGTQ0AwXp3nkaHZykJNrcB Authentication from lam@laptop.lam1.us
-
-# Install additional packages on first boot
-packages:
- - rcs
- - nfs-common
- - awscli
- - mailutils
- - swish++
- - libio-captureoutput-perl
- - libcgi-pm-perl
- - libdbi-perl
- - libdbd-mysql-perl
- - php
- - php-gd
- - texlive
- - php-xml*
- - lynx
- - apache2-doc
- - libapache2-mod-perl2
- - libbsd-resource-perl
- - libapache2-reload-perl
- - apache2-suexec-custom
- - php-mysql
- - libapache2-mod-php
- - x11-apps
- - whois
- - libgtk2.0-0
- - php-mbstring
- - php-intl
- - php-apcu
 
 runcmd:
  - echo
@@ -79,14 +43,23 @@ runcmd:
  - chmod a+r /var/log/cloud-init-output.log
  - echo
  - echo 'AWS LAM Adding a swapfile'
- - dd if=/dev/zero of=/swapfile bs=32M count=16
+ - dd if=/dev/zero of=/swapfile bs=32M count=24
  - chmod 600 /swapfile
  - mkswap /swapfile
  - swapon /swapfile
  - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+ - free
+ - cat /proc/swaps
  - echo
  - echo 'AWS LAM Check US Alaska local time for this system'
  - ls -lF --time-style=long-iso /etc/localtime
+ - echo
+ - echo 'AWS LAM Update package repository and Upgrade packages'
+ - apt update
+ - apt upgrade
+ - echo
+ - echo 'AWS LAM Install additional packages on first boot'
+ - apt-get install --yes rcs nfs-common awscli swish++ libio-captureoutput-perl libcgi-pm-perl libdbi-perl libdbd-mysql-perl php php-gd texlive php-xml* lynx apache2-doc libapache2-mod-perl2 libbsd-resource-perl libapache2-reload-perl apache2-suexec-custom php-mysql libapache2-mod-php x11-apps whois libgtk2.0-0 php-mbstring php-intl php-apcu
  - echo
  - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
  # Allow for either gzip compressed user-data or plain text user-data
@@ -120,6 +93,8 @@ runcmd:
  - /var/www/aws/cloud-init.pl
  - echo
  - echo 'AWS LAM enable aws site'
+ - ln -s /var/www/aws/aws_apache2_ipv6.conf /etc/apache2/sites-available/079_aws_ipv6.conf
+ - a2ensite 079_aws_ipv6.conf
  - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/080_aws.conf
  - a2ensite 080_aws
  - echo
