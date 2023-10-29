@@ -26,5 +26,5 @@ printf "public-ipv4 = %s\n" $(curl -sH "X-aws-ec2-metadata-token: $TOKEN" http:/
 printf "security-groups = %s\n" $(curl -sH "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/security-groups)
 printf "availability-zone = %s\n" $(curl -sH "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/placement/availability-zone)
 
-printf "public-ipv6 = %s\n" $(ip a | grep inet6 | grep 'scope global dynamic noprefixroute' | awk '{print $2;}' | sed 's|/128||')
+printf "public-ipv6 = %s\n" $(ip a | grep inet6 | grep 'scope global dynamic' | awk '{print $2;}' | sed 's|/128||')
 
