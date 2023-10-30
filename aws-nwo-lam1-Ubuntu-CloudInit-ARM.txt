@@ -85,6 +85,8 @@ runcmd:
  - mkswap /swapfile
  - swapon /swapfile
  - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+ - free -h
+ - cat /proc/swaps
  - echo
  - echo 'AWS LAM Check US Alaska local time for this system'
  - ls -lF --time-style=long-iso /etc/localtime
@@ -229,15 +231,13 @@ runcmd:
  - a2enmod authz_groupfile.load
  - a2enmod cgi
  - echo
- - echo 'AWS LAM Tell git installing in /var/www/lam is O.K.'
+ - echo 'AWS LAM Install lam web site'
+ - echo
+ # Extract lam from archive that includes MediWiki and git repo
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/lam.tgz --directory /var/www
+ - echo
+ - echo 'AWS LAM Tell git /var/www/lam is O.K.'
  - git config --system --add safe.directory /var/www/lam
- # Extract lam from archive that includes MediWiki but not git repo
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/lam.tgz --directory /var/www
- # Clone the lam repo and integrate it with MediWiki included lam archive
- - git clone /mnt/efs/git/lam.git /tmp/lam
- - mv /tmp/lam/.git /tmp/lam/.gitignore /var/www/lam
- - rm -rf /tmp/lam # Remove the lam repo fragment
- - sh -c "cd /var/www/lam;git remote set-url origin git@ak20:lam"
  # Use lam1 branch to serve secure site at https://lam1.duckdns.org
  - sh -c "cd /var/www/lam;git stash"
  - sh -c "cd /var/www/lam;git checkout lam1"

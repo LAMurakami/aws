@@ -64,6 +64,8 @@ runcmd:
  - mkswap /swapfile
  - swapon /swapfile
  - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+ - free -h
+ - cat /proc/swaps
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
@@ -108,6 +110,7 @@ runcmd:
  - /var/www/aws/cloud-init.pl
  - echo
  - echo 'AWS LAM enable aws site'
+ - ln -s /var/www/aws/aws_apache2_ipv6.conf /etc/httpd/conf.d/zzz_079_aws_ipv6.conf
  - ln -s /var/www/aws/aws_apache2.conf /etc/httpd/conf.d/zzz_080_aws.conf
  - echo
  - echo 'AWS LAM Update main apache2 configuration'
@@ -202,13 +205,8 @@ runcmd:
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz --directory /etc
  - echo
  - echo 'AWS LAM Install lam web site'
- # Extract lam from archive that includes MediWiki but not git repo
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/lam.tgz --directory /var/www
- # Clone the lam repo and integrate it with MediWiki included lam archive
- - git clone /mnt/efs/git/lam.git /tmp/lam
- - mv /tmp/lam/.git /tmp/lam/.gitignore /var/www/lam
- - rm -rf /tmp/lam # Remove the lam repo fragment
- - sh -c "cd /var/www/lam;git remote set-url origin git@ak20:lam"
+ # Extract lam from archive that includes MediWiki and git repo
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/lam.tgz --directory /var/www
  - echo
  - echo 'AWS LAM Use lam2 branch to serve secure site at https://lam2.duckdns.org'
  - sh -c "cd /var/www/lam;git stash"
