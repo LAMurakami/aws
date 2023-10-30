@@ -5,7 +5,7 @@ if [ -z $1 ] ; then
 fi
 
 echo url="https://www.duckdns.org/update?domains=$1&token=$(cat \
-~/.duckdns)&verbose=true&ip="| curl -k -K -; echo \
+~/.duckdns)&verbose=true&ip="| curl -s -k -K -; echo \
 " for $1.duckdns.org IP address update" ; echo
 
 IPv6_Address=$(ip a | grep inet6 \
@@ -13,6 +13,6 @@ IPv6_Address=$(ip a | grep inet6 \
 | sed 's|/128||' | tr -d '\n')
 
 echo url="https://www.duckdns.org/update?domains=$1&token=$(cat \
-~/.duckdns)&verbose=true&ip=&ipv6=${IPv6_Address}"| curl -k -K -; echo \
+~/.duckdns)&verbose=true&ip=&ipv6=${IPv6_Address}"| curl -s -k -K -; echo \
 " for $1.duckdns.org IP address update" ; echo
 
