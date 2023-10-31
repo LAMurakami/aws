@@ -244,8 +244,8 @@ runcmd:
  - sed -i '1s/localhost/lam2.duckdns.org lam2 localhost/' /etc/hosts
  - echo
  - echo 'AWS LAM Updating lam2.duckdns.org IP address'
- - echo url="https://www.duckdns.org/update?domains=lam2&token=$(cat ~ec2-user/.duckdns)&verbose=true&ip=" | curl -s -k -K -
- - echo " for lam2.duckdns.org IP address update"
+ - ln -s /home/ec2-user/.duckdns /root/.duckdns
+ - /var/www/aws/Update-DuckDNS.bash lam2
  - echo
  - echo 'AWS LAM List Installed Packages information'
  - dnf repoquery -a --installed

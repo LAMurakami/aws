@@ -246,8 +246,8 @@ runcmd:
  - echo 'AWS LAM Changes from lam1-Ubuntu-CloudInit etckeeper commit'
  - etckeeper commit -m 'AWS LAM Changes from lam1-Ubuntu-CloudInit'
  - echo 'AWS LAM Updating lam2.duckdns.org IP address'
- - echo url="https://www.duckdns.org/update?domains=lam2&token=$(cat ~ubuntu/.duckdns)&verbose=true&ip=" | curl -s -k -K -
- - echo " for lam2.duckdns.org IP address update"
+ - ln -s /home/ubuntu/.duckdns /root/.duckdns
+ - /var/www/aws/Update-DuckDNS.bash lam2
  - echo
  - echo 'AWS LAM Install dovecot-imapd after /etc/hosts has been configured'
  - apt-get install --yes dovecot-imapd

@@ -247,8 +247,8 @@ runcmd:
  - etckeeper commit -m 'QEMU LAM Alaska Final Cloud-init etckeeper commit'
  - echo
  - echo 'AWS LAM Updating lam2.duckdns.org IP address'
- - echo url="https://www.duckdns.org/update?domains=lam2&token=$(cat ~admin/.duckdns)&verbose=true&ip=" | curl -s -k -K -
- - echo " for lam2.duckdns.org IP address update"
+ - ln -s /home/admin/.duckdns /root/.duckdns
+ - /var/www/aws/Update-DuckDNS.bash lam2
  - echo
  - echo 'AWS LAM Alaska List Installed Packages information'
  - dpkg -l
