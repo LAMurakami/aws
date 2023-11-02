@@ -53,7 +53,53 @@ availability-zone: $cB{'availability-zone'}
 
 updateFile($updateFile);
 updateFile('/var/www/aws/aws_apache2.conf');
-updateFile('/var/www/aws/aws_apache2_ipv6.conf');
+
+updateIPv6confFile('/var/www/no-ssl/no-ssl_apache2.conf');
+updateIPv6confFile('/var/www/sites/sites_apache2.conf');
+updateIPv6confFile('/var/www/z/z_apache2.conf');
+updateIPv6confFile('/var/www/lam/lam_apache2.conf');
+updateIPv6confFile('/var/www/arsc/arsc_apache2.conf');
+updateIPv6confFile('/var/www/cabo/cabo_apache2.conf');
+updateIPv6confFile('/var/www/olnes/olnes_apache2.conf');
+updateIPv6confFile('/var/www/blinkenshell/public_html/blinkenshell_apache2.conf');
+updateIPv6confFile('/var/www/mike/mike_apache2.conf');
+updateIPv6confFile('/var/www/larryforalaska/larryforalaska_apache2.conf');
+updateIPv6confFile('/var/www/interiordems/interiordems_apache2.conf');
+updateIPv6confFile('/var/www/oldinteriordems/oldinteriordems_apache2.conf');
+updateIPv6confFile('/var/www/alaskademocrat/alaskademocrat_apache2.conf');
+# ..:....|....:....|....:....|....:....|....:....|....:....|....:....|....:....|
+sub updateIPv6confFile { # Update specified file.
+my $fileName = my $textFileString = ''; my $parameterCount = @_;
+if ($parameterCount > 0) {$fileName = shift}
+if(-e $fileName) { # test existance
+
+  my $openOK = open(READ_FILE, $fileName);
+  if ( !$openOK ) {
+    warn "Warning: $0\nFile: $fileName NOT opened for reading!\n$!\n\n";
+    return;
+  }
+
+  while(<READ_FILE>) {$textFileString .= $_ } close(READ_FILE);
+  my $originalTextFileString = $textFileString;
+
+  $textFileString =~ s/$cB{'public-ipv6'}/$cA{'public-ipv6'}/g;
+
+  $openOK = open (UPDATEFILE, ">$fileName");
+  if ( !$openOK ) {
+    warn "Warning: $0\nFile: $fileName NOT opened for update!\n$!\n\n";
+    return;
+  }
+  if ( $originalTextFileString ne $textFileString ) {
+    print "$0: File: $fileName IPv6 Updated!\n\n";
+  } else {
+    print "$0: File: $fileName IPv6 Unchanged!\n\n";
+  }
+  print UPDATEFILE $textFileString;
+  close(UPDATEFILE);
+} else { # test existance
+  warn "$0: File: $fileName NOT found!\n$!\n\n";}
+  return;
+}
 # ..:....|....:....|....:....|....:....|....:....|....:....|....:....|....:....|
 sub updateFile { # Update specified file.
 my $fileName = my $textFileString = ''; my $parameterCount = @_;
@@ -63,6 +109,7 @@ if(-e $fileName) { # test existance
  "Run time error: $0\nFile: $fileName NOT opened for reading!\n$!\n\n";
 
      while(<READ_FILE>) {$textFileString .= $_ } close(READ_FILE);
+     my $originalTextFileString = $textFileString;
 
 $textFileString =~ s/$cB{'public-hostname'}/$cA{'public-hostname'}/g;
 
@@ -84,9 +131,13 @@ open (UPDATEFILE, ">$fileName")
  or
   die "Run time error: $0\nPage: $fileName NOT opened for update!\n$!\n\n";
 
-print UPDATEFILE $textFileString;
-
-close(UPDATEFILE);
+  if ( $originalTextFileString ne $textFileString ) {
+    print "$0: File: $fileName Updated!\n\n";
+  } else {
+    print "$0: File: $fileName Unchanged!\n\n";
+  }
+  print UPDATEFILE $textFileString;
+  close(UPDATEFILE);
 
 } else {die
  "Run time error: $0\nFile: $fileName NOT found!\n$!\n\n";}
