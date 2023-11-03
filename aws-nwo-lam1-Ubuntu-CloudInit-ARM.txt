@@ -300,6 +300,7 @@ runcmd:
  - echo 'AWS LAM Adding alaskademocrat www Content'
  - git clone /mnt/efs/git/alaskademocrat.git /var/www/alaskademocrat
  - sh -c "cd /var/www/alaskademocrat;git remote set-url origin git@ak20:alaskademocrat"
+ - sh -c "cd /var/www/alaskademocrat;git checkout -b lam1-Ubuntu-ARM"
  - ln -s /var/www/alaskademocrat/alaskademocrat_apache2.conf /etc/apache2/sites-available/071_alaskademocrat.conf
  - a2ensite 071_alaskademocrat
  - echo
