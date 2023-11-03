@@ -119,8 +119,8 @@ runcmd:
  - ln -s /var/www/aws/etc/update-motd.d/51-cloudguest /etc/update-motd.d
  - echo
  - echo 'AWS LAM enable aws site'
- - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/080_aws.conf
- - a2ensite 080_aws
+ - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/000-aws.conf
+ - a2ensite 000-aws
  - echo
  - echo 'AWS LAM Install no-ssl web site'
  - git clone https://github.com/LAMurakami/no-ssl /var/www/no-ssl
@@ -237,10 +237,14 @@ runcmd:
  - echo
  - echo 'AWS LAM update aws site with current public local name ipv4 ipv6'
  - /var/www/aws/cloud-init.pl
- - sh -c "cd /var/www/aws;git commit -a -m 'LAM AWS cloud-init lam2-Debian-ARM'"
- - sh -c "cd /var/www/no-ssl;git commit -a -m 'LAM AWS cloud-init lam2-Debian-ARM'"
- - sh -c "cd /var/www/lam;git commit -a -m 'LAM AWS cloud-init lam2-Debian-ARM'"
- - sh -c "cd /var/www/z;git commit -a -m 'LAM AWS cloud-init lam2-Debian-ARM'"
+ - echo 'AWS LAM commit cloud-init changes in /var/www/aws git repo'
+ - sh -c "cd /var/www/aws;git commit -a -m 'AWS LAM cloud-init lam2-Debian-ARM'"
+ - echo 'AWS LAM commit cloud-init changes in /var/www/no-ssl git repo'
+ - sh -c "cd /var/www/no-ssl;git commit -a -m 'AWS LAM cloud-init lam2-Debian-ARM'"
+ - echo 'AWS LAM commit cloud-init changes in /var/www/lam git repo'
+ - sh -c "cd /var/www/lam;git commit -a -m 'AWS LAM cloud-init lam2-Debian-ARM'"
+ - echo 'AWS LAM commit cloud-init changes in /var/www/z git repo'
+ - sh -c "cd /var/www/z;git commit -a -m 'AWS LAM cloud-init lam2-Debian-ARM'"
  - echo
  - echo 'AWS LAM Install gitweb after apache has been configured'
  - apt-get install -y gitweb

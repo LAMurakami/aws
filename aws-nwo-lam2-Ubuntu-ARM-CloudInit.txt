@@ -114,14 +114,12 @@ runcmd:
  - file /usr/local/bin/tnef
  - echo
  - echo 'AWS LAM Installing aws.lam1.us web site'
- - git clone /mnt/efs/git/aws /var/www/aws
+ - git clone https://github.com/LAMurakami/aws /var/www/aws
  - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
  - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
- - ln -s /var/www/aws/aws_apache2_ipv6.conf /etc/apache2/sites-available/079_aws_ipv6.conf
- - a2ensite 079_aws_ipv6.conf
- - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/080_aws.conf
- - a2ensite 080_aws
- - /var/www/aws/cloud-init.pl
+ - sh -c "cd /var/www/aws;git checkout -b lam2-Ubuntu-ARM"
+ - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/000-aws.conf
+ - a2ensite 000-aws
  - echo
  - echo 'AWS LAM Cloud Guest motd'
  - ln -s /var/www/aws/etc/update-motd.d/51-cloudguest /etc/update-motd.d
@@ -146,11 +144,11 @@ runcmd:
  - a2enmod rewrite
  - a2enmod cgi
  - echo
- - echo 'AWS LAM Tell git installing in /var/www/lam is O.K.'
- - git config --system --add safe.directory /var/www/lam
- - git clone /mnt/efs/git/no-ssl.git /var/www/no-ssl
+ - echo 'AWS LAM Install no-ssl site'
+ - git clone https://github.com/LAMurakami/no-ssl.git /var/www/no-ssl
  - sh -c "cd /var/www/no-ssl;git remote set-url origin git@github.com:LAMurakami/no-ssl"
  - sh -c "cd /var/www/no-ssl;git remote add ak20 git@ak20:no-ssl"
+ - sh -c "cd /var/www/no-ssl;git checkout -b lam2-Ubuntu-ARM"
  - rm /etc/apache2/apache2.conf
  - rm /etc/apache2/mods-available/alias.conf
  - rm /etc/apache2/mods-available/autoindex.conf
@@ -161,14 +159,17 @@ runcmd:
  - mkdir /usr/local/lib/site_perl
  - ln -s /var/www/no-ssl/site_perl-LAM /usr/local/lib/site_perl/LAM
  - echo
+ - echo 'AWS LAM Tell git installing in /var/www/lam is O.K.'
+ - git config --system --add safe.directory /var/www/lam
+ - echo
  - echo 'AWS LAM Install lam web site'
  # Extract lam from archive that includes MediWiki and git repo
  - tar -xzf /mnt/efs/Amazon-Linux-2023/lam.tgz --directory /var/www
+ - sh -c "cd /var/www/lam;git checkout -b lam2-Ubuntu-ARM"
  - echo
  - echo 'AWS LAM Update from default to LAM AWS lam2 web configuration'
  - sed -i "s|aws|lam2|" /var/www/no-ssl/apache2.conf
  - mkdir /var/www/Multicount
- - chown www-data:www-data /var/www/Multicount
  - echo
  - echo 'AWS LAM Install mariadb after swap has been configured'
  - apt-get install -y mariadb-client mariadb-server
@@ -176,70 +177,65 @@ runcmd:
  - echo 'AWS LAM ***** Additional sites *****'
  - echo
  - echo 'AWS LAM Installing arsc.lam1.us web site'
- - git clone /mnt/efs/git/arsc /var/www/arsc
+ - git clone https://github.com/LAMurakami/arsc /var/www/arsc
  - sh -c "cd /var/www/arsc;git remote set-url origin git@github.com:LAMurakami/arsc"
  - sh -c "cd /var/www/arsc;git remote add ak20 git@ak20:arsc"
+ - sh -c "cd /var/www/arsc;git checkout -b lam2-Ubuntu-ARM"
  - ln -s /var/www/arsc/arsc_apache2.conf /etc/apache2/sites-available/060_arsc.conf
  - a2ensite 060_arsc
- - chown -R ubuntu:www-data /var/www/arsc
  - echo
  - echo 'AWS LAM Installing sites.lam1.us web site'
- - git clone /mnt/efs/git/sites.git /var/www/sites
+ - git clone https://github.com/LAMurakami/sites.git /var/www/sites
  - sh -c "cd /var/www/sites;git remote set-url origin git@ak20:sites"
+ - sh -c "cd /var/www/sites;git checkout -b lam2-Ubuntu-ARM"
  - ln -s /var/www/sites/sites_apache2.conf /etc/apache2/sites-available/030_sites.conf
  - a2ensite 030_sites
- - chown -R ubuntu:www-data /var/www/sites
  - echo
  - echo 'AWS LAM Installing cabo.lam1.us web site'
- - git clone /mnt/efs/git/cabo.git /var/www/cabo
+ - git clone https://github.com/LAMurakami/cabo.git /var/www/cabo
  - sh -c "cd /var/www/cabo;git remote set-url origin git@ak20:cabo"
+ - sh -c "cd /var/www/cabo;git checkout -b lam2-Ubuntu-ARM"
  - ln -s /var/www/cabo/cabo_apache2.conf /etc/apache2/sites-available/040_cabo.conf
  - a2ensite 040_cabo
- - chown -R ubuntu:www-data /var/www/cabo
  - echo
  - echo 'AWS LAM Installing z.lam1.us web site'
- - git clone /mnt/efs/git/z.git /var/www/z
+ - git clone https://github.com/LAMurakami/z.git /var/www/z
  - sh -c "cd /var/www/z;git remote set-url origin git@ak20:z"
+ - sh -c "cd /var/www/z;git checkout -b lam2-Ubuntu-ARM"
  - ln -s /var/www/z/z_apache2.conf /etc/apache2/sites-available/050_z.conf
  - a2ensite 050_z
- - chown -R ubuntu:www-data /var/www/z
  - echo
  - echo 'AWS LAM Adding blinkenshell www Content'
- # Extract blinkenshell from archive that includes date time stamps
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/blinkenshell.tgz --directory /var/www
- # Clone the blinkenshell repo and integrate it with blinkenshell archive
- - git clone /mnt/efs/git/blinkenshell.git /tmp/blinkenshell
- - mv /tmp/blinkenshell/.git /var/www/blinkenshell/public_html
- - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
+ - mkdir /var/www/blinkenshell
+ - git clone https://github.com/LAMurakami/blinkenshell.git /var/www/blinkenshell/public_html
+ - sh -c "cd /var/www/blinkenshell/public_html;git checkout -b lam2-Ubuntu-ARM"
  - ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf /etc/apache2/sites-available/051_blinkenshell.conf
  - a2ensite 051_blinkenshell
- - chown -R ubuntu:www-data /var/www/blinkenshell
  - echo
  - echo 'AWS LAM Adding olnes www Content'
- - git clone /mnt/efs/git/olnes.git /var/www/olnes
+ - git clone https://github.com/LAMurakami/olnes.git /var/www/olnes
  - sh -c "cd /var/www/olnes;git remote set-url origin git@ak20:olnes"
+ - sh -c "cd /var/www/olnes;git checkout -b lam2-Ubuntu-ARM"
  - ln -s /var/www/olnes/olnes_apache2.conf /etc/apache2/sites-available/052_olnes.conf
  - a2ensite 052_olnes
- - chown -R ubuntu:www-data /var/www/olnes
  - echo
  - echo 'AWS LAM Adding alaskademocrat www Content'
  - git clone /mnt/efs/git/alaskademocrat.git /var/www/alaskademocrat
  - sh -c "cd /var/www/alaskademocrat;git remote set-url origin git@ak20:alaskademocrat"
+ - sh -c "cd /var/www/alaskademocrat;git checkout -b lam2-Ubuntu-ARM"
  - ln -s /var/www/alaskademocrat/alaskademocrat_apache2.conf /etc/apache2/sites-available/071_alaskademocrat.conf
  - a2ensite 071_alaskademocrat
- - chown -R ubuntu:www-data /var/www/alaskademocrat
  - echo
  - echo 'AWS LAM Adding larryforalaska www Content'
- - git clone /mnt/efs/git/larryforalaska.git /var/www/larryforalaska
+ - git clone https://github.com/LAMurakami/larryforalaska.git /var/www/larryforalaska
  - sh -c "cd /var/www/larryforalaska;git remote set-url origin git@ak20:larryforalaska"
+ - sh -c "cd /var/www/larryforalaska;git checkout -b lam2-Ubuntu-ARM"
  - ln -s /var/www/larryforalaska/larryforalaska_apache2.conf /etc/apache2/sites-available/070_larryforalaska.conf
  - a2ensite 070_larryforalaska
- - chown -R ubuntu:www-data /var/www/larryforalaska
  - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
  - echo
  - echo 'AWS LAM Set ubuntu as owner of /var/www/{no-ssl,lam,aws}'
- - chown -R ubuntu:www-data /var/www/no-ssl /var/www/lam /var/www/aws
  - echo
  - systemctl restart apache2
  - echo
@@ -279,6 +275,35 @@ runcmd:
  - echo
  - echo 'AWS LAM Create lam murakami staff credentials.'
  - /var/www/lam/Create-lam-murakami-staff.bash
+ - echo
+ - echo 'AWS LAM update aws site with current public local name ipv4 ipv6'
+ - /var/www/aws/cloud-init.pl
+ - echo 'AWS LAM commit cloud-init changes in /var/www/aws git repo'
+ - sh -c "cd /var/www/aws;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
+ - echo 'AWS LAM commit cloud-init changes in /var/www/no-ssl git repo'
+ - sh -c "cd /var/www/no-ssl;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
+ - echo 'AWS LAM commit cloud-init changes in /var/www/arsc git repo'
+ - sh -c "cd /var/www/arsc;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
+ - echo 'AWS LAM commit cloud-init changes in /var/www/sites git repo'
+ - sh -c "cd /var/www/sites;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
+ - echo 'AWS LAM commit cloud-init changes in /var/www/cabo git repo'
+ - sh -c "cd /var/www/cabo;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
+ - echo 'AWS LAM commit cloud-init changes in /var/www/z git repo'
+ - sh -c "cd /var/www/z;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
+ - echo 'AWS LAM commit cloud-init changes in /var/www/blinkenshell/public_html git repo'
+ - sh -c "cd /var/www/blinkenshell/public_html;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
+ - echo 'AWS LAM commit cloud-init changes in /var/www/olnes git repo'
+ - sh -c "cd /var/www/olnes;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
+ - echo 'AWS LAM commit cloud-init changes in /var/www/alaskademocrat git repo'
+ - sh -c "cd /var/www/alaskademocrat;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
+ - echo 'AWS LAM commit cloud-init changes in /var/www/larryforalaska git repo'
+ - sh -c "cd /var/www/larryforalaska;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
+ - echo 'AWS LAM commit cloud-init changes in /var/www/lam git repo'
+ - sh -c "cd /var/www/lam;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
+ - echo
+ - echo 'AWS LAM Alaska Set lam as owner of /var/www'
+ - chown -R lam:staff /var/www
+ - chown www-data:www-data /var/www/Multicount
  - echo
  - echo 'AWS LAM Final Cloud-init etckeeper commit'
  - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
