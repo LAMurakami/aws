@@ -50,8 +50,8 @@ runcmd:
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
  - echo
- - echo 'AWS LAM Report kernel version'
- - uname -a
+ - echo 'AWS LAM Report HOST information'
+ - hostnamectl
  - echo
  - echo 'AWS LAM Report Release version'
  - head /etc/*release

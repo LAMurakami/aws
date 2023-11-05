@@ -28,8 +28,8 @@ output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
 bootcmd:
  - echo
- - echo 'AWS LAM Report kernel version'
- - uname -a
+ - echo 'AWS LAM Report HOST information'
+ - hostnamectl
  - echo
  - echo 'AWS LAM Report Release version'
  - head /etc/*release
