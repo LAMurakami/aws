@@ -310,7 +310,7 @@ runcmd:
  - echo
  - echo 'AWS LAM update aws site with current public local name ipv4 ipv6'
  - /var/www/aws/cloud-init.pl
- - /var/www/aws/AWS-LAM-git-commit.bash lam1-Ubuntu-ARM
+ - /var/www/aws/AWS-LAM-git-commit.bash lam1-Ubuntu-ARM aws no-ssl arsc sites cabo z blinkenshell/public_html olnes alaskademocrat larryforalaska lam mike interiordems oldinteriordems
  - echo
  - echo 'AWS LAM Change ownership of /var/www /mnt/efs'
  - sh -c "chown -R lam:www-data /var/www"
