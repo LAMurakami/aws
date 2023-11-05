@@ -14,7 +14,7 @@ output: {all: '| tee -a /var/log/cloud-init-output.log'}
 bootcmd:
  - echo
  - echo 'AWS LAM Report HOST information'
- - hostnamectl
+ - uname -a
  - echo
  - echo 'AWS LAM Report Release version'
  - head /etc/*release
@@ -263,6 +263,8 @@ runcmd:
  - mv /tmp/blinkenshell/.git /var/www/blinkenshell/public_html
  - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
  - sh -c "cd /var/www/blinkenshell/public_html;git remote set-url origin git@github.com:LAMurakami/blinkenshell"
+ - sh -c "cd /var/www/blinkenshell/public_html;git stash"
+ - sh -c "cd /var/www/blinkenshell/public_html;git checkout master"
  - sh -c "cd /var/www/blinkenshell/public_html;git checkout -b lam1-Ubuntu-x86"
  - ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf /etc/apache2/sites-available/051_blinkenshell.conf
  - a2ensite 051_blinkenshell

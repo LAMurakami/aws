@@ -29,7 +29,7 @@ output: {all: '| tee -a /var/log/cloud-init-output.log'}
 bootcmd:
  - echo
  - echo 'AWS LAM Report HOST information'
- - hostnamectl
+ - uname -a
  - echo
  - echo 'AWS LAM Report Release version'
  - head /etc/*release
