@@ -206,8 +206,18 @@ runcmd:
  - a2ensite 050_z
  - echo
  - echo 'AWS LAM Adding blinkenshell www Content'
- - mkdir /var/www/blinkenshell
- - git clone https://github.com/LAMurakami/blinkenshell.git /var/www/blinkenshell/public_html
+ # Extract blinkenshell from archive that includes date time stamps
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/blinkenshell.tgz --directory /var/www
+ - echo
+ - echo 'AWS LAM Tell git ownership of /var/www/blinkenshell/public_html is O.K.'
+ - git config --system --add safe.directory /var/www/blinkenshell/public_html
+ # Clone the blinkenshell repo and integrate it with blinkenshell archive
+ - git clone https://github.com/LAMurakami/blinkenshell.git /tmp/blinkenshell
+ - mv /tmp/blinkenshell/.git /var/www/blinkenshell/public_html
+ - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
+ - sh -c "cd /var/www/blinkenshell/public_html;git remote set-url origin git@github.com:LAMurakami/blinkenshell"
+ - sh -c "cd /var/www/blinkenshell/public_html;git stash"
+ - sh -c "cd /var/www/blinkenshell/public_html;git checkout master"
  - sh -c "cd /var/www/blinkenshell/public_html;git checkout -b lam2-Ubuntu-ARM"
  - ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf /etc/apache2/sites-available/051_blinkenshell.conf
  - a2ensite 051_blinkenshell
@@ -278,28 +288,7 @@ runcmd:
  - echo
  - echo 'AWS LAM update aws site with current public local name ipv4 ipv6'
  - /var/www/aws/cloud-init.pl
- - echo 'AWS LAM commit cloud-init changes in /var/www/aws git repo'
- - sh -c "cd /var/www/aws;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
- - echo 'AWS LAM commit cloud-init changes in /var/www/no-ssl git repo'
- - sh -c "cd /var/www/no-ssl;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
- - echo 'AWS LAM commit cloud-init changes in /var/www/arsc git repo'
- - sh -c "cd /var/www/arsc;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
- - echo 'AWS LAM commit cloud-init changes in /var/www/sites git repo'
- - sh -c "cd /var/www/sites;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
- - echo 'AWS LAM commit cloud-init changes in /var/www/cabo git repo'
- - sh -c "cd /var/www/cabo;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
- - echo 'AWS LAM commit cloud-init changes in /var/www/z git repo'
- - sh -c "cd /var/www/z;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
- - echo 'AWS LAM commit cloud-init changes in /var/www/blinkenshell/public_html git repo'
- - sh -c "cd /var/www/blinkenshell/public_html;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
- - echo 'AWS LAM commit cloud-init changes in /var/www/olnes git repo'
- - sh -c "cd /var/www/olnes;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
- - echo 'AWS LAM commit cloud-init changes in /var/www/alaskademocrat git repo'
- - sh -c "cd /var/www/alaskademocrat;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
- - echo 'AWS LAM commit cloud-init changes in /var/www/larryforalaska git repo'
- - sh -c "cd /var/www/larryforalaska;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
- - echo 'AWS LAM commit cloud-init changes in /var/www/lam git repo'
- - sh -c "cd /var/www/lam;git commit -a -m 'AWS LAM cloud-init lam2-Ubuntu-ARM'"
+ - /var/www/aws/AWS-LAM-git-commit.bash lam2-Ubuntu-ARM aws no-ssl arsc sites cabo z blinkenshell/public_html olnes alaskademocrat larryforalaska lam
  - echo
  - echo 'AWS LAM Alaska Set lam as owner of /var/www'
  - chown -R lam:staff /var/www
