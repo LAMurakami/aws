@@ -51,6 +51,7 @@ ssh_authorized_keys:
  - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAYEAnNqVrt71AKSIMmSAIONBx4jIEK0IIZF5fSAaB9kI4oOK+t7aSTKAZwwgKHWJ536XFdR3Ql5Xi0r2CuUEf1GVEagAxLZTXRuim5UGmS63rfSxGwq9JQVg5WDbN5ilnGxSmqsD77SApvmffcO/T2zZWd+rrjMWWRi9zQwRdQRm60bc69ajJbjIJd8SCXIggUPzTkUz5Sca7dhdffcMpGR9bdexFln+YSli1ohtvs2zVBM4ncpufGS+Auax8+gQNr32QeSszlKuKsXYorZ9gl+Z8s62mX5yCXIrH2hWoHsCTUX38iVM8/wI6sPVosarkng7mPOOQLy5k50Y0cb9FRQGlrvmQqsc3fI7tC1fblhKL0HaY844kIZRHwFuOI04ik+b8Swdjed6+FH/RIKppuOY+qfdmv8gcX4ZhpbKg+JN+u5Xy5awpUFqhsbBdCz0MvLNPKEbDNCFokX8nL0HqGeABk2DOJ1+IOFz5pIiCL31LTVGTQ0AwXp3nkaHZykJNrcB Authentication from lam@laptop.lam1.us
 
 runcmd:
+ - keyName="lam2-Ubuntu-ARM"
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
@@ -93,7 +94,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Adding nfs4 mount to AWS NW-O VPC Elastic File System'
  - mkdir /mnt/efs
- - chown ubuntu:ubuntu /mnt/efs
  - nfsOpt="_netdev,noresvport,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
  - echo "fs-6f45fac6.efs.us-west-2.amazonaws.com:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
  - mount -a -t nfs4
@@ -145,10 +145,7 @@ runcmd:
  - a2enmod cgi
  - echo
  - echo 'AWS LAM Install no-ssl site'
- - git clone https://github.com/LAMurakami/no-ssl.git /var/www/no-ssl
- - sh -c "cd /var/www/no-ssl;git remote set-url origin git@github.com:LAMurakami/no-ssl"
- - sh -c "cd /var/www/no-ssl;git remote add ak20 git@ak20:no-ssl"
- - sh -c "cd /var/www/no-ssl;git checkout -b lam2-Ubuntu-ARM"
+ - /var/www/aws/aws-lam-www-git-clone.bash no-ssl $keyName
  - rm /etc/apache2/apache2.conf
  - rm /etc/apache2/mods-available/alias.conf
  - rm /etc/apache2/mods-available/autoindex.conf
@@ -165,6 +162,7 @@ runcmd:
  - echo 'AWS LAM Install lam web site'
  # Extract lam from archive that includes MediWiki and git repo
  - tar -xzf /mnt/efs/Amazon-Linux-2023/lam.tgz --directory /var/www
+ - sh -c "cd /var/www/lam;git stash"
  - sh -c "cd /var/www/lam;git checkout -b lam2-Ubuntu-ARM"
  - echo
  - echo 'AWS LAM Update from default to LAM AWS lam2 web configuration'
@@ -177,31 +175,22 @@ runcmd:
  - echo 'AWS LAM ***** Additional sites *****'
  - echo
  - echo 'AWS LAM Installing arsc.lam1.us web site'
- - git clone https://github.com/LAMurakami/arsc /var/www/arsc
- - sh -c "cd /var/www/arsc;git remote set-url origin git@github.com:LAMurakami/arsc"
- - sh -c "cd /var/www/arsc;git remote add ak20 git@ak20:arsc"
- - sh -c "cd /var/www/arsc;git checkout -b lam2-Ubuntu-ARM"
+ - /var/www/aws/aws-lam-www-git-clone.bash arsc $keyName
  - ln -s /var/www/arsc/arsc_apache2.conf /etc/apache2/sites-available/060_arsc.conf
  - a2ensite 060_arsc
  - echo
  - echo 'AWS LAM Installing sites.lam1.us web site'
- - git clone https://github.com/LAMurakami/sites.git /var/www/sites
- - sh -c "cd /var/www/sites;git remote set-url origin git@ak20:sites"
- - sh -c "cd /var/www/sites;git checkout -b lam2-Ubuntu-ARM"
+ - /var/www/aws/aws-lam-www-git-clone.bash sites $keyName
  - ln -s /var/www/sites/sites_apache2.conf /etc/apache2/sites-available/030_sites.conf
  - a2ensite 030_sites
  - echo
  - echo 'AWS LAM Installing cabo.lam1.us web site'
- - git clone https://github.com/LAMurakami/cabo.git /var/www/cabo
- - sh -c "cd /var/www/cabo;git remote set-url origin git@ak20:cabo"
- - sh -c "cd /var/www/cabo;git checkout -b lam2-Ubuntu-ARM"
+ - /var/www/aws/aws-lam-www-git-clone.bash cabo $keyName
  - ln -s /var/www/cabo/cabo_apache2.conf /etc/apache2/sites-available/040_cabo.conf
  - a2ensite 040_cabo
  - echo
  - echo 'AWS LAM Installing z.lam1.us web site'
- - git clone https://github.com/LAMurakami/z.git /var/www/z
- - sh -c "cd /var/www/z;git remote set-url origin git@ak20:z"
- - sh -c "cd /var/www/z;git checkout -b lam2-Ubuntu-ARM"
+ - /var/www/aws/aws-lam-www-git-clone.bash z $keyName
  - ln -s /var/www/z/z_apache2.conf /etc/apache2/sites-available/050_z.conf
  - a2ensite 050_z
  - echo
@@ -223,23 +212,17 @@ runcmd:
  - a2ensite 051_blinkenshell
  - echo
  - echo 'AWS LAM Adding olnes www Content'
- - git clone https://github.com/LAMurakami/olnes.git /var/www/olnes
- - sh -c "cd /var/www/olnes;git remote set-url origin git@ak20:olnes"
- - sh -c "cd /var/www/olnes;git checkout -b lam2-Ubuntu-ARM"
+ - /var/www/aws/aws-lam-www-git-clone.bash olnes $keyName
  - ln -s /var/www/olnes/olnes_apache2.conf /etc/apache2/sites-available/052_olnes.conf
  - a2ensite 052_olnes
  - echo
  - echo 'AWS LAM Adding alaskademocrat www Content'
- - git clone /mnt/efs/git/alaskademocrat.git /var/www/alaskademocrat
- - sh -c "cd /var/www/alaskademocrat;git remote set-url origin git@ak20:alaskademocrat"
- - sh -c "cd /var/www/alaskademocrat;git checkout -b lam2-Ubuntu-ARM"
+ - /var/www/aws/aws-lam-www-git-clone.bash alaskademocrat $keyName private
  - ln -s /var/www/alaskademocrat/alaskademocrat_apache2.conf /etc/apache2/sites-available/071_alaskademocrat.conf
  - a2ensite 071_alaskademocrat
  - echo
  - echo 'AWS LAM Adding larryforalaska www Content'
- - git clone https://github.com/LAMurakami/larryforalaska.git /var/www/larryforalaska
- - sh -c "cd /var/www/larryforalaska;git remote set-url origin git@ak20:larryforalaska"
- - sh -c "cd /var/www/larryforalaska;git checkout -b lam2-Ubuntu-ARM"
+ - /var/www/aws/aws-lam-www-git-clone.bash larryforalaska $keyName
  - ln -s /var/www/larryforalaska/larryforalaska_apache2.conf /etc/apache2/sites-available/070_larryforalaska.conf
  - a2ensite 070_larryforalaska
  - echo
@@ -257,11 +240,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Install dovecot-imapd after /etc/hosts has been configured'
  - apt-get install --yes dovecot-imapd
- - echo
- - echo 'AWS LAM Add root alias so default AWS ubuntu user gets root mail'
- - cp /var/www/aws/etc/aliases /etc/aliases
  - cp /var/www/aws/etc/dovecot/conf.d/10-master.conf /etc/dovecot/conf.d/10-master.conf
- - newaliases
  - echo
  - sh -c "cd /etc ; git commit -a -m 'Changes from lam2-Ubuntu-CloudInit'"
  - echo
@@ -293,6 +272,7 @@ runcmd:
  - echo 'AWS LAM Alaska Set lam as owner of /var/www'
  - chown -R lam:staff /var/www
  - chown www-data:www-data /var/www/Multicount
+ - chown lam:staff /mnt/efs
  - echo
  - echo 'AWS LAM Final Cloud-init etckeeper commit'
  - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
