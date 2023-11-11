@@ -117,7 +117,7 @@ runcmd:
  - git clone https://github.com/LAMurakami/aws /var/www/aws
  - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
  - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
- - sh -c "cd /var/www/aws;git checkout -b lam2-Ubuntu-ARM"
+ - sh -c "cd /var/www/aws;git checkout -b $keyName"
  - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/000-aws.conf
  - a2ensite 000-aws
  - echo
@@ -163,7 +163,7 @@ runcmd:
  # Extract lam from archive that includes MediWiki and git repo
  - tar -xzf /mnt/efs/Amazon-Linux-2023/lam.tgz --directory /var/www
  - sh -c "cd /var/www/lam;git stash"
- - sh -c "cd /var/www/lam;git checkout -b lam2-Ubuntu-ARM"
+ - sh -c "cd /var/www/lam;git checkout -b $keyName"
  - echo
  - echo 'AWS LAM Update from default to LAM AWS lam2 web configuration'
  - sed -i "s|aws|lam2|" /var/www/no-ssl/apache2.conf
@@ -207,7 +207,7 @@ runcmd:
  - sh -c "cd /var/www/blinkenshell/public_html;git remote set-url origin git@github.com:LAMurakami/blinkenshell"
  - sh -c "cd /var/www/blinkenshell/public_html;git stash"
  - sh -c "cd /var/www/blinkenshell/public_html;git checkout master"
- - sh -c "cd /var/www/blinkenshell/public_html;git checkout -b lam2-Ubuntu-ARM"
+ - sh -c "cd /var/www/blinkenshell/public_html;git checkout -b $keyName"
  - ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf /etc/apache2/sites-available/051_blinkenshell.conf
  - a2ensite 051_blinkenshell
  - echo
@@ -233,7 +233,7 @@ runcmd:
  - systemctl restart apache2
  - echo
  - echo 'AWS LAM Changes from lam1-Ubuntu-CloudInit etckeeper commit'
- - etckeeper commit -m 'AWS LAM Changes from lam1-Ubuntu-CloudInit'
+ - etckeeper commit -m "AWS LAM Changes from $keyName"
  - echo 'AWS LAM Updating lam2.duckdns.org IP address'
  - ln -s /home/ubuntu/.duckdns /root/.duckdns
  - /var/www/aws/Update-DuckDNS.bash lam2
@@ -241,8 +241,7 @@ runcmd:
  - echo 'AWS LAM Install dovecot-imapd after /etc/hosts has been configured'
  - apt-get install --yes dovecot-imapd
  - cp /var/www/aws/etc/dovecot/conf.d/10-master.conf /etc/dovecot/conf.d/10-master.conf
- - echo
- - sh -c "cd /etc ; git commit -a -m 'Changes from lam2-Ubuntu-CloudInit'"
+ - etckeeper commit -m "AWS LAM Changes from $keyName"
  - echo
  - echo 'AWS LAM Install man2html after apache has been configured'
  - apt-get install -y man2html
@@ -267,7 +266,7 @@ runcmd:
  - echo
  - echo 'AWS LAM update aws site with current public local name ipv4 ipv6'
  - /var/www/aws/cloud-init.pl
- - /var/www/aws/AWS-LAM-git-commit.bash lam2-Ubuntu-ARM aws no-ssl arsc sites cabo z blinkenshell/public_html olnes alaskademocrat larryforalaska lam
+ - /var/www/aws/AWS-LAM-git-commit.bash $keyName aws no-ssl arsc sites cabo z blinkenshell/public_html olnes alaskademocrat larryforalaska lam
  - echo
  - echo 'AWS LAM Alaska Set lam as owner of /var/www'
  - chown -R lam:staff /var/www

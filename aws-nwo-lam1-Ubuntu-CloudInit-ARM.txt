@@ -116,7 +116,7 @@ runcmd:
  - git clone https://github.com/LAMurakami/aws /var/www/aws
  - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
  - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
- - sh -c "cd /var/www/aws;git checkout -b lam1-Ubuntu-ARM"
+ - sh -c "cd /var/www/aws;git checkout -b $keyName"
  - echo
  - echo 'AWS LAM Cloud Guest motd'
  - ln -s /var/www/aws/etc/update-motd.d/51-cloudguest /etc/update-motd.d
@@ -229,7 +229,7 @@ runcmd:
  # Use lam1 branch to serve secure site at https://lam1.duckdns.org
  - sh -c "cd /var/www/lam;git stash"
  - sh -c "cd /var/www/lam;git checkout lam1"
- - sh -c "cd /var/www/lam;git checkout -b lam1-Ubuntu-ARM"
+ - sh -c "cd /var/www/lam;git checkout -b $keyName"
  - rm /etc/apache2/mods-available/info.conf
  - rm /etc/apache2/mods-available/status.conf
  - /var/www/lam/Implement_lam_conf.bash
@@ -274,7 +274,7 @@ runcmd:
  - sh -c "cd /var/www/blinkenshell/public_html;git remote set-url origin git@github.com:LAMurakami/blinkenshell"
  - sh -c "cd /var/www/blinkenshell/public_html;git stash"
  - sh -c "cd /var/www/blinkenshell/public_html;git checkout master"
- - sh -c "cd /var/www/blinkenshell/public_html;git checkout -b lam1-Ubuntu-ARM"
+ - sh -c "cd /var/www/blinkenshell/public_html;git checkout -b $keyName"
  - ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf /etc/apache2/sites-available/051_blinkenshell.conf
  - a2ensite 051_blinkenshell
  - echo
@@ -287,7 +287,7 @@ runcmd:
  - echo
  - echo 'AWS LAM update aws site with current public local name ipv4 ipv6'
  - /var/www/aws/cloud-init.pl
- - /var/www/aws/AWS-LAM-git-commit.bash lam1-Ubuntu-ARM aws no-ssl arsc sites cabo z blinkenshell/public_html olnes alaskademocrat larryforalaska lam mike interiordems oldinteriordems
+ - /var/www/aws/AWS-LAM-git-commit.bash $keyName aws no-ssl arsc sites cabo z blinkenshell/public_html olnes alaskademocrat larryforalaska lam mike interiordems oldinteriordems
  - echo
  - echo 'AWS LAM Change ownership of /var/www /mnt/efs'
  - sh -c "chown -R lam:www-data /var/www"
@@ -300,8 +300,8 @@ runcmd:
  - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz - | gunzip -c | mysql --user=lam wikidb
  - systemctl restart apache2
  - echo
- - echo 'AWS LAM Changes from lam1-Ubuntu-CloudInit etckeeper commit'
- - etckeeper commit -m 'AWS LAM Changes from lam1-Ubuntu-CloudInit'
+ - echo "AWS LAM Changes from $keyName-CloudInit etckeeper commit"
+ - etckeeper commit -m "AWS LAM Changes from $keyName-CloudInit"
  - echo
  - echo 'AWS LAM Updating lam1.duckdns.org IP address'
  - ln -s /home/ubuntu/.duckdns /root/.duckdns
@@ -315,7 +315,7 @@ runcmd:
  - cp /var/www/aws/etc/dovecot/conf.d/10-master.conf /etc/dovecot/conf.d/10-master.conf
  - newaliases
  - echo
- - sh -c "cd /etc ; git commit -a -m 'Changes from lam1-Ubuntu-CloudInit'"
+ - etckeeper commit -m "AWS LAM Changes from $keyName-CloudInit"
  - echo
  - echo 'AWS LAM Install gitweb after apache has been configured'
  - apt-get install -y gitweb
