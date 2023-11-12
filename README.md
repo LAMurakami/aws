@@ -20,6 +20,22 @@ to serve my domain names are also included in the apache2 ServerAlias.
 These values are used along with the instance-type on the main page for the
 virtual host in my version of the this http site is working main page.  The values for the main page and configuration file are applied during the CloudInit process by [cloud-init.pl](https://github.com/LAMurakami/aws/blob/master/cloud-init.pl) and [ec2-user-data.bash](https://github.com/LAMurakami/aws/blob/master/ec2-user-data.bash)
 
+A public-ipv6 value is also used to update the VirtualHost configuration for all the additional-sites possibly being served by the instance.
+Additional sites served by the instance possibly include:
+lam
+[no-ssl](https://github.com/LAMurakami/no-ssl)
+[arsc](https://github.com/LAMurakami/arsc)
+[sites](https://github.com/LAMurakami/sites)
+[cabo](https://github.com/LAMurakami/cabo)
+[z](https://github.com/LAMurakami/z)
+[blinkenshell](https://github.com/LAMurakami/blinkenshell)
+[olnes](https://github.com/LAMurakami/olnes)
+alaskademocrat
+[larryforalaska](https://github.com/LAMurakami/larryforalaska)
+mike
+interiordems
+oldinteriordems
+
 Content (DocumentRoot) is now at /var/www/&lt;site&gt;/html and
 configuration and supporting files within /var/www/&lt;site&gt; but not the
 DocumentRoot.
@@ -73,7 +89,10 @@ applies the public-hostname, public-ipv4, local-hostname and
 local-ipv4 values from the /var/log/cloud-init-output.log to the
 /var/www/aws/html/index.html and /var/www/aws/aws_apache2.conf files so the
 Dynamic Domain Name Service page is displayed when the AWS public domain name
-or IP address is visited.
+or IP address is visited.  The cloud-init.pl program also updates the public-ipv6
+value in the VirtualHost specification of the
+/var/www/&lt;site&gt;/&lt;site&gt;_apache2.conf configuration files for all the
+additional-sites.
 
 * &lt;site&gt;_apache2.conf is the site apache2 configuration file.  The LAM AWS
 EC2 LAMP instance does not support .htaccess files.  The &lt;site&gt;_apache2.conf
