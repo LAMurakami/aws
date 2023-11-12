@@ -10,7 +10,7 @@ if [ -z $2 ] ; then
   exit 1;
 fi
 
-keyName = $1 ; shift ;
+keyName=$1 ; shift ;
 
 for dir in "$@"
 do
