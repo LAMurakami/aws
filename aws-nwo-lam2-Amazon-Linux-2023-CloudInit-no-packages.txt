@@ -132,7 +132,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Adding nfs4 mount to AWS NW-O VPC Elastic File System'
  - mkdir /mnt/efs
- - chown ec2-user:ec2-user /mnt/efs
  - nfsOpt="_netdev,noresvport,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
  - echo "fs-6f45fac6.efs.us-west-2.amazonaws.com:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
  - mount -a -t nfs4
@@ -184,7 +183,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Create lam murakami staff credentials.'
  - /var/www/lam/Create-lam-murakami-staff.bash AL2023x86
- - chown lam:staff /mnt/efs
  - echo
  - echo 'AWS LAM Update apache2 ssl configuration'
  - rm /etc/httpd/conf.d/ssl.conf
@@ -248,6 +246,9 @@ runcmd:
  - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
  - echo
+ - echo 'AWS LAM add apache group to ec2-user'
+ - sh -c "usermod -a -G apache ec2-user"
+ - echo
  - echo 'AWS LAM Create /phpinfo.php page'
  - sh -c "echo '<?php phpinfo(); ?>' > /var/www/lam/html/phpinfo.php"
  - sh -c "cd /var/www/lam;git add html/phpinfo.php"
@@ -255,9 +256,6 @@ runcmd:
  - echo 'AWS LAM update aws site with current public local name ipv4 ipv6'
  - /var/www/aws/cloud-init.pl
  - /var/www/aws/AWS-LAM-git-commit.bash $keyName aws no-ssl arsc sites cabo z blinkenshell/public_html olnes alaskademocrat larryforalaska lam mike interiordems oldinteriordems
- - echo
- - echo 'AWS LAM add apache group to ec2-user'
- - sh -c "usermod -a -G apache ec2-user"
  - echo
  - echo 'AWS LAM Change ownership of /var/www'
  - sh -c "chown -R lam:apache /var/www"
