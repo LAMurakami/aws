@@ -1,0 +1,320 @@
+#cloud-config
+
+# Tell cloud-init to log the output to a log file
+output: {all: '| tee -a /var/log/cloud-init-output.log'}
+
+# /var/www/aws/aws-nwo-lam2-Debian-x86-CloudInit.txt - Initialize lam2.duckdns.org
+#
+# https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
+#
+
+bootcmd:
+ - echo
+ - echo 'AWS LAM Report HOST information'
+ - uname -a
+ - echo
+ - echo 'AWS LAM Report Release version'
+ - head /etc/*release
+ - echo
+ - echo 'AWS LAM cloud-config YAML bootcmd complete'
+ - date
+
+# Set hostname
+hostname: lam2
+
+# Set timezone
+timezone: US/Alaska
+
+# Upgrade apt database on first boot
+package_update: true
+
+# Upgrade the instance on first boot
+package_upgrade: true
+
+ssh_import_is: [admin]
+ssh_authorized_keys:
+ - ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAYEAnNqVrt71AKSIMmSAIONBx4jIEK0IIZF5fSAaB9kI4oOK+t7aSTKAZwwgKHWJ536XFdR3Ql5Xi0r2CuUEf1GVEagAxLZTXRuim5UGmS63rfSxGwq9JQVg5WDbN5ilnGxSmqsD77SApvmffcO/T2zZWd+rrjMWWRi9zQwRdQRm60bc69ajJbjIJd8SCXIggUPzTkUz5Sca7dhdffcMpGR9bdexFln+YSli1ohtvs2zVBM4ncpufGS+Auax8+gQNr32QeSszlKuKsXYorZ9gl+Z8s62mX5yCXIrH2hWoHsCTUX38iVM8/wI6sPVosarkng7mPOOQLy5k50Y0cb9FRQGlrvmQqsc3fI7tC1fblhKL0HaY844kIZRHwFuOI04ik+b8Swdjed6+FH/RIKppuOY+qfdmv8gcX4ZhpbKg+JN+u5Xy5awpUFqhsbBdCz0MvLNPKEbDNCFokX8nL0HqGeABk2DOJ1+IOFz5pIiCL31LTVGTQ0AwXp3nkaHZykJNrcB Authentication from lam@laptop.lam1.us
+
+packages:
+ - rcs
+ - nfs-common
+ - awscli
+ - mailutils
+ - swish++
+ - libio-captureoutput-perl
+ - libcgi-pm-perl
+ - libdbi-perl
+ - libdbd-mysql-perl
+ - php
+ - php-gd
+ - texlive
+ - php-xml*
+ - lynx
+ - apache2-doc
+ - libapache2-mod-perl2
+ - libbsd-resource-perl
+ - libapache2-reload-perl
+ - apache2-suexec-custom
+ - mariadb-client
+ - mariadb-server
+ - php-mysql
+ - libapache2-mod-php
+ - x11-apps
+ - whois
+ - libgtk2.0-0
+ - php-mbstring
+ - php-intl
+ - php-apcu
+ - git
+ - xauth
+ - l3afpad
+
+runcmd:
+ - keyName="lam2-Debian-x86-No-Public-IPv4"
+ - echo
+ - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
+ - chmod a+r /var/log/cloud-init-output.log
+ - echo
+ - echo 'AWS LAM Adding a swapfile'
+ - dd if=/dev/zero of=/swapfile bs=32M count=16
+ - chmod 600 /swapfile
+ - mkswap /swapfile
+ - swapon /swapfile
+ - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+ - free -h
+ - cat /proc/swaps
+ - echo
+ - echo 'AWS LAM Install glances after swap has been configured'
+ - apt-get install -y glances
+ - echo
+ - echo 'AWS LAM Check US Alaska local time for this system'
+ - ls -lF --time-style=long-iso /etc/localtime
+ - echo
+ - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
+ # Allow for either gzip compressed user-data or plain text user-data
+ - (curl -s http://169.254.169.254/latest/user-data | gunzip) || curl -s http://169.254.169.254/latest/user-data
+ - echo
+ - echo 'AWS LAM Set git user name, email for system'
+ - git config --system user.name "LAMurakami"
+ - git config --system user.email GitHub@LAMurakami.com
+ - git config --system core.editor vi
+ - git config --system branch.autosetuprebase always
+ - git config --system init.defaultBranch master
+ - echo
+ - echo 'AWS LAM Install etckeeper to track configuration changes'
+ - apt-get install -y etckeeper
+ - echo
+ - echo 'AWS LAM Set vim as default editor for system'
+ - update-alternatives --set editor /usr/bin/vim.basic
+ - echo
+ - echo 'AWS LAM Set hostname and localhost alias in /etc/hosts'
+ - sed -i '1s/localhost/lam2.duckdns.org lam2 localhost/' /etc/hosts
+ - echo
+ - echo 'AWS LAM Enable x11 forwarding over ssh for sudo'
+ - ln -s /var/www/no-ssl/xauthority.sh /etc/profile.d
+ - echo
+ - echo 'AWS LAM Use l3afpad fork of leafpad'
+ - ln -s /usr/bin/l3afpad /usr/bin/leafpad
+ - echo
+ - echo 'AWS LAM ***** Use private LAM Alaska resources *****'
+ - echo
+ - echo 'AWS LAM Adding nfs4 mount to AWS NW-O VPC Elastic File System'
+ - mkdir /mnt/efs
+ - nfsOpt="_netdev,noresvport,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
+ - echo "fs-6f45fac6.efs.us-west-2.amazonaws.com:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
+ - systemctl daemon-reload
+ - mount -a -t nfs4
+ - echo
+ - echo 'AWS LAM Installing GNU which v2.21 compiled Debian 12 x86'
+ - tar -xzf /mnt/efs/Debian-12/which-Debian-12-x86.tgz --directory /usr/local
+ - file /usr/local/bin/which
+ - echo
+ - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
+ - cp /mnt/efs/aws-lam1-ubuntu/sshd_config /etc/ssh
+ - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
+ - systemctl restart sshd
+ - echo
+ - echo 'AWS LAM Installing ubuntu user bash resources for debian'
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/ubuntu.tgz --directory /home/admin
+ - echo
+ - echo 'AWS LAM Installing aws.lam1.us web site'
+ - git clone /mnt/efs/git/aws /var/www/aws
+ - sh -c "cd /var/www/aws;git checkout -b $keyName"
+ - echo
+ - echo 'AWS LAM Cloud Guest motd'
+ - ln -s /var/www/aws/etc/update-motd.d/51-cloudguest /etc/update-motd.d
+ - echo
+ - echo 'AWS LAM enable aws site'
+ - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/000-aws.conf
+ - a2ensite 000-aws
+ - echo
+ - echo 'AWS LAM Install no-ssl web site'
+ - /var/www/aws/aws-lam-efs-www-git-clone.bash no-ssl $keyName
+ - rm /etc/apache2/apache2.conf
+ - rm /etc/apache2/mods-available/alias.conf
+ - rm /etc/apache2/mods-available/autoindex.conf
+ - rm /etc/apache2/mods-available/dir.conf
+ - a2enmod rewrite
+ - /var/www/no-ssl/Implement_no-ssl_conf.bash
+ - echo
+ - echo 'AWS LAM Update from default to LAM AWS lam2 web configuration'
+ - sed -i "s|aws|lam2|" /var/www/no-ssl/apache2.conf
+ - sed -i 's|aws.ServerAdmin|lam2.ServerAdmin|' /etc/apache2/apache2.conf
+ - sed -i 's|aws.lam1.us|lam2.duckdns.org|' /etc/apache2/apache2.conf
+ - echo
+ - echo 'AWS LAM Configuring perl to include LAM perl modules'
+ - mkdir /usr/local/lib/site_perl
+ - ln -s /var/www/no-ssl/site_perl-LAM /usr/local/lib/site_perl/LAM
+ - echo
+ - echo 'AWS LAM Installing z.lam1.us web site'
+ - /var/www/aws/aws-lam-efs-www-git-clone.bash z $keyName
+ - ln -s /var/www/z/z_apache2.conf /etc/apache2/sites-available/050_z.conf
+ - a2ensite 050_z
+ - echo
+ - echo 'AWS LAM ***** Additional sites *****'
+ - echo
+ - echo 'AWS LAM Installing arsc.lam1.us web site'
+ - /var/www/aws/aws-lam-efs-www-git-clone.bash arsc $keyName
+ - ln -s /var/www/arsc/arsc_apache2.conf /etc/apache2/sites-available/060_arsc.conf
+ - a2ensite 060_arsc
+ - echo
+ - echo 'AWS LAM Installing sites.lam1.us web site'
+ - /var/www/aws/aws-lam-efs-www-git-clone.bash sites $keyName
+ - ln -s /var/www/sites/sites_apache2.conf /etc/apache2/sites-available/030_sites.conf
+ - a2ensite 030_sites
+ - echo
+ - echo 'AWS LAM Installing cabo.lam1.us web site'
+ - /var/www/aws/aws-lam-efs-www-git-clone.bash cabo $keyName
+ - ln -s /var/www/cabo/cabo_apache2.conf /etc/apache2/sites-available/040_cabo.conf
+ - a2ensite 040_cabo
+ - echo
+ - echo 'AWS LAM Adding olnes www Content'
+ - /var/www/aws/aws-lam-efs-www-git-clone.bash olnes $keyName
+ - ln -s /var/www/olnes/olnes_apache2.conf /etc/apache2/sites-available/052_olnes.conf
+ - a2ensite 052_olnes
+ - echo
+ - echo 'AWS LAM Adding larryforalaska www Content'
+ - /var/www/aws/aws-lam-efs-www-git-clone.bash larryforalaska $keyName
+ - ln -s /var/www/larryforalaska/larryforalaska_apache2.conf /etc/apache2/sites-available/070_larryforalaska.conf
+ - a2ensite 070_larryforalaska
+ - echo
+ - echo 'AWS LAM ***** Secure site *****'
+ - echo
+ - echo 'AWS LAM Installing Let-s Encrypt certificates for TLS encryption (HTTPS)'
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz --directory /etc
+ - echo
+ - echo 'AWS LAM Updating apache2 configuration for lam2'
+ - a2enmod ssl
+ - a2enmod info
+ - a2enmod authz_groupfile.load
+ - a2enmod cgi
+ - echo
+ - echo 'AWS LAM Install lam web site'
+ # Extract lam from archive that includes MediWiki and git repo
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/lam.tgz --directory /var/www
+ - echo
+ - echo 'AWS LAM Tell git in /var/www/lam is O.K.'
+ - git config --system --add safe.directory /var/www/lam
+ # Use lam2-debian branch to serve secure site at https://lam2.duckdns.org
+ - sh -c "cd /var/www/lam;git stash"
+ - sh -c "cd /var/www/lam;git checkout lam2-debian"
+ - sh -c "cd /var/www/lam;git checkout -b $keyName"
+ - rm /etc/apache2/mods-available/info.conf
+ - rm /etc/apache2/mods-available/status.conf
+ - /var/www/lam/Implement_lam_conf.bash
+ - echo
+ - echo 'AWS LAM Create lam murakami staff credentials.'
+ - /var/www/lam/Create-lam-murakami-staff.bash
+ - echo
+ - echo 'AWS LAM Create Multicount directory'
+ - mkdir /var/www/Multicount
+ - chmod 775 /var/www/Multicount
+ - echo
+ - echo 'AWS LAM Creating {lam|Mediawiki} database and user'
+ - mysql --table < /var/www/lam/lam-user.sql
+ - echo
+ - echo 'AWS LAM ***** Private Additional sites *****'
+ - echo
+ - echo 'AWS LAM Installing {new|old}.interiordems.com web sites'
+ - /var/www/aws/aws-lam-efs-www-git-clone.bash interiordems $keyName
+ - ln -s /var/www/interiordems/interiordems_apache2.conf /etc/apache2/sites-available/020_interiordems.conf
+ - a2ensite 020_interiordems
+ - /var/www/aws/aws-lam-efs-www-git-clone.bash oldinteriordems $keyName
+ - ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf /etc/apache2/sites-available/010_oldinteriordems.conf
+ - a2ensite 010_oldinteriordems
+ - echo
+ - echo 'AWS LAM Adding mike@mike.lam1.us user, group and www Content'
+ - useradd --shell /bin/bash --create-home --groups users --uid 55501 mike
+ - usermod --groups users,mike mike
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/mike.tgz --directory /home
+ - /var/www/aws/aws-lam-efs-www-git-clone.bash mike $keyName
+ - ln -s /var/www/mike/mike_apache2.conf /etc/apache2/sites-available/081_mike.conf
+ - a2ensite 081_mike
+ - echo
+ - echo 'AWS LAM Adding blinkenshell www Content'
+ # Extract blinkenshell from archive that includes date time stamps
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/blinkenshell.tgz --directory /var/www
+ - echo
+ - echo 'AWS LAM Tell git ownership of /var/www/blinkenshell/public_html is O.K.'
+ - git config --system --add safe.directory /var/www/blinkenshell/public_html
+ # Clone the blinkenshell repo and integrate it with blinkenshell archive
+ - git clone /mnt/efs/git/blinkenshell /tmp/blinkenshell
+ - mv /tmp/blinkenshell/.git /var/www/blinkenshell/public_html
+ - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
+ - sh -c "cd /var/www/blinkenshell/public_html;git remote set-url origin git@github.com:LAMurakami/blinkenshell"
+ - sh -c "cd /var/www/blinkenshell/public_html;git stash"
+ - sh -c "cd /var/www/blinkenshell/public_html;git checkout master"
+ - sh -c "cd /var/www/blinkenshell/public_html;git checkout -b $keyName"
+ - ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf /etc/apache2/sites-available/051_blinkenshell.conf
+ - a2ensite 051_blinkenshell
+ - echo
+ - echo 'AWS LAM Adding alaskademocrat www Content'
+ - /var/www/aws/aws-lam-efs-www-git-clone.bash alaskademocrat $keyName
+ - ln -s /var/www/alaskademocrat/alaskademocrat_apache2.conf /etc/apache2/sites-available/071_alaskademocrat.conf
+ - a2ensite 071_alaskademocrat
+ - echo
+ - echo 'AWS LAM ***** Final Initialization Steps *****'
+ - echo
+ - echo 'AWS LAM update aws site with current public local name ipv4 ipv6'
+ - /var/www/aws/cloud-init.pl
+ - /var/www/aws/AWS-LAM-git-commit.bash $keyName aws no-ssl arsc sites cabo z blinkenshell/public_html olnes alaskademocrat larryforalaska lam mike interiordems oldinteriordems
+ - echo
+ - echo 'AWS LAM Alaska Set lam as owner of /var/www'
+ - chown -R lam:staff /var/www
+ - chown www-data:www-data /var/www/Multicount
+ - chown lam:staff /mnt/efs
+ - echo
+ - echo 'AWS LAM Refreshing lam database'
+ - ln -s /home/admin/.aws /root/.aws
+ - aws s3 cp s3://lamurakami/Bk-20-MySQL.lam.sql.gz --endpoint-url https://s3.dualstack.us-west-2.amazonaws.com - | gunzip -c | mysql --user=lam lam
+ - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz --endpoint-url https://s3.dualstack.us-west-2.amazonaws.com - | gunzip -c | mysql --user=lam wikidb
+ - echo
+ - echo 'AWS LAM Install man2html after apache has been configured'
+ - apt-get install -y man2html
+ - echo
+ - echo 'AWS LAM Install plocate after swap has been configured'
+ - apt-get install -y plocate
+ - echo
+ - echo 'AWS LAM ***** Run cron daily plocate jobs *****'
+ - ln -s /var/www/no-ssl/local_scripts/plocate-mnt-efs.sh /etc/cron.daily/plocate-mnt-efs.sh
+ - /etc/cron.daily/plocate-mnt-efs.sh
+ - chmod a+r /mnt/efs/plocate.db
+ - updatedb
+ - echo
+ - echo 'AWS LAM Use Elastic File System plocate database'
+ - ln -s /var/www/no-ssl/plocate.sh /etc/profile.d/plocate.sh
+ - echo
+ - echo 'AWS LAM Install gitweb after apache has been configured'
+ - apt-get install -y gitweb
+ - a2disconf gitweb
+ - cp /var/www/aws/etc/gitweb.conf /etc/gitweb.conf
+ - systemctl restart apache2
+ - echo
+ - echo 'AWS LAM Alaska Final Cloud-init etckeeper commit'
+ - etckeeper commit -m 'QEMU LAM Alaska Final Cloud-init etckeeper commit'
+ - echo
+ - echo 'AWS LAM Alaska List Installed Packages information'
+ - dpkg -l
+ - echo
+ - echo 'AWS LAM cloud-config YAML runcmd complete'
+ - date
