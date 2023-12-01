@@ -279,8 +279,8 @@ runcmd:
  - echo
  - echo 'AWS LAM Adding alaskademocrat www Content'
  - /var/www/aws/aws-lam-efs-www-git-clone.bash alaskademocrat $keyName
- - ln -s /var/www/alaskademocrat/alaskademocrat_apache2.conf /etc/apache2/sites-available/071_alaskademocrat.conf
- - a2ensite 071_alaskademocrat
+ - ln -s /var/www/alaskademocrat/alaskademocrat_apache2.conf /etc/apache2/sites-available/069_alaskademocrat.conf
+ - a2ensite 069_alaskademocrat
  - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
  - echo
