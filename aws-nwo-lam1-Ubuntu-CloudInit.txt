@@ -242,6 +242,7 @@ runcmd:
  - mv /tmp/blinkenshell/.git /var/www/blinkenshell/public_html
  - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
  - sh -c "cd /var/www/blinkenshell/public_html;git remote set-url origin git@github.com:LAMurakami/blinkenshell"
+ - sh -c "cd /var/www/blinkenshell/public_html;git remote add ak20 git@ak20:blinkenshell"
  - sh -c "cd /var/www/blinkenshell/public_html;git stash"
  - sh -c "cd /var/www/blinkenshell/public_html;git checkout master"
  - sh -c "cd /var/www/blinkenshell/public_html;git checkout -b $keyName"
@@ -257,7 +258,7 @@ runcmd:
  - echo
  - echo 'AWS LAM update aws site with current public local name ipv4 ipv6'
  - /var/www/aws/cloud-init.pl
- - /var/www/aws/AWS-LAM-git-commit.bash $keyName  aws no-ssl arsc sites cabo z blinkenshell/public_html olnes alaskademocrat larryforalaska lam mike interiordems oldinteriordems
+ - /var/www/aws/AWS-LAM-git-commit.bash $keyName  aws no-ssl
  - echo
  - echo 'AWS LAM Change ownership of /var/www /mnt/efs'
  - sh -c "chown -R lam:www-data /var/www"
