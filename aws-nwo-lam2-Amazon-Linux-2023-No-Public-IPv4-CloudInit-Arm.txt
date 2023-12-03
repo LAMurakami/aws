@@ -123,7 +123,7 @@ runcmd:
  - echo 'AWS LAM Install no-ssl web site'
  - /var/www/aws/aws-lam-efs-www-git-clone.bash no-ssl $keyName
  - /var/www/aws/aws-lam-www-git-clone.bash no-ssl $keyName
- - ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/httpd/conf.d/zzz_000-no-ssl.conf
+ - ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/httpd/conf.d/zzz_999-no-ssl.conf
  - echo
  - echo 'AWS LAM Install LAM perl modules'
  - mkdir -p /usr/local/share/perl5/5.32
