@@ -60,7 +60,7 @@ runcmd:
  - apt upgrade --yes
  - echo
  - echo 'AWS LAM Install additional packages on first boot'
- - apt-get install --yes rcs nfs-common awscli swish++ libio-captureoutput-perl libcgi-pm-perl libdbi-perl libdbd-mysql-perl php php-gd texlive php-xml* lynx apache2-doc libapache2-mod-perl2 libbsd-resource-perl libapache2-reload-perl apache2-suexec-custom php-mysql libapache2-mod-php x11-apps whois libgtk2.0-0 php-mbstring php-intl php-apcu
+ - apt-get install --yes rcs nfs-common awscli swish++ libio-captureoutput-perl libcgi-pm-perl libdbi-perl libdbd-mysql-perl php php-gd texlive php-xml* lynx apache2-doc libapache2-mod-perl2 libbsd-resource-perl libapache2-reload-perl apache2-suexec-custom php-mysql libapache2-mod-php x11-apps whois libgtk2.0-0 php-mbstring php-intl php-apcu l3afpad
  - echo
  - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
  # Allow for either gzip compressed user-data or plain text user-data

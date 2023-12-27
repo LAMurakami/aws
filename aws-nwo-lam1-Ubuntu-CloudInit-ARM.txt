@@ -73,6 +73,7 @@ packages:
  - php-mbstring
  - php-intl
  - php-apcu
+ - l3afpad
 
 runcmd:
  - keyName="lam1-Ubuntu-ARM"

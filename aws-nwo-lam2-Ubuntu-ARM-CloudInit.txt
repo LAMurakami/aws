@@ -77,7 +77,7 @@ runcmd:
  - apt upgrade -y
  - echo
  - echo 'AWS LAM Install additional packages on first boot'
- - apt-get --assume-yes --quiet install rcs nfs-common awscli swish++ libio-captureoutput-perl libcgi-pm-perl libdbi-perl libdbd-mysql-perl php php-gd texlive php-xml* lynx apache2-doc libapache2-mod-perl2 libbsd-resource-perl libapache2-reload-perl apache2-suexec-custom php-mysql libapache2-mod-php x11-apps whois libgtk2.0-0 php-mbstring
+ - apt-get --assume-yes --quiet install rcs nfs-common awscli swish++ libio-captureoutput-perl libcgi-pm-perl libdbi-perl libdbd-mysql-perl php php-gd texlive php-xml* lynx apache2-doc libapache2-mod-perl2 libbsd-resource-perl libapache2-reload-perl apache2-suexec-custom php-mysql libapache2-mod-php x11-apps whois libgtk2.0-0 php-mbstring l3afpad
  - echo
  - echo 'AWS LAM Set git user name, email for system'
  - git config --system user.name "LAMurakami"
