@@ -89,6 +89,10 @@ runcmd:
  - tar -xzf /mnt/efs/Amazon-Linux-2023/geany-Arm.tgz --directory /usr/local
  - ldconfig /usr/local/lib
  - echo
+ - echo 'AWS LAM Install l3afpad substitute for leafpad'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/l3afpad-arm.tgz --directory /usr/local
+ - ln -s /usr/local/bin/l3afpad /usr/bin/leafpad
+ - echo
  - echo 'AWS LAM Install glances for ec2-user'
  - tar -xzf /mnt/efs/Amazon-Linux-2023/glances-ec2-user-Arm.tgz --directory /home/ec2-user
  - echo
@@ -122,7 +126,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Install no-ssl web site'
  - /var/www/aws/aws-lam-efs-www-git-clone.bash no-ssl $keyName
- - /var/www/aws/aws-lam-www-git-clone.bash no-ssl $keyName
  - ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/httpd/conf.d/zzz_999-no-ssl.conf
  - echo
  - echo 'AWS LAM Install LAM perl modules'
