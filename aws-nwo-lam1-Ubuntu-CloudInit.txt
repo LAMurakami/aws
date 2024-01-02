@@ -7,9 +7,9 @@ output: {all: '| tee -a /var/log/cloud-init-output.log'}
 #
 # https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
 #
-# This version uses the LAM EFS private repo copies and then sets the URL
-# to git@ak20:${REPO}.git or git@github.com:LAMurakami/${REPO}.git as
-# appropriate.
+# This version clones from https://github.com/LAMurakami or the LAM EFS private
+# repo copies and then sets the URL to git@github.com:LAMurakami/${REPO}.git
+# or git@ak20:${REPO}.git as appropriate.
 
 bootcmd:
  - echo
