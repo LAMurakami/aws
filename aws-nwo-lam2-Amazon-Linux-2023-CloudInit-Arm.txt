@@ -88,7 +88,6 @@ runcmd:
  - cp /var/www/aws/Amazon-Linux-2-httpd.conf /etc/httpd/conf/httpd.conf
  - echo
  - echo 'AWS LAM Install no-ssl web site'
- - git clone https://github.com/LAMurakami/no-ssl /var/www/no-ssl
  - /var/www/aws/aws-lam-www-git-clone.bash no-ssl $keyName
  - ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/httpd/conf.d/zzz_999-no-ssl.conf
  - echo
