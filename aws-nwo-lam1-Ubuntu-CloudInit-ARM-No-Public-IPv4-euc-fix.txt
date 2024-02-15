@@ -37,8 +37,6 @@ hostname: lam1
 # Set timezone
 timezone: US/Alaska
 
-ssh_import_is: [ubuntu]
-
 runcmd:
  - keyName="lam1-Ubuntu-ARM-No-Public-IPv4-us-west-2-euc-fix"
  - echo
