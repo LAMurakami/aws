@@ -22,6 +22,9 @@ bootcmd:
  - echo 'AWS LAM Report AWS EC2 metadata for this instance'
  - ec2metadata | grep -v '^user-data'
  - echo
+ - echo 'AWS LAM Report IP addresses for this instance'
+ - ip a
+ - echo
  - echo 'AWS LAM List Installed Packages information'
  - dpkg -l
  - echo 'AWS LAM cloud-config YAML bootcmd complete'
