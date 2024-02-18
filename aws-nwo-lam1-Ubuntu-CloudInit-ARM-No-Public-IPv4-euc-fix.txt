@@ -63,6 +63,12 @@ runcmd:
  - export DEBIAN_FRONTEND=noninteractive
  - apt-get -yqq install mailutils rcs nfs-common awscli swish++ libio-captureoutput-perl libcgi-pm-perl libdbi-perl libdbd-mysql-perl php php-gd texlive php-xml* lynx apache2-doc libapache2-mod-perl2 libbsd-resource-perl libapache2-reload-perl apache2-suexec-custom php-mysql libapache2-mod-php x11-apps whois libgtk2.0-0 php-mbstring php-intl php-apcu l3afpad
  - echo
+ - echo 'AWS LAM Get EFS for REGION'
+ - wget --quiet https://lamurakami.github.io/aws-efs/REGION.bash
+ - chmod a+x REGION.bash
+ - REGION=$(./REGION.bash)
+ - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
+ - echo
  - echo 'AWS LAM Check US Alaska local time for this system'
  - ls -lF --time-style=long-iso /etc/localtime
  - echo
@@ -94,7 +100,7 @@ runcmd:
  - echo 'AWS LAM Adding nfs4 mount to AWS NW-O VPC Elastic File System'
  - mkdir /mnt/efs
  - nfsOpt="_netdev,noresvport,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
- - echo "fs-6f45fac6.efs.us-west-2.amazonaws.com:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
+ - echo "${EFS}:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
  - mount -a -t nfs4
  - df -Th -x supermount --exclude-type=tmpfs --exclude-type=devtmpfs
  - echo
