@@ -133,6 +133,12 @@ runcmd:
  - echo 'AWS LAM Installing ubuntu user bash resources for debian'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/ubuntu.tgz --directory /home/admin
  - echo
+ - echo 'AWS LAM Link to .aws resources for root'
+ - ln -s /home/admin/.aws /root/.aws
+ - echo
+ - echo 'AWS LAM Set aws s3 IPv6 endpoint-url'
+ - IPv6='--endpoint-url https://s3.dualstack.us-west-2.amazonaws.com'
+ - echo
  - echo 'AWS LAM Installing aws.lam1.us web site'
  - git clone /mnt/efs/git/aws /var/www/aws
  - sh -c "cd /var/www/aws;git checkout -b $keyName"
@@ -207,7 +213,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Install lam web site'
  # Extract lam from archive that includes MediWiki and git repo
- - tar -xzf /mnt/efs/Amazon-Linux-2023/lam.tgz --directory /var/www
+ - aws s3 cp s3://lamurakami/lam.tgz ${IPv6} - | tar -xzf - --directory /var/www
  - echo
  - echo 'AWS LAM Tell git in /var/www/lam is O.K.'
  - git config --system --add safe.directory /var/www/lam
@@ -282,9 +288,8 @@ runcmd:
  - chown lam:staff /mnt/efs
  - echo
  - echo 'AWS LAM Refreshing lam database'
- - ln -s /home/admin/.aws /root/.aws
- - aws s3 cp s3://lamurakami/Bk-20-MySQL.lam.sql.gz --endpoint-url https://s3.dualstack.us-west-2.amazonaws.com - | gunzip -c | mysql --user=lam lam
- - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz --endpoint-url https://s3.dualstack.us-west-2.amazonaws.com - | gunzip -c | mysql --user=lam wikidb
+ - aws s3 cp s3://lamurakami/Bk-20-MySQL.lam.sql.gz ${IPv6} - | gunzip -c | mysql --user=lam lam
+ - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz ${IPv6} - | gunzip -c | mysql --user=lam wikidb
  - echo
  - echo 'AWS LAM Install man2html after apache has been configured'
  - apt-get install -y man2html

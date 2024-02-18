@@ -165,6 +165,12 @@ runcmd:
  - echo 'AWS LAM Installing Amazon Linux 2 ec2-user bash resources'
  - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-ec2-user.tgz --directory /home/ec2-user
  - echo
+ - echo 'AWS LAM Link to .aws resources for root'
+ - ln -s /home/ec2-user/.aws /root/.aws
+ - echo
+ - echo 'AWS LAM Set aws s3 IPv6 endpoint-url'
+ - IPv6='--endpoint-url https://s3.dualstack.us-west-2.amazonaws.com'
+ - echo
  - echo 'AWS LAM ***** Secure site *****'
  - echo
  - echo 'AWS LAM Install Let-s Encrypt certificates for TLS encryption (HTTPS)'
@@ -172,7 +178,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Install lam web site'
  # Extract lam from archive that includes MediWiki and git repo
- - tar -xzf /mnt/efs/Amazon-Linux-2023/lam.tgz --directory /var/www
+ - aws s3 cp s3://lamurakami/lam.tgz ${IPv6} - | tar -xzf - --directory /var/www
  - echo
  - echo 'AWS LAM Use lam2 branch to serve secure site at https://lam2.duckdns.org'
  - sh -c "cd /var/www/lam;git stash"
@@ -202,10 +208,9 @@ runcmd:
  - echo 'AWS LAM Creating {lam|Mediawiki} database and user'
  - mysql --table < /var/www/lam/lam-user.sql
  - echo 'AWS LAM Restore latest lam database backup from AWS S3'
- - ln -s /home/ec2-user/.aws /root/.aws
- - aws s3 cp s3://lamurakami/Bk-20-MySQL.lam.sql.gz --endpoint-url https://s3.dualstack.us-west-2.amazonaws.com - | gunzip -c | mysql --user=lam lam
+ - aws s3 cp s3://lamurakami/Bk-20-MySQL.lam.sql.gz ${IPv6} - | gunzip -c | mysql --user=lam lam
  - echo 'AWS LAM Restore latest LAM Alaska MediaWiki database backup from AWS S3'
- - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz --endpoint-url https://s3.dualstack.us-west-2.amazonaws.com - | gunzip -c | mysql --user=lam wikidb
+ - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz ${IPv6} - | gunzip -c | mysql --user=lam wikidb
  - echo
  - echo 'AWS LAM ***** Private Additional sites *****'
  - echo
