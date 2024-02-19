@@ -1,0 +1,51 @@
+Host ak20 ak20.lam1.us
+Port 55520
+User lam
+Hostname ak20.lam1.us
+
+Host ak17 ak17.lam1.us
+Port 55517
+User lam
+Hostname ak17.lam1.us
+
+Host ak19 ak19.lam1.us
+Port 55519
+User lam
+Hostname ak19.lam1.us
+
+Host ak16 ak16.lam1.us
+Port 55516
+User lam
+Hostname ak16.lam1.us
+
+Host ak7 ak7.lam1.us
+Port 55507
+User lam
+Hostname ak7.lam1.us
+
+Host ak6 ak6.lam1.us
+Port 55506
+User lam
+Hostname ak6.lam1.us
+
+Host triton triton.blinkenshell.org
+User lam
+Port 2222
+Hostname triton.blinkenshell.org
+
+Host wa16 lam2.duckdns.org
+Port 55516
+User lam
+Hostname lam2.duckdns.org
+
+Host git-ak20
+Port 55520
+User git
+IdentityFile /home/lam/.ssh/git_ak20_id_rsa
+Hostname ak20.lam1.us
+
+Host blinkenshell
+Port 2222
+User lam
+IdentityFile /home/lam/.ssh/blinkenshell_id_rsa
+Hostname triton.blinkenshell.org
