@@ -66,7 +66,7 @@ runcmd:
  - echo 'AWS LAM Get EFS for REGION'
  - wget --quiet https://lamurakami.github.io/aws-efs/REGION.bash
  - chmod a+x REGION.bash
- - REGION=$(./REGION.bash)
+ - export REGION=$(./REGION.bash)
  - rm REGION.bash
  - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
  - echo
@@ -120,19 +120,23 @@ runcmd:
  - echo 'AWS LAM Copy ssh key root'
  - cp /home/ubuntu/.ssh/git_ak20_id_rsa /root/.ssh
  - echo
+ - echo 'AWS LAM Set aws s3 IPv6 endpoint-url'
+ - IPv6='--endpoint-url https://s3.dualstack.us-west-2.amazonaws.com'
+ - echo
  - echo 'AWS LAM Installing GNU which v2.21 compiled for ARM Ubuntu Server 22.04'
- - ssh aws 'cat /mnt/efs/aws-lam1-ubuntu/which-Ubuntu-22-04-ARM.tgz' | tar -xzf - --directory /usr/local
+ - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/which-Ubuntu-22-04-ARM.tgz ${IPv6} - | tar -xzf - --directory /usr/local
  - file /usr/local/bin/which
  - echo
  - echo 'AWS LAM Installing GNU tnef 1.4.18 compiled for ARM Ubuntu Server 22.04'
- - ssh aws 'cat /mnt/efs/aws-lam1-ubuntu/tnef-Arm-Ubuntu-22-04.tgz' | tar -xzf - --directory /usr/local
+ - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/tnef-Arm-Ubuntu-22-04.tgz ${IPv6} - | tar -xzf - --directory /usr/local
  - file /usr/local/bin/tnef
  - echo
  - echo 'AWS LAM Installing leafpad compiled for ARM Ubuntu Server 22.04'
- - ssh aws 'cat /mnt/efs/aws-lam1-ubuntu/leafpad-Arm-Ubuntu-22-04.tgz' | tar -xzf - --directory /usr/local
+ - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/leafpad-Arm-Ubuntu-22-04.tgz ${IPv6} - | tar -xzf - --directory /usr/local
  - echo
  - echo 'AWS LAM Installing aws.lam1.us web site'
- - git clone aws:/mnt/efs/git/aws /var/www/aws
+ - if [[ ${REGION} == 'us-west-2' ]]; then git clone /mnt/efs/git/aws /var/www/aws; fi
+ - if [[ ${REGION} != 'us-west-2' ]]; then git clone aws:/mnt/efs/git/aws /var/www/aws; fi
  - sh -c "cd /var/www/aws;git checkout -b $keyName"
  - echo
  - echo 'AWS LAM Cloud Guest motd'
@@ -146,9 +150,6 @@ runcmd:
  - cp /var/www/aws/etc/ssh/sshd_config /etc/ssh
  - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
  - systemctl restart sshd
- - echo
- - echo 'AWS LAM Set aws s3 IPv6 endpoint-url'
- - IPv6='--endpoint-url https://s3.dualstack.us-west-2.amazonaws.com'
  - echo
  - echo 'AWS LAM Install no-ssl web site'
  - /var/www/aws/aws-efs-www-git-clone.bash no-ssl $keyName
@@ -206,7 +207,7 @@ runcmd:
  - echo 'AWS LAM ***** Secure site *****'
  - echo
  - echo 'AWS LAM Installing Let-s Encrypt certificates for TLS encryption (HTTPS)'
- - ssh aws 'cat /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz' | tar -xzf -  --directory /etc
+ - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/letsencrypt.tgz ${IPv6} - | tar -xzf - --directory /etc
  - echo
  - echo 'AWS LAM Updating apache2 configuration for lam1'
  - a2enmod ssl
@@ -251,14 +252,14 @@ runcmd:
  - echo 'AWS LAM Adding mike@mike.lam1.us user, group and www Content'
  - useradd --shell /bin/bash --create-home --groups users --uid 55501 mike
  - usermod --groups users,mike mike
- - ssh aws 'cat /mnt/efs/aws-lam1-ubuntu/mike.tgz' | tar -xzf -  --directory /home
+ - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/mike.tgz ${IPv6} - | tar -xzf - --directory /home
  - /var/www/aws/aws-efs-www-git-clone.bash mike $keyName
  - ln -s /var/www/mike/mike_apache2.conf /etc/apache2/sites-available/081_mike.conf
  - a2ensite 081_mike
  - echo
  - echo 'AWS LAM Adding blinkenshell www Content'
  # Extract blinkenshell from archive that includes date time stamps
- - ssh aws 'cat /mnt/efs/aws-lam1-ubuntu/blinkenshell.tgz' | tar -xzf - --directory /var/www
+ - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/blinkenshell.tgz ${IPv6} - | tar -xzf - --directory /var/www
  - echo
  - echo 'AWS LAM Tell git ownership of /var/www/blinkenshell/public_html is O.K.'
  - git config --system --add safe.directory /var/www/blinkenshell/public_html
