@@ -13,30 +13,15 @@ Port 55519
 User lam
 Hostname ak19.lam1.us
 
-Host ak16 ak16.lam1.us
-Port 55516
+Host aws aws.lam1.us
+Port 55520
 User lam
-Hostname ak16.lam1.us
-
-Host ak7 ak7.lam1.us
-Port 55507
-User lam
-Hostname ak7.lam1.us
-
-Host ak6 ak6.lam1.us
-Port 55506
-User lam
-Hostname ak6.lam1.us
+Hostname aws.lam1.us
 
 Host triton triton.blinkenshell.org
 User lam
 Port 2222
 Hostname triton.blinkenshell.org
-
-Host wa16 lam2.duckdns.org
-Port 55516
-User lam
-Hostname lam2.duckdns.org
 
 Host git-ak20
 Port 55520
