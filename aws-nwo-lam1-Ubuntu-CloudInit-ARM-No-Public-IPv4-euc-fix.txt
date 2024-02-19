@@ -206,7 +206,7 @@ runcmd:
  - echo 'AWS LAM ***** Secure site *****'
  - echo
  - echo 'AWS LAM Installing Let-s Encrypt certificates for TLS encryption (HTTPS)'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz --directory /etc
+ - ssh aws 'cat /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz' | tar -xzf -  --directory /etc
  - echo
  - echo 'AWS LAM Updating apache2 configuration for lam1'
  - a2enmod ssl
