@@ -44,6 +44,19 @@ runcmd:
  - free -h
  - cat /proc/swaps
  - echo
+ - echo 'AWS LAM Get EFS for REGION'
+ - wget --quiet https://lamurakami.github.io/aws-efs/REGION.bash
+ - chmod a+x REGION.bash
+ - export REGION=$(./REGION.bash)
+ - rm REGION.bash
+ - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
+ - echo
+ - echo 'AWS LAM setup root to aws ssh config'
+ - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-config
+ - mv root-ssh-config /root/.ssh/config
+ - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-known_hosts
+ - mv root-ssh-known_hosts /root/.ssh/known_hosts
+ - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
  - echo
@@ -94,20 +107,33 @@ runcmd:
  - echo 'AWS LAM Adding nfs4 mount to AWS NW-O VPC Elastic File System'
  - mkdir /mnt/efs
  - nfsOpt="_netdev,noresvport,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
- - echo "fs-6f45fac6.efs.us-west-2.amazonaws.com:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
+ - echo "${EFS}:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
  - mount -a -t nfs4
  - df -Th -x supermount --exclude-type=tmpfs --exclude-type=devtmpfs
  - echo
+ - echo 'AWS LAM Installing Amazon Linux 2 ec2-user bash resources'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/ec2-user.tgz --directory /home/ec2-user
+ - echo
+ - echo 'AWS LAM Link to .aws resources for root'
+ - ln -s /home/ec2-user/.aws /root/.aws
+ - echo
+ - echo 'AWS LAM Copy ssh key root'
+ - cp /home/ec2-user/.ssh/git_ak20_id_rsa /root/.ssh
+ - echo
+ - echo 'AWS LAM Set aws s3 IPv6 endpoint-url'
+ - IPv6='--endpoint-url https://s3.dualstack.us-west-2.amazonaws.com'
+ - echo
  - echo 'AWS LAM Installing leafpad compiled for x86 Amazon Linux 2'
- - tar -xzf /mnt/efs/Amazon-Linux-2/leafpad-x86.tgz --directory /usr/local
+ - aws s3 cp ${IPv6} s3://lamurakami/Amazon-Linux-2/leafpad-x86.tgz - | tar -xzf - --directory /usr/local
  - ln -s /usr/local/bin/leafpad /usr/bin
  - echo
  - echo 'AWS LAM Installing tnef compiled for x86 Amazon Linux 2'
- - tar -xzf /mnt/efs/Amazon-Linux-2/tnef-x86.tgz --directory /usr/local
+ - aws s3 cp ${IPv6} s3://lamurakami/Amazon-Linux-2/tnef-x86.tgz - | tar -xzf - --directory /usr/local
  - echo
  - echo 'AWS LAM Install aws.lam1.us web site'
- - git clone /mnt/efs/git/aws /var/www/aws
- - sh -c "cd /var/www/aws;git checkout -b $keyName"
+ - wget --quiet https://lamurakami.github.io/aws-efs/aws-efs-www-git-clone.bash
+ - chmod a+x aws-efs-www-git-clone.bash
+ - ./aws-efs-www-git-clone.bash aws $keyName
  - echo
  - echo 'AWS LAM Report AWS EC2 metadata for this instance'
  - /var/www/aws/ec2-user-data.bash
@@ -122,7 +148,7 @@ runcmd:
  - cp /var/www/aws/Amazon-Linux-2-httpd.conf /etc/httpd/conf/httpd.conf
  - echo
  - echo 'AWS LAM Install no-ssl web site'
- - /var/www/aws/aws-lam-efs-www-git-clone.bash no-ssl $keyName
+ - ./aws-efs-www-git-clone.bash no-ssl $keyName
  - ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/httpd/conf.d/zzz_999-no-ssl.conf
  - echo
  - echo 'AWS LAM Install LAM perl modules'
@@ -130,7 +156,7 @@ runcmd:
  - ln -s /var/www/no-ssl/site_perl-LAM /usr/local/share/perl5/LAM
  - echo
  - echo 'AWS LAM Installing z.lam1.us web site'
- - /var/www/aws/aws-lam-efs-www-git-clone.bash z $keyName
+ - ./aws-efs-www-git-clone.bash z $keyName
  - ln -s /var/www/z/z_apache2.conf /etc/httpd/conf.d/zzz_050_z.conf
  - rm /etc/httpd/conf.d/welcome.conf
  - echo
@@ -140,23 +166,23 @@ runcmd:
  - echo 'AWS LAM ***** Additional sites *****'
  - echo
  - echo 'AWS LAM Installing sites.lam1.us web site'
- - /var/www/aws/aws-lam-efs-www-git-clone.bash sites $keyName
+ - ./aws-efs-www-git-clone.bash sites $keyName
  - ln -s /var/www/sites/sites_apache2.conf /etc/httpd/conf.d/zzz_030_sites.conf
  - echo
  - echo 'AWS LAM Installing arsc.lam1.us web site'
- - /var/www/aws/aws-lam-efs-www-git-clone.bash arsc $keyName
+ - ./aws-efs-www-git-clone.bash arsc $keyName
  - ln -s /var/www/arsc/arsc_apache2.conf /etc/httpd/conf.d/zzz_060_arsc.conf
  - echo
  - echo 'AWS LAM Installing cabo.lam1.us web site'
- - /var/www/aws/aws-lam-efs-www-git-clone.bash cabo $keyName
+ - ./aws-efs-www-git-clone.bash cabo $keyName
  - ln -s /var/www/cabo/cabo_apache2.conf /etc/httpd/conf.d/zzz_040_cabo.conf
  - echo
  - echo 'AWS LAM Adding olnes www Content'
- - /var/www/aws/aws-lam-efs-www-git-clone.bash olnes $keyName
+ - ./aws-efs-www-git-clone.bash olnes $keyName
  - ln -s /var/www/olnes/olnes_apache2.conf /etc/httpd/conf.d/zzz_052_olnes.conf
  - echo
  - echo 'AWS LAM Adding larryforalaska www Content'
- - /var/www/aws/aws-lam-efs-www-git-clone.bash larryforalaska $keyName
+ - ./aws-efs-www-git-clone.bash larryforalaska $keyName
  - ln -s /var/www/larryforalaska/larryforalaska_apache2.conf /etc/httpd/conf.d/zzz_070_larryforalaska.conf
  - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
@@ -164,23 +190,14 @@ runcmd:
  - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
  - systemctl restart sshd
  - echo
- - echo 'AWS LAM Installing Amazon Linux 2 ec2-user bash resources'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/ec2-user.tgz --directory /home/ec2-user
- - echo
- - echo 'AWS LAM Link to .aws resources for root'
- - ln -s /home/ec2-user/.aws /root/.aws
- - echo
- - echo 'AWS LAM Set aws s3 IPv6 endpoint-url'
- - IPv6='--endpoint-url https://s3.dualstack.us-west-2.amazonaws.com'
- - echo
  - echo 'AWS LAM ***** Secure site *****'
  - echo
  - echo 'AWS LAM Install Let-s Encrypt certificates for TLS encryption (HTTPS)'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz --directory /etc
+ - aws s3 cp ${IPv6} s3://lamurakami/aws-lam1-ubuntu/letsencrypt.tgz ${IPv6} - | tar -xzf - --directory /etc
  - echo
  - echo 'AWS LAM Install lam web site'
  # Extract lam from archive that includes MediWiki and git repo
- - aws s3 cp s3://lamurakami/lam.tgz ${IPv6} - | tar -xzf - --directory /var/www
+ - aws s3 cp ${IPv6} s3://lamurakami/lam.tgz - | tar -xzf - --directory /var/www
  - echo
  - echo 'AWS LAM Use lam2 branch to serve secure site at https://lam2.duckdns.org'
  - sh -c "cd /var/www/lam;git stash"
@@ -214,33 +231,33 @@ runcmd:
  - echo 'AWS LAM Creating {lam|Mediawiki} database and user'
  - mysql --table < /var/www/lam/lam-user.sql
  - echo 'AWS LAM Restore latest lam database backup from AWS S3'
- - aws s3 cp s3://lamurakami/Bk-20-MySQL.lam.sql.gz ${IPv6}- | gunzip -c | mysql --user=lam lam
+ - aws s3 cp ${IPv6} s3://lamurakami/Bk-20-MySQL.lam.sql.gz - | gunzip -c | mysql --user=lam lam
  - echo 'AWS LAM Restore latest LAM Alaska MediaWiki database backup from AWS S3'
- - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz ${IPv6} - | gunzip -c | mysql --user=lam wikidb
+ - aws s3 cp ${IPv6} s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz - | gunzip -c | mysql --user=lam wikidb
  - echo
  - echo 'AWS LAM ***** Private Additional sites *****'
  - echo
  - echo 'AWS LAM Installing {new|old}.interiordems.com web sites'
- - /var/www/aws/aws-lam-efs-www-git-clone.bash interiordems $keyName
+ - ./aws-efs-www-git-clone.bash interiordems $keyName
  - ln -s /var/www/interiordems/interiordems_apache2.conf /etc/httpd/conf.d/zzz_020_interiordems.conf
- - /var/www/aws/aws-lam-efs-www-git-clone.bash oldinteriordems $keyName
+ - ./aws-efs-www-git-clone.bash oldinteriordems $keyName
  - ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf /etc/httpd/conf.d/zzz_010_oldinteriordems.conf
  - echo
  - echo 'AWS LAM Adding mike@mike.lam1.us user, group and www Content'
  - useradd --shell /bin/bash --create-home --groups users --uid 55501 mike
  - usermod --groups users,mike mike
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/mike.tgz --directory /home
- - /var/www/aws/aws-lam-efs-www-git-clone.bash mike $keyName
+ - aws s3 cp ${IPv6} s3://lamurakami/aws-lam1-ubuntu/mike.tgz ${IPv6} - | tar -xzf - --directory /home
+ - ./aws-efs-www-git-clone.bash mike $keyName
  - ln -s /var/www/mike/mike_apache2.conf /etc/httpd/conf.d/zzz_081_mike.conf
  - echo
  - echo 'AWS LAM Adding blinkenshell www Content'
  # Extract blinkenshell from archive that includes date time stamps
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/blinkenshell.tgz --directory /var/www
+ - aws s3 cp ${IPv6} s3://lamurakami/aws-lam1-ubuntu/blinkenshell.tgz ${IPv6} - | tar -xzf - --directory /var/www
  - echo
  - echo 'AWS LAM Tell git ownership of /var/www/blinkenshell/public_html is O.K.'
  - git config --system --add safe.directory /var/www/blinkenshell/public_html
  # Clone the blinkenshell repo and integrate it with blinkenshell archive
- - git clone /mnt/efs/git/blinkenshell /tmp/blinkenshell
+ - ./aws-efs-www-git-clone.bash blinkenshell $keyName /tmp/
  - mv /tmp/blinkenshell/.git /var/www/blinkenshell/public_html
  - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
  - sh -c "cd /var/www/blinkenshell/public_html;git stash"
@@ -249,7 +266,7 @@ runcmd:
  - ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf /etc/httpd/conf.d/zzz_051_blinkenshell.conf
  - echo
  - echo 'AWS LAM Adding alaskademocrat www Content'
- - /var/www/aws/aws-lam-efs-www-git-clone.bash alaskademocrat $keyName
+ - ./aws-efs-www-git-clone.bash alaskademocrat $keyName
  - ln -s /var/www/alaskademocrat/alaskademocrat_apache2.conf /etc/httpd/conf.d/zzz_069_alaskademocrat.conf
  - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
@@ -299,6 +316,9 @@ runcmd:
  - echo
  - echo 'AWS LAM Check if the system needs to be rebooted'
  - needs-restarting --reboothint
+ - echo
+ - echo 'AWS LAM Remove temp script'
+ - rm aws-efs-www-git-clone.bash
  - echo
  - echo 'AWS LAM cloud-config YAML runcmd complete'
  - date
