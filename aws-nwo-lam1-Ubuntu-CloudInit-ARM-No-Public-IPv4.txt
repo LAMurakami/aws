@@ -3,13 +3,12 @@
 # Tell cloud-init to log the output to a log file
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
-# /var/www/aws/aws-nwo-lam1-Ubuntu-CloudInit.txt - Initialize lam1.duckdns.org
+# /var/www/aws/aws-nwo-lam1-Ubuntu-CloudInit-ARM-No-Public-IPv4.txt
+#
+# Initialize lam1.duckdns.org
 #
 # https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
 #
-# This version uses the LAM EFS private repo copies and then sets the URL
-# to git@ak20:${REPO}.git or git@github.com:LAMurakami/${REPO}.git as
-# appropriate.
 
 bootcmd:
  - echo
