@@ -3,7 +3,8 @@
 # Tell cloud-init to log the output to a log file
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
-# /var/www/aws/aws-nwo-lam2-Debian-ARM-CloudInit.txt - Initialize lam2.duckdns.org
+# /var/www/aws/aws-nwo-lam2-Debian-ARM-No-Public-IPv4-CloudInit.txt
+# Initialize lam2.duckdns.org
 #
 # https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
 #
