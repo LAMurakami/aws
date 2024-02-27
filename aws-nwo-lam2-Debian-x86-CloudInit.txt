@@ -3,7 +3,8 @@
 # Tell cloud-init to log the output to a log file
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
-# /var/www/aws/aws-nwo-lam2-Debian-x86-CloudInit.txt - Initialize lam2.duckdns.org
+# /var/www/aws/aws-nwo-lam2-Debian-x86-CloudInit.txt
+# Initialize lam2.duckdns.org
 #
 # https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
 #
@@ -82,6 +83,19 @@ runcmd:
  - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
  - free -h
  - cat /proc/swaps
+ - echo
+ - echo 'AWS LAM Get EFS for REGION'
+ - wget --quiet https://lamurakami.github.io/aws-efs/REGION.bash
+ - chmod a+x REGION.bash
+ - export REGION=$(./REGION.bash)
+ - rm REGION.bash
+ - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
+ - echo
+ - echo 'AWS LAM setup root to aws ssh config'
+ - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-config
+ - mv root-ssh-config /root/.ssh/config
+ - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-known_hosts
+ - mv root-ssh-known_hosts /root/.ssh/known_hosts
  - echo
  - echo 'AWS LAM Install glances after swap has been configured'
  - apt-get install -y glances
@@ -183,18 +197,9 @@ runcmd:
  - echo 'AWS LAM Adding nfs4 mount to AWS NW-O VPC Elastic File System'
  - mkdir /mnt/efs
  - nfsOpt="_netdev,noresvport,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
- - echo "fs-6f45fac6.efs.us-west-2.amazonaws.com:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
+ - echo "${EFS}:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
  - systemctl daemon-reload
  - mount -a -t nfs4
- - echo
- - echo 'AWS LAM Installing GNU which v2.21 compiled Debian 12 x86'
- - tar -xzf /mnt/efs/Debian-12/which-Debian-12-x86.tgz --directory /usr/local
- - file /usr/local/bin/which
- - echo
- - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
- - cp /mnt/efs/aws-lam1-ubuntu/sshd_config /etc/ssh
- - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
- - systemctl restart sshd
  - echo
  - echo 'AWS LAM Installing ubuntu user bash resources for debian'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/ubuntu.tgz --directory /home/admin
@@ -202,10 +207,22 @@ runcmd:
  - echo 'AWS LAM Link to .aws resources for root'
  - ln -s /home/admin/.aws /root/.aws
  - echo
+ - echo 'AWS LAM Copy ssh key root'
+ - cp /home/admin/.ssh/git_ak20_id_rsa /root/.ssh
+ - echo
+ - echo 'AWS LAM Installing GNU which v2.21 compiled Debian 12 x86'
+ - aws s3 cp s3://lamurakami/Debian-12/which-Debian-12-x86.tgz - | tar -xzf - --directory /usr/local
+ - file /usr/local/bin/which
+ - echo
+ - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
+ - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/sshd_config /etc/ssh/sshd_config
+ - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
+ - systemctl restart sshd
+ - echo
  - echo 'AWS LAM ***** Secure site *****'
  - echo
  - echo 'AWS LAM Installing Let-s Encrypt certificates for TLS encryption (HTTPS)'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz --directory /etc
+ - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/letsencrypt.tgz - | tar -xzf - --directory /etc
  - echo
  - echo 'AWS LAM Updating apache2 configuration for lam2'
  - a2enmod ssl
@@ -240,29 +257,29 @@ runcmd:
  - echo 'AWS LAM ***** Private Additional sites *****'
  - echo
  - echo 'AWS LAM Installing {new|old}.interiordems.com web sites'
- - /var/www/aws/aws-lam-www-git-clone.bash interiordems $keyName private
+ - /var/www/aws/aws-efs-www-git-clone.bash interiordems $keyName
  - ln -s /var/www/interiordems/interiordems_apache2.conf /etc/apache2/sites-available/020_interiordems.conf
  - a2ensite 020_interiordems
- - /var/www/aws/aws-lam-www-git-clone.bash oldinteriordems $keyName private
+ - /var/www/aws/aws-efs-www-git-clone.bash oldinteriordems $keyName
  - ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf /etc/apache2/sites-available/010_oldinteriordems.conf
  - a2ensite 010_oldinteriordems
  - echo
  - echo 'AWS LAM Adding mike@mike.lam1.us user, group and www Content'
  - useradd --shell /bin/bash --create-home --groups users --uid 55501 mike
  - usermod --groups users,mike mike
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/mike.tgz --directory /home
- - /var/www/aws/aws-lam-www-git-clone.bash mike $keyName private
+ - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/mike.tgz - | tar -xzf - --directory /home
+ - /var/www/aws/aws-efs-www-git-clone.bash mike $keyName
  - ln -s /var/www/mike/mike_apache2.conf /etc/apache2/sites-available/081_mike.conf
  - a2ensite 081_mike
  - echo
  - echo 'AWS LAM Adding blinkenshell www Content'
  # Extract blinkenshell from archive that includes date time stamps
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/blinkenshell.tgz --directory /var/www
+ - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/blinkenshell.tgz - | tar -xzf - --directory /var/www
  - echo
  - echo 'AWS LAM Tell git ownership of /var/www/blinkenshell/public_html is O.K.'
  - git config --system --add safe.directory /var/www/blinkenshell/public_html
  # Clone the blinkenshell repo and integrate it with blinkenshell archive
- - git clone https://github.com/LAMurakami/blinkenshell.git /tmp/blinkenshell
+ - /var/www/aws/aws-efs-www-git-clone.bash blinkenshell $keyName /tmp/
  - mv /tmp/blinkenshell/.git /var/www/blinkenshell/public_html
  - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
  - sh -c "cd /var/www/blinkenshell/public_html;git remote set-url origin git@github.com:LAMurakami/blinkenshell"
@@ -274,7 +291,7 @@ runcmd:
  - a2ensite 051_blinkenshell
  - echo
  - echo 'AWS LAM Adding alaskademocrat www Content'
- - /var/www/aws/aws-lam-www-git-clone.bash alaskademocrat $keyName private
+ - /var/www/aws/aws-efs-www-git-clone.bash alaskademocrat $keyName
  - ln -s /var/www/alaskademocrat/alaskademocrat_apache2.conf /etc/apache2/sites-available/069_alaskademocrat.conf
  - a2ensite 069_alaskademocrat
  - echo

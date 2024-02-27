@@ -244,14 +244,14 @@ runcmd:
  - echo 'AWS LAM Adding mike@mike.lam1.us user, group and www Content'
  - useradd --shell /bin/bash --create-home --groups users --uid 55501 mike
  - usermod --groups users,mike mike
- - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/mike.tgz ${IPv6} - | tar -xzf - --directory /home
+ - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/mike.tgz - | tar -xzf - --directory /home
  - /var/www/aws/aws-efs-www-git-clone.bash mike $keyName
  - ln -s /var/www/mike/mike_apache2.conf /etc/apache2/sites-available/081_mike.conf
  - a2ensite 081_mike
  - echo
  - echo 'AWS LAM Adding blinkenshell www Content'
  # Extract blinkenshell from archive that includes date time stamps
- - aws s3 cp ${IPv6} s3://lamurakami/aws-lam1-ubuntu/blinkenshell.tgz ${IPv6} - | tar -xzf - --directory /var/www
+ - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/blinkenshell.tgz - | tar -xzf - --directory /var/www
  - echo
  - echo 'AWS LAM Tell git ownership of /var/www/blinkenshell/public_html is O.K.'
  - git config --system --add safe.directory /var/www/blinkenshell/public_html
