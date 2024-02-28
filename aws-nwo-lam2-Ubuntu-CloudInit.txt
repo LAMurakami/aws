@@ -67,7 +67,7 @@ runcmd:
  - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
  - free -h
  - cat /proc/swaps
- - echoecho
+ - echo
  - echo 'AWS LAM Get EFS for REGION'
  - wget --quiet https://lamurakami.github.io/aws-efs/REGION.bash
  - chmod a+x REGION.bash
