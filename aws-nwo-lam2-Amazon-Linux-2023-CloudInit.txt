@@ -3,6 +3,9 @@
 # Tell cloud-init to log the output to a log file
 output : { all : '| tee -a /var/log/cloud-init-output.log' }
 
+# /var/www/aws/aws-nwo-lam2-Amazon-Linux-2023-CloudInit.txt
+# Initialize lam2.duckdns.org
+
 bootcmd:
  - echo
  - echo 'AWS LAM Report HOST information'
@@ -63,6 +66,19 @@ runcmd:
  - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
  - free -h
  - cat /proc/swaps
+ - echo
+ - echo 'AWS LAM Get EFS for REGION'
+ - wget --quiet https://lamurakami.github.io/aws-efs/REGION.bash
+ - chmod a+x REGION.bash
+ - export REGION=$(./REGION.bash)
+ - rm REGION.bash
+ - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
+ - echo
+ - echo 'AWS LAM setup root to aws ssh config'
+ - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-config
+ - mv root-ssh-config /root/.ssh/config
+ - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-known_hosts
+ - mv root-ssh-known_hosts /root/.ssh/known_hosts
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
@@ -155,51 +171,54 @@ runcmd:
  - echo 'AWS LAM Adding nfs4 mount to AWS NW-O VPC Elastic File System'
  - mkdir /mnt/efs
  - nfsOpt="_netdev,noresvport,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
- - echo "fs-6f45fac6.efs.us-west-2.amazonaws.com:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
+ - echo "${EFS}:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
  - mount -a -t nfs4
  - df -Th -x supermount --exclude-type=tmpfs --exclude-type=devtmpfs
  - echo
+ - echo 'AWS LAM Installing Amazon Linux 2 ec2-user bash resources'
+ - tar -xzf /mnt/efs/Amazon-Linux-2023/ec2-user.tgz --directory /home/ec2-user
+ - echo
+ - echo 'AWS LAM Link to .aws resources for root'
+ - ln -s /home/ec2-user/.aws /root/.aws
+ - echo
+ - echo 'AWS LAM Copy ssh key root'
+ - cp /home/ec2-user/.ssh/git_ak20_id_rsa /root/.ssh
+ - echo
  - echo 'AWS LAM Install man2html'
- - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-man2html.tgz --directory /usr/local
+ - aws s3 cp s3://lamurakami/Amazon-Linux-2023/Amazom-Linux-2023-man2html.tgz - | tar -xzf - --directory /usr/local
  - echo
  - echo 'AWS LAM Install xeyes, xclock, xlogo'
- - tar -xzf /mnt/efs/Amazon-Linux-2023/xapps-AL2023-x86.tgz --directory /usr
+ - aws s3 cp s3://lamurakami/Amazon-Linux-2023/xapps-AL2023-x86.tgz - | tar -xzf - --directory /usr
  - echo
  - echo 'AWS LAM Install geany'
- - tar -xzf /mnt/efs/Amazon-Linux-2023/geany.tgz --directory /usr/local
+ - aws s3 cp s3://lamurakami/Amazon-Linux-2023/geany.tgz - | tar -xzf - --directory /usr/local
  - ldconfig /usr/local/lib
  - echo
  - echo 'AWS LAM Install l3afpad substitute for leafpad'
- - tar -xzf /mnt/efs/Amazon-Linux-2023/l3afpad-x86.tgz --directory /usr/local
+ - aws s3 cp s3://lamurakami/Amazon-Linux-2023/l3afpad-x86.tgz - | tar -xzf - --directory /usr/local
  - ln -s /usr/local/bin/l3afpad /usr/bin/leafpad
  - echo
  - echo 'AWS LAM Install glances for ec2-user'
- - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-glances.tgz --directory /home/ec2-user
+ - aws s3 cp ${IPv6} s3://lamurakami/Amazon-Linux-2023/Amazom-Linux-2023-glances.tgz - | tar -xzf - --directory /home/ec2-user
  - echo
  - echo 'AWS LAM Install etckeeper and perform intitial commit'
- - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-bin-etckeeper.tgz --directory /usr
- - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-etc-etckeeper.tgz --directory /etc
- - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-lib-systemd-system-etckeeper.tgz --directory /lib/systemd/system
+ - aws s3 cp ${IPv6} s3://lamurakami/Amazon-Linux-2023/Amazom-Linux-2023-bin-etckeeper.tgz - | tar -xzf - --directory /usr
+ - aws s3 cp ${IPv6} s3://lamurakami/Amazon-Linux-2023/Amazom-Linux-2023-etc-etckeeper.tgz - | tar -xzf - --directory /etc
+ - aws s3 cp ${IPv6} s3://lamurakami/Amazom-Linux-2023-lib-systemd-system-etckeeper.tgz - | tar -xzf - --directory /lib/systemd/system
  - etckeeper init
  - etckeeper commit -m 'AWS LAM Amazon Linux 2023'
  - systemctl enable etckeeper.timer
  - systemctl start etckeeper.timer
  - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
- - cp /mnt/efs/Amazon-Linux-2023/sshd_config /etc/ssh/sshd_config
+ - aws s3 cp s3://lamurakami/Amazon-Linux-2023/sshd_config /etc/ssh/sshd_config
  - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
  - systemctl restart sshd
- - echo
- - echo 'AWS LAM Installing Amazon Linux 2 ec2-user bash resources'
- - tar -xzf /mnt/efs/Amazon-Linux-2023/Amazom-Linux-2023-ec2-user.tgz --directory /home/ec2-user
- - echo
- - echo 'AWS LAM Link to .aws resources for root'
- - ln -s /home/ec2-user/.aws /root/.aws
  - echo
  - echo 'AWS LAM ***** Secure site *****'
  - echo
  - echo 'AWS LAM Install Let-s Encrypt certificates for TLS encryption (HTTPS)'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/letsencrypt.tgz --directory /etc
+ - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/letsencrypt.tgz - | tar -xzf - --directory /etc
  - echo
  - echo 'AWS LAM Install lam web site'
  # Extract lam from archive that includes MediWiki and git repo
@@ -240,26 +259,26 @@ runcmd:
  - echo 'AWS LAM ***** Private Additional sites *****'
  - echo
  - echo 'AWS LAM Installing {new|old}.interiordems.com web sites'
- - /var/www/aws/aws-lam-www-git-clone.bash interiordems $keyName private
+ - /var/www/aws/aws-efs-www-git-clone.bash interiordems $keyName
  - ln -s /var/www/interiordems/interiordems_apache2.conf /etc/httpd/conf.d/zzz_020_interiordems.conf
- - /var/www/aws/aws-lam-www-git-clone.bash oldinteriordems $keyName private
+ - /var/www/aws/aws-efs-www-git-clone.bash oldinteriordems $keyName
  - ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf /etc/httpd/conf.d/zzz_010_oldinteriordems.conf
  - echo
  - echo 'AWS LAM Adding mike@mike.lam1.us user, group and www Content'
  - useradd --shell /bin/bash --create-home --groups users --uid 55501 mike
  - usermod --groups users,mike mike
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/mike.tgz --directory /home
- - /var/www/aws/aws-lam-www-git-clone.bash mike $keyName private
+ - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/mike.tgz - | tar -xzf - --directory /home
+ - /var/www/aws/aws-efs-www-git-clone.bash mike $keyName
  - ln -s /var/www/mike/mike_apache2.conf /etc/httpd/conf.d/zzz_081_mike.conf
  - echo
  - echo 'AWS LAM Adding blinkenshell www Content'
  # Extract blinkenshell from archive that includes date time stamps
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/blinkenshell.tgz --directory /var/www
+ - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/blinkenshell.tgz - | tar -xzf - --directory /var/www
  - echo
  - echo 'AWS LAM Tell git ownership of /var/www/blinkenshell/public_html is O.K.'
  - git config --system --add safe.directory /var/www/blinkenshell/public_html
  # Clone the blinkenshell repo and integrate it with blinkenshell archive
- - git clone https://github.com/LAMurakami/blinkenshell.git /tmp/blinkenshell
+ - /var/www/aws/aws-efs-www-git-clone.bash blinkenshell $keyName /tmp/
  - mv /tmp/blinkenshell/.git /var/www/blinkenshell/public_html
  - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
  - sh -c "cd /var/www/blinkenshell/public_html;git remote set-url origin git@github.com:LAMurakami/blinkenshell"
@@ -270,7 +289,7 @@ runcmd:
  - ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf /etc/httpd/conf.d/zzz_051_blinkenshell.conf
  - echo
  - echo 'AWS LAM Adding alaskademocrat www Content'
- - /var/www/aws/aws-lam-www-git-clone.bash alaskademocrat $keyName private
+ - /var/www/aws/aws-efs-www-git-clone.bash alaskademocrat $keyName
  - ln -s /var/www/alaskademocrat/alaskademocrat_apache2.conf /etc/httpd/conf.d/zzz_069_alaskademocrat.conf
  - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
