@@ -153,6 +153,9 @@ runcmd:
  - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
  - systemctl restart sshd
  - echo
+ - echo 'AWS LAM Create logs/ sybmolic link for Apache2 configuration use'
+ - ln -s /var/log/apache2 /etc/apache2/logs
+ - echo
  - echo 'AWS LAM Installing aws.lam1.us web site'
  - wget --quiet https://lamurakami.github.io/aws-efs/aws-efs-www-git-clone.bash
  - chmod a+x aws-efs-www-git-clone.bash

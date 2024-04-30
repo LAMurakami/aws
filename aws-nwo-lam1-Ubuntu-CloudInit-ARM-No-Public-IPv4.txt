@@ -130,6 +130,9 @@ runcmd:
  - echo 'AWS LAM Installing leafpad compiled for ARM Ubuntu Server 22.04'
  - aws s3 cp ${IPv6} s3://lamurakami/aws-lam1-ubuntu/leafpad-Arm-Ubuntu-22-04.tgz - | tar -xzf - --directory /usr/local
  - echo
+ - echo 'AWS LAM Create logs/ sybmolic link for Apache2 configuration use'
+ - ln -s /var/log/apache2 /etc/apache2/logs
+ - echo
  - echo 'AWS LAM Installing aws.lam1.us web site'
  - wget --quiet https://lamurakami.github.io/aws-efs/aws-efs-www-git-clone.bash
  - chmod a+x aws-efs-www-git-clone.bash
