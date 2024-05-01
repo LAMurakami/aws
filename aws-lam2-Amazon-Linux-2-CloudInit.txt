@@ -104,9 +104,7 @@ runcmd:
  - mkdir /usr/local/share/perl5
  - ln -s /var/www/no-ssl/site_perl-LAM /usr/local/share/perl5/LAM
  - echo
- - echo 'AWS LAM allow Ubuntu apache2 log path or Amazon Linux 2 apache2 log path'
- - sh -c "cd /var/log;ln -s httpd apache2"
- - ln -s /var/log/apache2 /etc/httpd/logs
+ - echo 'AWS LAM allow read access to apache2 (httpd) log path'
  - chmod a+rx /var/log/httpd
  - echo
  - echo 'AWS LAM update aws site with current public local name ipv4'
