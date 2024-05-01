@@ -72,9 +72,7 @@ runcmd:
  - echo 'AWS LAM Set vim as default editor for system'
  - dnf remove -y nano
  - echo
- - echo 'AWS LAM allow Ubuntu apache2 log path or Amazon Linux 2 apache2 log path'
- - sh -c "cd /var/log;ln -s httpd apache2"
- - ln -s /var/log/apache2 /etc/httpd/logs
+ - echo 'AWS LAM allow read access to apache2 (httpd) log path'
  - chmod a+rx /var/log/httpd
  - echo
  - echo 'AWS LAM create Multicount directory'
