@@ -12,7 +12,7 @@ sqlFile=$1
 db=$2
 
 if [[ ${REGION} == 'us-west-2' ]]; then
-  cat /mnt/efs/${tarFile} | gunzip -c | mysql --user=lam ${db}
+  cat /mnt/efs/${sqlFile} | gunzip -c | mysql --user=lam ${db}
 else
-  ssh aws "cat /mnt/efs/${tarFile}" | gunzip -c | mysql --user=lam ${db}
+  ssh aws "cat /mnt/efs/${sqlFile}" | gunzip -c | mysql --user=lam ${db}
 fi
