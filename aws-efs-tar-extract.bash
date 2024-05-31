@@ -11,7 +11,7 @@ fi
 tarFile=$1 # lam.tgz
 dir=$2 # /var/www
 
-if [[ ${REGION} == 'us-west-2' ]]; then"
+if [[ ${REGION} == 'us-west-2' ]]; then
   tar -xzf /mnt/efs/${tarFile} --directory ${dir}
 else
   ssh aws "cat /mnt/efs/${tarFile}" | tar xzf - --directory ${dir}
