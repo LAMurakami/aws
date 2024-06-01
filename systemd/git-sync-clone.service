@@ -6,5 +6,3 @@ RequiresMountsFor=/mnt/efs
 Type=simple
 ExecStart=/var/www/aws/systemd/git-sync-clone
 Restart=no
-User=git
-Group=staff
