@@ -22,7 +22,7 @@ if [[ ${REGION} == 'us-west-2' ]]; then
   origin1='/mnt/efs/git/'
 else
 # If not in the us-west-2 Oregon region use the ssh to aws connection
-  origin1='aws:/mnt/efs/git/'
+  origin1='git@aws:/mnt/efs/git/'
 fi
 
 git clone $origin1$repo $target$repo
