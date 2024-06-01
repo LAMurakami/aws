@@ -64,6 +64,12 @@ runcmd:
  - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-known_hosts
  - mv root-ssh-known_hosts /root/.ssh/known_hosts
  - echo
+ - echo 'AWS LAM Add localhost to known_hosts for root'
+ - ssh-keyscan -H -t rsa localhost >> /root/.ssh/known_hosts
+ - echo
+ - echo 'AWS LAM Create git user'
+ - useradd -g staff -G staff -u 4896 git -d /mnt/efs/git
+ - echo
  - echo 'AWS LAM Check US Alaska local time for this system'
  - ls -lF --time-style=long-iso /etc/localtime
  - echo
@@ -307,9 +313,6 @@ runcmd:
  - apt-get install -y gitweb
  - a2disconf gitweb
  - cp /var/www/aws/etc/gitweb.conf /etc/gitweb.conf
- - echo
- - echo 'AWS LAM Create git user'
- - useradd -g staff -G staff -u 4896 git -d /mnt/efs/git
  - echo
  - echo 'AWS LAM Install man2html after apache has been configured'
  - apt-get install -y man2html
