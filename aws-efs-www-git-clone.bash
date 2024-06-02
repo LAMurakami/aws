@@ -19,7 +19,7 @@ fi
 
 # The git repos are in the us-west-2 Oregon region
 if [[ ${REGION} == 'us-west-2' ]]; then
-  origin1='/mnt/efs/git/'
+  origin1='git@localhost:/mnt/efs/git/'
 else
 # If not in the us-west-2 Oregon region use the ssh to aws connection
   origin1='git@aws:/mnt/efs/git/'
