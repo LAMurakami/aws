@@ -62,6 +62,12 @@ runcmd:
  - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-known_hosts
  - mv root-ssh-known_hosts /root/.ssh/known_hosts
  - echo
+ - echo 'AWS LAM Add localhost to known_hosts for root'
+ - ssh-keyscan -H -t rsa localhost >> /root/.ssh/known_hosts
+ - echo
+ - echo 'AWS LAM Create git user'
+ - useradd -g staff -G staff -M -d /mnt/efs/git -u 4896 git
+ - echo
  - echo 'AWS LAM Check US Alaska local time for this system'
  - ls -lF --time-style=long-iso /etc/localtime
  - echo
@@ -105,6 +111,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Installing ubuntu user bash resources'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/ubuntu.tgz --directory /home/ubuntu
+ - chown -R ubuntu:ubuntu /home/ubuntu
  - echo
  - echo 'AWS LAM Link to .aws resources for root'
  - ln -s /home/ubuntu/.aws /root/.aws
@@ -214,7 +221,7 @@ runcmd:
  - echo 'AWS LAM Install lam web site'
  - echo
  # Extract lam from archive that includes MediWiki and git repo
- - aws s3 cp ${IPv6} s3://lamurakami/lam.tgz - | tar -xzf - --directory /var/www
+ - /var/www/aws/aws-efs-tar-extract.bash lam.tgz /var/www
  - echo
  - echo 'AWS LAM Tell git /var/www/lam is O.K.'
  - git config --system --add safe.directory /var/www/lam
@@ -320,6 +327,9 @@ runcmd:
  - echo
  - echo 'AWS LAM Use Elastic File System plocate database'
  - ln -s /var/www/no-ssl/plocate.sh /etc/profile.d/plocate.sh
+ - echo
+ - echo 'AWS LAM Updating lam2.duckdns.org IP address'
+ - /var/www/aws/Update-DuckDNS-IPv6.bash lam1
  - echo
  - echo 'AWS LAM Final Cloud-init etckeeper commit'
  - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
