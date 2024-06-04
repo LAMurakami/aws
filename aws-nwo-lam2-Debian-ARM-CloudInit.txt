@@ -97,6 +97,12 @@ runcmd:
  - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-known_hosts
  - mv root-ssh-known_hosts /root/.ssh/known_hosts
  - echo
+ - echo 'AWS LAM Add localhost to known_hosts for root'
+ - ssh-keyscan -H -t rsa localhost >> /root/.ssh/known_hosts
+ - echo
+ - echo 'AWS LAM Create git user'
+ - useradd -g staff -G staff -M -d /mnt/efs/git -u 4896 git
+ - echo
  - echo 'AWS LAM Install glances after swap has been configured'
  - apt-get install -y glances
  - echo
@@ -206,6 +212,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Installing ubuntu user bash resources for debian'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/ubuntu.tgz --directory /home/admin
+ - chown -R admin:admin /home/admin
  - echo
  - echo 'AWS LAM Link to .aws resources for root'
  - ln -s /home/admin/.aws /root/.aws
@@ -236,7 +243,7 @@ runcmd:
  - echo 'AWS LAM Install lam web site'
  - echo
  # Extract lam from archive that includes MediWiki and git repo
- - aws s3 cp s3://lamurakami/lam.tgz - | tar -xzf - --directory /var/www
+ - /var/www/aws/aws-efs-tar-extract.bash lam.tgz /var/www
  - echo
  - echo 'AWS LAM Tell git /var/www/lam is O.K.'
  - git config --system --add safe.directory /var/www/lam
