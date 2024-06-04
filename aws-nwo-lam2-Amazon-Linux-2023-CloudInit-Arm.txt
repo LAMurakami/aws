@@ -50,6 +50,13 @@ runcmd:
  - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-known_hosts
  - mv root-ssh-known_hosts /root/.ssh/known_hosts
  - echo
+ - echo 'AWS LAM Add localhost to known_hosts for root'
+ - ssh-keyscan -H -t ed25519 localhost >> /root/.ssh/known_hosts
+ - echo
+ - echo 'AWS LAM Create git user'
+ - groupadd -g 206 staff
+ - useradd -g staff -G staff -M -d /mnt/efs/git -u 4896 git
+ - echo
  - echo 'AWS LAM Install LAMipedia packages'
  - dnf -y install httpd httpd-manual mod_ssl whois lynx perl-CGI perl-libwww-perl xauth php-fpm php-mysqli php-json php php-devel php-gd php-mbstring php-intl php-mysqlnd php-xml mariadb105-server gitweb xorg-x11-utils mod_perl gtk3 perl-DBD-MySQL mlocate texlive libxkbfile xorg-x11-xbitmaps
  - echo
@@ -150,6 +157,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Installing Amazon Linux 2 ec2-user bash resources'
  - tar -xzf /mnt/efs/Amazon-Linux-2023/ec2-user.tgz --directory /home/ec2-user
+ - chown -R ec2-user:ec2-user /home/ec2-user
  - echo
  - echo 'AWS LAM Link to .aws resources for root'
  - ln -s /home/ec2-user/.aws /root/.aws
@@ -198,7 +206,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Install lam web site'
  # Extract lam from archive that includes MediWiki and git repo
- - aws s3 cp s3://lamurakami/lam.tgz - | tar -xzf - --directory /var/www
+ - /var/www/aws/aws-efs-tar-extract.bash lam.tgz /var/www
  - echo
  - echo 'AWS LAM Use lam2 branch to serve secure site at https://lam2.duckdns.org'
  - sh -c "cd /var/www/lam;git stash"
