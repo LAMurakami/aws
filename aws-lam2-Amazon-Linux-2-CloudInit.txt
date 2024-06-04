@@ -111,7 +111,7 @@ runcmd:
  - /var/www/aws/cloud-init.pl
  - echo
  - echo 'AWS LAM enable aws site'
- - ln -s /var/www/aws/aws_apache2.conf /etc/httpd/conf.d/zzz_080_aws.conf
+ - ln -s /var/www/aws/aws_apache2.conf /etc/httpd/conf.d/000-aws.conf
  - echo
  - echo 'AWS LAM Update main apache2 configuration'
  - cp /var/www/aws/Amazon-Linux-2-httpd.conf /etc/httpd/conf/httpd.conf
@@ -123,7 +123,6 @@ runcmd:
  - git clone https://github.com/LAMurakami/arsc /var/www/arsc
  - sh -c "cd /var/www/arsc;git remote set-url origin git@github.com:LAMurakami/arsc"
  - sh -c "cd /var/www/arsc;git remote add ak20 git@ak20:arsc"
- - ln -s /var/www/arsc/arsc_apache2.conf /etc/httpd/conf.d/zzz_060_arsc.conf
  - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
  - echo

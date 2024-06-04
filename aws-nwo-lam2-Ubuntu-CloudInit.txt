@@ -81,6 +81,12 @@ runcmd:
  - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-known_hosts
  - mv root-ssh-known_hosts /root/.ssh/known_hosts
  - echo
+ - echo 'AWS LAM Add localhost to known_hosts for root'
+ - ssh-keyscan -H -t rsa localhost >> /root/.ssh/known_hosts
+ - echo
+ - echo 'AWS LAM Create git user'
+ - useradd -g staff -G staff -M -d /mnt/efs/git -u 4896 git
+ - echo
  - echo 'AWS LAM Update package repository and Upgrade packages'
  - apt update
  - apt upgrade -y
@@ -109,6 +115,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Installing ubuntu user bash resources'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/ubuntu.tgz --directory /home/ubuntu
+ - chown -R ubuntu:ubuntu /home/ubuntu
  - echo
  - echo 'AWS LAM Link to .aws resources for root'
  - ln -s /home/ubuntu/.aws /root/.aws
@@ -179,7 +186,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Install lam web site'
  # Extract lam from archive that includes MediWiki and git repo
- - aws s3 cp s3://lamurakami/lam.tgz - | tar -xzf - --directory /var/www
+ - /var/www/aws/aws-efs-tar-extract.bash lam.tgz /var/www
  - sh -c "cd /var/www/lam;git stash"
  # Use lam1 branch for /var/www/lam/Create-lam-murakami-staff.bash
  - sh -c "cd /var/www/lam;git checkout lam1"
