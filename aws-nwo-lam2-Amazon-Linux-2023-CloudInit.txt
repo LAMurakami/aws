@@ -3,8 +3,8 @@
 # Tell cloud-init to log the output to a log file
 output : { all : '| tee -a /var/log/cloud-init-output.log' }
 
-# /var/www/aws/aws-nwo-lam2-Amazon-Linux-2023-CloudInit.txt
-# Initialize lam2.duckdns.org
+# /var/www/aws/aws-nwo-lam2-Amazon-Linux-2023-CloudInit-no-packages.txt
+# Initialize lam2.duckdns.
 
 bootcmd:
  - echo
@@ -25,41 +25,11 @@ repo_update: true
 # Upgrade the instance on first boot
 repo_upgrade: all
 
-packages:
- - httpd
- - httpd-manual
- - mod_ssl
- - whois
- - php-fpm
- - php-mysqli
- - php-json
- - php
- - php-devel
- - php-gd
- - php-mbstring
- - php-intl
- - php-mysqlnd
- - php-xml
- - lynx
- - texlive
- - perl-CGI
- - perl-libwww-perl
- - xauth
- - gitweb
- - mariadb105-server
- - xorg-x11-utils
- - mod_perl
- - gtk3
- - perl-DBD-MySQL
- - mlocate
- - libxkbfile
- - xorg-x11-xbitmaps
-
 runcmd:
- - keyName="lam2-AL2023-x86-packages"
+ - keyName="lam2-AL2023-x86"
  - echo
  - echo 'AWS LAM Add a swapfile'
- - dd if=/dev/zero of=/swapfile bs=32M count=8
+ - dd if=/dev/zero of=/swapfile bs=32M count=24
  - chmod 600 /swapfile
  - mkswap /swapfile
  - swapon /swapfile
@@ -79,6 +49,16 @@ runcmd:
  - mv root-ssh-config /root/.ssh/config
  - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-known_hosts
  - mv root-ssh-known_hosts /root/.ssh/known_hosts
+ - echo
+ - echo 'AWS LAM Add localhost to known_hosts for root'
+ - ssh-keyscan -H -t ed25519 localhost >> /root/.ssh/known_hosts
+ - echo
+ - echo 'AWS LAM Create git user'
+ - groupadd -g 206 staff
+ - useradd -g staff -G staff -M -d /mnt/efs/git -u 4896 git
+ - echo
+ - echo 'AWS LAM Install LAMipedia packages'
+ - dnf -y install httpd httpd-manual mod_ssl whois lynx perl-CGI perl-libwww-perl xauth php-fpm php-mysqli php-json php php-devel php-gd php-mbstring php-intl php-mysqlnd php-xml mariadb105-server gitweb xorg-x11-utils mod_perl gtk3 perl-DBD-MySQL mlocate texlive libxkbfile xorg-x11-xbitmaps
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
@@ -138,6 +118,7 @@ runcmd:
  - echo 'AWS LAM Installing z.lam1.us web site'
  - /var/www/aws/aws-lam-www-git-clone.bash z $keyName
  - ln -s /var/www/z/z_apache2.conf /etc/httpd/conf.d/zzz_050_z.conf
+ - rm /etc/httpd/conf.d/welcome.conf
  - echo
  - echo 'AWS LAM Enable x11 forwarding over ssh for sudo'
  - ln -s /var/www/no-ssl/xauthority.sh /etc/profile.d
@@ -175,6 +156,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Installing Amazon Linux 2 ec2-user bash resources'
  - tar -xzf /mnt/efs/Amazon-Linux-2023/ec2-user.tgz --directory /home/ec2-user
+ - chown -R ec2-user:ec2-user /home/ec2-user
  - echo
  - echo 'AWS LAM Link to .aws resources for root'
  - ln -s /home/ec2-user/.aws /root/.aws
@@ -186,7 +168,7 @@ runcmd:
  - aws s3 cp s3://lamurakami/Amazon-Linux-2023/Amazom-Linux-2023-man2html.tgz - | tar -xzf - --directory /usr/local
  - echo
  - echo 'AWS LAM Install xeyes, xclock, xlogo'
- - aws s3 cp s3://lamurakami/Amazon-Linux-2023/xapps-AL2023-x86.tgz - | tar -xzf - --directory /usr
+ - aws s3 cp s3://lamurakami/Amazon-Linux-2023/xapps-AL2023-x86.tgz - | tar -xzf - --directory /usr/local
  - echo
  - echo 'AWS LAM Install geany'
  - aws s3 cp s3://lamurakami/Amazon-Linux-2023/geany.tgz - | tar -xzf - --directory /usr/local
@@ -197,12 +179,12 @@ runcmd:
  - ln -s /usr/local/bin/l3afpad /usr/bin/leafpad
  - echo
  - echo 'AWS LAM Install glances for ec2-user'
- - aws s3 cp ${IPv6} s3://lamurakami/Amazon-Linux-2023/Amazom-Linux-2023-glances.tgz - | tar -xzf - --directory /home/ec2-user
+ - aws s3 cp s3://lamurakami/Amazon-Linux-2023/Amazom-Linux-2023-glances.tgz - | tar -xzf - --directory /home/ec2-user
  - echo
  - echo 'AWS LAM Install etckeeper and perform intitial commit'
- - aws s3 cp ${IPv6} s3://lamurakami/Amazon-Linux-2023/Amazom-Linux-2023-bin-etckeeper.tgz - | tar -xzf - --directory /usr
- - aws s3 cp ${IPv6} s3://lamurakami/Amazon-Linux-2023/Amazom-Linux-2023-etc-etckeeper.tgz - | tar -xzf - --directory /etc
- - aws s3 cp ${IPv6} s3://lamurakami/Amazom-Linux-2023-lib-systemd-system-etckeeper.tgz - | tar -xzf - --directory /lib/systemd/system
+ - aws s3 cp s3://lamurakami/Amazon-Linux-2023/Amazom-Linux-2023-bin-etckeeper.tgz - | tar -xzf - --directory /usr
+ - aws s3 cp s3://lamurakami/Amazon-Linux-2023/Amazom-Linux-2023-etc-etckeeper.tgz - | tar -xzf - --directory /etc
+ - aws s3 cp s3://lamurakami/Amazon-Linux-2023/Amazom-Linux-2023-lib-systemd-system-etckeeper.tgz - | tar -xzf - --directory /lib/systemd/system
  - etckeeper init
  - etckeeper commit -m 'AWS LAM Amazon Linux 2023'
  - systemctl enable etckeeper.timer
@@ -220,7 +202,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Install lam web site'
  # Extract lam from archive that includes MediWiki and git repo
- - aws s3 cp s3://lamurakami/lam.tgz - | tar -xzf - --directory /var/www
+ - /var/www/aws/aws-efs-tar-extract.bash lam.tgz /var/www
  - echo
  - echo 'AWS LAM Use lam2 branch to serve secure site at https://lam2.duckdns.org'
  - sh -c "cd /var/www/lam;git stash"
@@ -301,24 +283,23 @@ runcmd:
  - echo
  - echo 'AWS LAM update aws site with current public local name ipv4 ipv6'
  - /var/www/aws/cloud-init.pl
- - /var/www/aws/AWS-LAM-git-commit.bash $keyName aws lam
+ - /var/www/aws/AWS-LAM-git-commit.bash $keyName aws no-ssl lam
  - echo
  - echo 'AWS LAM Change ownership of /var/www'
  - sh -c "chown -R lam:apache /var/www"
  - chown apache:apache /var/www/Multicount
  - chown lam:staff /mnt/efs
  - echo
- - echo 'AWS LAM Update packages to latest'
- - dnf -y update
- - sh -c 'echo "latest" >> /etc/dnf/vars/releasever'
- - dnf -y upgrade
- - echo
  - echo 'AWS LAM systemctl start httpd'
- - rm /etc/httpd/conf.d/welcome.conf
  - systemctl start httpd
  - echo
  - echo 'AWS LAM systemctl enable httpd'
  - systemctl enable httpd
+ - echo
+ - echo 'AWS LAM Update packages to latest'
+ - dnf -y update
+ - sh -c 'echo "latest" >> /etc/dnf/vars/releasever'
+ - dnf -y upgrade
  - echo
  - echo 'AWS LAM Set lam2.duckdns.org hostname'
  - /var/www/aws/Amazon-Linux-2-set-hostname.bash
