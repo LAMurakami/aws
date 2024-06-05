@@ -9,7 +9,7 @@ $tempFileName = sprintf("/tmp/aws-meta-%04d-%02d-%02d-%02d-%02d-%02d-%d.txt",
 
 print "\ntempFileName: $tempFileName\n";
 
-qx(/var/www/aws/ec2-user-data.bash > $tempFileName);     # Capture ec2 user data
+qx(/var/www/aws/ec2-user-data.pl > $tempFileName);       # Capture ec2 user data
 
 open (CONFIG, $tempFileName)                                    # Open temp file
  or                                                    # or report error and end
