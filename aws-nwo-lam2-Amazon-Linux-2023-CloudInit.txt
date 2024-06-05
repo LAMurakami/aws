@@ -87,7 +87,7 @@ runcmd:
  - sh -c "cd /var/www/aws;git checkout -b $keyName"
  - echo
  - echo 'AWS LAM Report AWS EC2 metadata for this instance'
- - /var/www/aws/ec2-user-data.bash
+ - /var/www/aws/ec2-user-data.pl
  - echo
  - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
  - /var/www/aws/ec2-instance-user-data.bash

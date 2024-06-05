@@ -80,7 +80,7 @@ runcmd:
  - systemctl restart sshd
  - echo
  - echo 'AWS LAM Report AWS EC2 metadata for this instance'
- - /var/www/aws/ec2-user-data.bash
+ - /var/www/aws/ec2-user-data.pl
  - echo
  - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
  # Allow for either gzip compressed user-data or plain text user-data

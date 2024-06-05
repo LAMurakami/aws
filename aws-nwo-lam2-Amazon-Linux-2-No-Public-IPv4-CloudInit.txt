@@ -141,7 +141,7 @@ runcmd:
  - ./aws-efs-www-git-clone.bash aws $keyName
  - echo
  - echo 'AWS LAM Report AWS EC2 metadata for this instance'
- - /var/www/aws/ec2-user-data.bash
+ - /var/www/aws/ec2-user-data.pl
  - echo
  - echo 'AWS LAM Cloud Guest motd'
  - ln -s /var/www/aws/etc/update-motd.d/51-cloudguest /etc/update-motd.d
