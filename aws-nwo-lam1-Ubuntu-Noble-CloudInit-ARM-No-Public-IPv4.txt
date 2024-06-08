@@ -57,6 +57,7 @@ runcmd:
  - export REGION=$(./REGION.bash)
  - rm REGION.bash
  - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
+ - echo "REGION=${REGION} EFS=${EFS}"
  - echo
  - echo 'AWS LAM setup root to aws ssh config'
  - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-config
@@ -129,16 +130,8 @@ runcmd:
  - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
  - /var/www/aws/ec2-instance-user-data.bash
  - echo
- - echo 'AWS LAM Installing GNU which v2.21 compiled for ARM Ubuntu Server 22.04'
- - /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/which-Ubuntu-22-04-ARM.tgz /usr/local
- - file /usr/local/bin/which
- - echo
- - echo 'AWS LAM Installing GNU tnef 1.4.18 compiled for ARM Ubuntu Server 22.04'
- - /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/tnef-Arm-Ubuntu-22-04.tgz /usr/local
- - file /usr/local/bin/tnef
- - echo
- - echo 'AWS LAM Installing leafpad compiled for ARM Ubuntu Server 22.04'
- - /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/leafpad-Arm-Ubuntu-22-04.tgz /usr/local
+ - echo 'AWS LAM Installing extras compiled for Ubuntu Server 22.04'
+ - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash ubuntu
  - echo
  - echo 'AWS LAM Cloud Guest motd'
  - ln -s /var/www/aws/etc/update-motd.d/51-cloudguest /etc/update-motd.d
