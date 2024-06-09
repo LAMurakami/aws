@@ -3,7 +3,7 @@
 # Tell cloud-init to log the output to a log file
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
-# /var/www/aws/aws-nwo-lam2-Debian-x86-No-Public-IPv4-CloudInit.txt
+# /var/www/aws/aws-nwo-lam2-Debian-No-Public-IPv4-CloudInit.txt
 # Initialize lam2.duckdns.org
 #
 # https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
@@ -67,7 +67,7 @@ packages:
  - l3afpad
 
 runcmd:
- - keyName="lam2-Debian-x86-No-Public-IPv4"
+ - keyName="lam2-Debian-No-Public-IPv4"
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
@@ -87,6 +87,7 @@ runcmd:
  - export REGION=$(./REGION.bash)
  - rm REGION.bash
  - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
+ - echo "REGION=${REGION} EFS=${EFS}"
  - echo
  - echo 'AWS LAM setup root to aws ssh config'
  - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-config
@@ -137,9 +138,11 @@ runcmd:
  - echo "${EFS}:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
  - systemctl daemon-reload
  - mount -a -t nfs4
+ - df -Th -x supermount --exclude-type=tmpfs --exclude-type=devtmpfs
  - echo
  - echo 'AWS LAM Installing ubuntu user bash resources for debian'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/ubuntu.tgz --directory /home/admin
+ - chown -R admin:admin /home/admin
  - echo
  - echo 'AWS LAM Link to .aws resources for root'
  - ln -s /home/admin/.aws /root/.aws
@@ -150,15 +153,6 @@ runcmd:
  - echo 'AWS LAM Set aws s3 IPv6 endpoint-url'
  - IPv6='--endpoint-url https://s3.dualstack.us-west-2.amazonaws.com'
  - echo
- - echo 'AWS LAM Installing GNU which v2.21 compiled Debian 12 x86'
- - aws s3 cp ${IPv6} s3://lamurakami/Debian-12/which-Debian-12-x86.tgz - | tar -xzf - --directory /usr/local
- - file /usr/local/bin/which
- - echo
- - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
- - aws s3 cp ${IPv6} s3://lamurakami/aws-lam1-ubuntu/sshd_config /etc/ssh/sshd_config
- - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
- - systemctl restart sshd
- - echo
  - echo 'AWS LAM Create logs/ sybmolic link for Apache2 configuration use'
  - ln -s /var/log/apache2 /etc/apache2/logs
  - echo
@@ -166,6 +160,15 @@ runcmd:
  - wget --quiet https://lamurakami.github.io/aws-efs/aws-efs-www-git-clone.bash
  - chmod a+x aws-efs-www-git-clone.bash
  - ./aws-efs-www-git-clone.bash aws $keyName
+ - echo
+ - echo 'AWS LAM Installing extras compiled for Debian'
+ - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash debian
+ - file /usr/local/bin/which
+ - echo
+ - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
+ - cp /var/www/aws/etc/ssh/sshd_config /etc/ssh
+ - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
+ - systemctl restart sshd
  - echo
  - echo 'AWS LAM Cloud Guest motd'
  - ln -s /var/www/aws/etc/update-motd.d/51-cloudguest /etc/update-motd.d
@@ -242,7 +245,7 @@ runcmd:
  # Extract lam from archive that includes MediWiki and git repo
  - aws s3 cp ${IPv6} s3://lamurakami/lam.tgz - | tar -xzf - --directory /var/www
  - echo
- - echo 'AWS LAM Tell git in /var/www/lam is O.K.'
+ - echo 'AWS LAM Tell git /var/www/lam is O.K.'
  - git config --system --add safe.directory /var/www/lam
  # Use lam2-debian branch to serve secure site at https://lam2.duckdns.org
  - sh -c "cd /var/www/lam;git stash"

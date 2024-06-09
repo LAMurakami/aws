@@ -3,7 +3,7 @@
 # Tell cloud-init to log the output to a log file
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
-# /var/www/aws/aws-nwo-lam1-Ubuntu-CloudInit-ARM-No-Public-IPv4.txt
+# /var/www/aws/aws-nwo-lam1-Ubuntu-Noble-No-Public-IPv4-CloudInit.txt
 #
 # Initialize lam1.duckdns.org
 #
