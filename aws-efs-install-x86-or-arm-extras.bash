@@ -43,7 +43,6 @@ case $distro in
       echo
       echo 'AWS LAM Installing leafpad compiled for Ubuntu Server 22.04'
       /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/leafpad-Ubuntu-22-04.tgz /usr/local
-      echo
     else
       echo "AWS LAM Installing $distro distro aarch64 extras"
       echo
@@ -57,15 +56,18 @@ case $distro in
       echo
       echo 'AWS LAM Installing leafpad compiled for ARM Ubuntu Server 22.04'
       /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/leafpad-Arm-Ubuntu-22-04.tgz /usr/local
-      echo
     fi
     ;;
 
   debian) 
     if [ $(uname -m) = "x86_64" ]; then
       echo "Installing $distro distro x86_64 extras"
+      echo
+      /var/www/aws/aws-efs-tar-extract.bash Debian-12/which-Debian-12-x86.tgz /usr/local
     else
       echo "Installing $distro distro aarch64 extras"
+      echo
+      /var/www/aws/aws-efs-tar-extract.bash Debian-12/which-Debian-12-ARM.tgz /usr/local
     fi
     ;;
 
