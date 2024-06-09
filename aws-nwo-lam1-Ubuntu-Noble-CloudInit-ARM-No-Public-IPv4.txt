@@ -37,7 +37,7 @@ hostname: lam1
 timezone: US/Alaska
 
 runcmd:
- - keyName="lam1-Ubuntu-ARM-No-Public-IPv4-Noble"
+ - keyName="lam1-Ubuntu-No-Public-IPv4-Noble"
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log

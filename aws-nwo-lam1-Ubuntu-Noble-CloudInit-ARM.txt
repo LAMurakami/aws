@@ -36,7 +36,7 @@ hostname: lam1
 timezone: US/Alaska
 
 runcmd:
- - keyName="lam1-Ubuntu-Noble-ARM"
+ - keyName="lam1-Ubuntu-Noble"
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
@@ -56,12 +56,19 @@ runcmd:
  - export REGION=$(./REGION.bash)
  - rm REGION.bash
  - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
+ - echo "REGION=${REGION} EFS=${EFS}"
  - echo
  - echo 'AWS LAM setup root to aws ssh config'
  - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-config
  - mv root-ssh-config /root/.ssh/config
  - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-known_hosts
  - mv root-ssh-known_hosts /root/.ssh/known_hosts
+ - echo
+ - echo 'AWS LAM Add localhost to known_hosts for root'
+ - ssh-keyscan -H -t rsa localhost >> /root/.ssh/known_hosts
+ - echo
+ - echo 'AWS LAM Create git user'
+ - useradd -g staff -G staff -M -d /mnt/efs/git -u 4896 git
  - echo
  - echo 'AWS LAM Check US Alaska local time for this system'
  - ls -lF --time-style=long-iso /etc/localtime
@@ -178,6 +185,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Installing ubuntu user bash resources'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/ubuntu.tgz --directory /home/ubuntu
+ - chown -R ubuntu:ubuntu /home/ubuntu
  - echo
  - echo 'AWS LAM Link to .aws resources for root'
  - ln -s /home/ubuntu/.aws /root/.aws
@@ -185,19 +193,11 @@ runcmd:
  - echo 'AWS LAM Copy ssh key root'
  - cp /home/ubuntu/.ssh/git_ak20_id_rsa /root/.ssh
  - echo
- - echo 'AWS LAM Installing GNU which v2.21 compiled for ARM Ubuntu Server 22.04'
- - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/which-Ubuntu-22-04-ARM.tgz - | tar -xzf - --directory /usr/local
- - file /usr/local/bin/which
- - echo
- - echo 'AWS LAM Installing GNU tnef 1.4.18 compiled for ARM Ubuntu Server 22.04'
- - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/tnef-Arm-Ubuntu-22-04.tgz - | tar -xzf - --directory /usr/local
- - file /usr/local/bin/tnef
- - echo
- - echo 'AWS LAM Installing leafpad compiled for ARM Ubuntu Server 22.04'
- - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/leafpad-Arm-Ubuntu-22-04.tgz - | tar -xzf - --directory /usr/local
+ - echo 'AWS LAM Installing extras compiled for Ubuntu Server 22.04'
+ - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash ubuntu
  - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
- - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/sshd_config /etc/ssh/sshd_config
+ - cp /var/www/aws/etc/ssh/sshd_config /etc/ssh
  - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
  - systemctl restart ssh
  - echo
