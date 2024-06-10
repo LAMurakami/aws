@@ -74,8 +74,48 @@ case $distro in
   AL2023) 
     if [ $(uname -m) = "x86_64" ]; then
       echo "Installing $distro distro x86_64 extras"
+      echo
+      echo 'AWS LAM Install man2html compiled for Amazon Linux 2023'
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/Amazom-Linux-2023-man2html.tgz /usr/local
+      echo
+      echo 'AWS LAM Install xeyes, xclock, xlogo compiled for Amazon Linux 2023'
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/xapps-AL2023-x86.tgz /usr/local
+      echo
+      echo 'AWS LAM Install geany compiled for Amazon Linux 2023'
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/geany.tgz /usr/local
+      echo
+      echo 'AWS LAM Install l3afpad substitute for leafpad compiled for Amazon Linux 2023'
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/l3afpad-x86.tgz /usr/local
+      echo
+      echo 'AWS LAM Install glances compiled for Amazon Linux 2023 for ec2-user'
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/Amazom-Linux-2023-glances.tgz /home/ec2-user
+      echo
+      echo 'AWS LAM Install etckeeper compiled for Amazon Linux 2023'
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/Amazom-Linux-2023-bin-etckeeper.tgz /usr
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/Amazom-Linux-2023-etc-etckeeper.tgz /etc
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/Amazom-Linux-2023-lib-systemd-system-etckeeper.tgz /lib/systemd/system
     else
       echo "Installing $distro distro aarch64 extras"
+      echo
+      echo 'AWS LAM Install man2html compiled for Amazon Linux 2023'
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/man2html-Arm.tgz /usr/local
+      echo
+      echo 'AWS LAM Install xeyes, xclock, xlogo compiled for Amazon Linux 2023'
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/xapps-AL2023-ARM.tgz /usr/local
+      echo
+      echo 'AWS LAM Install geany compiled for Amazon Linux 2023'
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/geany-Arm.tgz /usr/local
+      echo
+      echo 'AWS LAM Install l3afpad substitute for leafpad compiled for Amazon Linux 2023'
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/l3afpad-arm.tgz /usr/local
+      echo
+      echo 'AWS LAM Install glances compiled for Amazon Linux 2023 for ec2-user'
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/glances-ec2-user-Arm.tgz /home/ec2-user
+      echo
+      echo 'AWS LAM Install etckeeper compiled for Amazon Linux 2023'
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/etckeeper-bin-Arm.tgz /usr
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/etckeeper-etc-Arm.tgz /etc
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/etckeeper-lib-systemd-system-Arm.tgz /lib/systemd/system
     fi
     ;;
 
