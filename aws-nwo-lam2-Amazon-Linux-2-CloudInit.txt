@@ -1,5 +1,7 @@
 #cloud-config
 
+# /var/www/aws/aws-nwo-lam2-Amazon-Linux-2-CloudInit.txt
+
 # Tell cloud-init to log the output to a log file
 output : { all : '| tee -a /var/log/cloud-init-output.log' }
 
@@ -36,7 +38,7 @@ packages:
  - gtk2
 
 runcmd:
- - keyName="lam2-Amazon-Linux-2-x86"
+ - keyName="lam2-Amazon-Linux-2"
  - echo
  - echo 'AWS LAM Add a swapfile'
  - dd if=/dev/zero of=/swapfile bs=32M count=8
@@ -53,6 +55,7 @@ runcmd:
  - export REGION=$(./REGION.bash)
  - rm REGION.bash
  - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
+ - echo "REGION=${REGION} EFS=${EFS}"
  - echo
  - echo 'AWS LAM setup root to aws ssh config'
  - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-config
@@ -65,7 +68,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Create git user'
  - groupadd -g 206 staff
- - useradd -u 4896 -g staff -G staff -d /mnt/efs/git git
+ - useradd -u 4896 -g staff -G staff -M -d /mnt/efs/git git
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
@@ -185,12 +188,8 @@ runcmd:
  - echo 'AWS LAM Copy ssh key root'
  - cp /home/ec2-user/.ssh/git_ak20_id_rsa /root/.ssh
  - echo
- - echo 'AWS LAM Installing leafpad compiled for x86 Amazon Linux 2'
- - aws s3 cp s3://lamurakami/Amazon-Linux-2/leafpad-x86.tgz - | tar -xzf - --directory /usr/local
- - ln -s /usr/local/bin/leafpad /usr/bin
- - echo
- - echo 'AWS LAM Installing tnef compiled for x86 Amazon Linux 2'
- - aws s3 cp s3://lamurakami/Amazon-Linux-2/tnef-x86.tgz - | tar -xzf - --directory /usr/local
+ - echo 'AWS LAM Installing extras compiled for Amazon Linux 2'
+ - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash AL2
  - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
  - cp /var/www/aws/Amazon-Linux-2-sshd_config /etc/ssh/sshd_config

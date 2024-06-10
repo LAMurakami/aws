@@ -1,5 +1,7 @@
 #cloud-config
 
+# /var/www/aws/aws-nwo-lam2-Amazon-Linux-2-No-Public-IPv4-CloudInit.txt
+
 # Tell cloud-init to log the output to a log file
 output : { all : '| tee -a /var/log/cloud-init-output.log' }
 
@@ -33,7 +35,7 @@ packages:
  - gtk2
 
 runcmd:
- - keyName="lam2-Amazon-Linux-2-x86-No-Public-IPv4"
+ - keyName="lam2-Amazon-Linux-2-No-Public-IPv4"
  - echo
  - echo 'AWS LAM Add a swapfile'
  - dd if=/dev/zero of=/swapfile bs=32M count=8
@@ -50,6 +52,7 @@ runcmd:
  - export REGION=$(./REGION.bash)
  - rm REGION.bash
  - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
+ - echo "REGION=${REGION} EFS=${EFS}"
  - echo
  - echo 'AWS LAM setup root to aws ssh config'
  - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-config
@@ -62,7 +65,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Create git user'
  - groupadd -g 206 staff
- - useradd -u 4896 -g staff -G staff -d /mnt/efs/git git
+ - useradd -u 4896 -g staff -G staff -M -d /mnt/efs/git git
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
@@ -118,6 +121,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Installing Amazon Linux 2 ec2-user bash resources'
  - tar -xzf /mnt/efs/Amazon-Linux-2023/ec2-user.tgz --directory /home/ec2-user
+ - chown -R ec2-user:ec2-user /home/ec2-user
  - echo
  - echo 'AWS LAM Link to .aws resources for root'
  - ln -s /home/ec2-user/.aws /root/.aws
@@ -128,17 +132,12 @@ runcmd:
  - echo 'AWS LAM Set aws s3 IPv6 endpoint-url'
  - IPv6='--endpoint-url https://s3.dualstack.us-west-2.amazonaws.com'
  - echo
- - echo 'AWS LAM Installing leafpad compiled for x86 Amazon Linux 2'
- - aws s3 cp ${IPv6} s3://lamurakami/Amazon-Linux-2/leafpad-x86.tgz - | tar -xzf - --directory /usr/local
- - ln -s /usr/local/bin/leafpad /usr/bin
- - echo
- - echo 'AWS LAM Installing tnef compiled for x86 Amazon Linux 2'
- - aws s3 cp ${IPv6} s3://lamurakami/Amazon-Linux-2/tnef-x86.tgz - | tar -xzf - --directory /usr/local
- - echo
  - echo 'AWS LAM Install aws.lam1.us web site'
  - wget --quiet https://lamurakami.github.io/aws-efs/aws-efs-www-git-clone.bash
  - chmod a+x aws-efs-www-git-clone.bash
  - ./aws-efs-www-git-clone.bash aws $keyName
+ - echo 'AWS LAM Installing extras compiled for Amazon Linux 2'
+ - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash AL2
  - echo
  - echo 'AWS LAM Report AWS EC2 metadata for this instance'
  - /var/www/aws/ec2-user-data.pl
