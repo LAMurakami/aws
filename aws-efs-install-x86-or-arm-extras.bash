@@ -79,6 +79,30 @@ case $distro in
     fi
     ;;
 
+  AL2)
+    if [ $(uname -m) = "x86_64" ]; then
+      echo "Installing $distro distro x86_64 extras"
+      echo
+      echo 'AWS LAM Installing leafpad compiled for x86 Amazon Linux 2'
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2/leafpad-x86.tgz /usr/local
+      ln -s /usr/local/bin/leafpad /usr/bin
+      echo
+      echo 'AWS LAM Installing tnef compiled for x86 Amazon Linux 2'
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2/tnef-x86.tgz /usr/local
+      file /usr/local/bin/tnef
+    else
+      echo "Installing $distro distro aarch64 extras"
+      echo
+      echo 'AWS LAM Installing leafpad compiled for ARM Amazon Linux 2'
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2/leafpad-Arm.tgz /usr/local
+      ln -s /usr/local/bin/leafpad /usr/bin
+      echo
+      echo 'AWS LAM Installing tnef compiled for x86 Amazon Linux 2'
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2/tnef-arm64.tgz /usr/local
+      file /usr/local/bin/tnef
+    fi
+    ;;
+
   *) 
     echo "$0 doesn't yet handle distro $distro extras"
     ;; 
