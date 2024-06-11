@@ -26,7 +26,7 @@ repo_update: true
 repo_upgrade: all
 
 runcmd:
- - keyName="lam2-AL2023-x86"
+ - keyName="lam2-AL2023"
  - echo
  - echo 'AWS LAM Add a swapfile'
  - dd if=/dev/zero of=/swapfile bs=32M count=24
@@ -43,6 +43,7 @@ runcmd:
  - export REGION=$(./REGION.bash)
  - rm REGION.bash
  - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
+ - echo "REGION=${REGION} EFS=${EFS}"
  - echo
  - echo 'AWS LAM setup root to aws ssh config'
  - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-config
@@ -164,27 +165,12 @@ runcmd:
  - echo 'AWS LAM Copy ssh key root'
  - cp /home/ec2-user/.ssh/git_ak20_id_rsa /root/.ssh
  - echo
- - echo 'AWS LAM Install man2html'
- - aws s3 cp s3://lamurakami/Amazon-Linux-2023/Amazom-Linux-2023-man2html.tgz - | tar -xzf - --directory /usr/local
- - echo
- - echo 'AWS LAM Install xeyes, xclock, xlogo'
- - aws s3 cp s3://lamurakami/Amazon-Linux-2023/xapps-AL2023-x86.tgz - | tar -xzf - --directory /usr/local
- - echo
- - echo 'AWS LAM Install geany'
- - aws s3 cp s3://lamurakami/Amazon-Linux-2023/geany.tgz - | tar -xzf - --directory /usr/local
- - ldconfig /usr/local/lib
- - echo
- - echo 'AWS LAM Install l3afpad substitute for leafpad'
- - aws s3 cp s3://lamurakami/Amazon-Linux-2023/l3afpad-x86.tgz - | tar -xzf - --directory /usr/local
+ - echo 'AWS LAM Installing extras compiled for Amazon Linux 2023'
+ - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash AL2023
+ - echo 'AWS LAM Use l3afpad substitute for leafpad'
  - ln -s /usr/local/bin/l3afpad /usr/bin/leafpad
  - echo
- - echo 'AWS LAM Install glances for ec2-user'
- - aws s3 cp s3://lamurakami/Amazon-Linux-2023/Amazom-Linux-2023-glances.tgz - | tar -xzf - --directory /home/ec2-user
- - echo
- - echo 'AWS LAM Install etckeeper and perform intitial commit'
- - aws s3 cp s3://lamurakami/Amazon-Linux-2023/Amazom-Linux-2023-bin-etckeeper.tgz - | tar -xzf - --directory /usr
- - aws s3 cp s3://lamurakami/Amazon-Linux-2023/Amazom-Linux-2023-etc-etckeeper.tgz - | tar -xzf - --directory /etc
- - aws s3 cp s3://lamurakami/Amazon-Linux-2023/Amazom-Linux-2023-lib-systemd-system-etckeeper.tgz - | tar -xzf - --directory /lib/systemd/system
+ - echo 'AWS LAM Perform intitial etckeeper commit'
  - etckeeper init
  - etckeeper commit -m 'AWS LAM Amazon Linux 2023'
  - systemctl enable etckeeper.timer
