@@ -79,10 +79,7 @@ case $distro in
       /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/Amazom-Linux-2023-man2html.tgz /usr/local
       echo
       echo 'AWS LAM Install xeyes, xclock, xlogo compiled for Amazon Linux 2023'
-      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/xapps-AL2023-x86.tgz /usr/local
-      echo
-      echo 'AWS LAM Install geany compiled for Amazon Linux 2023'
-      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/geany.tgz /usr/local
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/xapps-AL2023-x86.tgz /usr
       echo
       echo 'AWS LAM Install l3afpad substitute for leafpad compiled for Amazon Linux 2023'
       /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/l3afpad-x86.tgz /usr/local
@@ -101,10 +98,7 @@ case $distro in
       /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/man2html-Arm.tgz /usr/local
       echo
       echo 'AWS LAM Install xeyes, xclock, xlogo compiled for Amazon Linux 2023'
-      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/xapps-AL2023-ARM.tgz /usr/local
-      echo
-      echo 'AWS LAM Install geany compiled for Amazon Linux 2023'
-      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/geany-Arm.tgz /usr/local
+      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/xapps-AL2023-ARM.tgz /usr
       echo
       echo 'AWS LAM Install l3afpad substitute for leafpad compiled for Amazon Linux 2023'
       /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/l3afpad-arm.tgz /usr/local
