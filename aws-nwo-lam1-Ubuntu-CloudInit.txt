@@ -1,5 +1,7 @@
 #cloud-config
 
+# /var/www/aws/aws-nwo-lam1-Ubuntu-CloudInit.txt
+
 # Tell cloud-init to log the output to a log file
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
@@ -34,7 +36,7 @@ hostname: lam1
 timezone: US/Alaska
 
 runcmd:
- - keyName="lam1-Ubuntu-x86"
+ - keyName="lam1-Ubuntu"
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
@@ -54,6 +56,7 @@ runcmd:
  - export REGION=$(./REGION.bash)
  - rm REGION.bash
  - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
+ - echo "REGION=${REGION} EFS=${EFS}"
  - echo
  - echo 'AWS LAM setup root to aws ssh config'
  - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-config
@@ -188,16 +191,8 @@ runcmd:
  - echo 'AWS LAM Copy ssh key root'
  - cp /home/ubuntu/.ssh/git_ak20_id_rsa /root/.ssh
  - echo
- - echo 'AWS LAM Installing GNU which v2.21 compiled for Ubuntu Server 22.04'
- - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/which-Ubuntu-22-04.tgz - | tar -xzf - --directory /usr/local
- - file /usr/local/bin/which
- - echo
- - echo 'AWS LAM Installing GNU tnef 1.4.18 compiled for Ubuntu Server 22.04'
- - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/tnef-Ubuntu-22-04.tgz - | tar -xzf - --directory /usr/local
- - file /usr/local/bin/tnef
- - echo
- - echo 'AWS LAM Installing leafpad compiled for Ubuntu Server 22.04'
- - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/leafpad-Ubuntu-22-04.tgz - | tar -xzf - --directory /usr/local
+ - echo 'AWS LAM Installing extras compiled for Ubuntu Server 22.04'
+ - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash ubuntu
  - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
  - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/sshd_config /etc/ssh/sshd_config
@@ -284,7 +279,7 @@ runcmd:
  - echo
  - echo 'AWS LAM update aws site with current public local name ipv4 ipv6'
  - /var/www/aws/cloud-init.pl
- - /var/www/aws/AWS-LAM-git-commit.bash $keyName  aws no-ssl
+ - /var/www/aws/AWS-LAM-git-commit.bash $keyName aws no-ssl
  - echo
  - echo 'AWS LAM Change ownership of /var/www /mnt/efs'
  - sh -c "chown -R lam:www-data /var/www"
@@ -309,6 +304,7 @@ runcmd:
  - echo 'AWS LAM Add root alias so default AWS ubuntu user gets root mail'
  - cp /var/www/aws/etc/aliases /etc/aliases
  - cp /var/www/aws/etc/dovecot/conf.d/10-master.conf /etc/dovecot/conf.d/10-master.conf
+ - newaliases
  - etckeeper commit -m "AWS LAM Changes from $keyName-CloudInit"
  - echo
  - echo 'AWS LAM Install gitweb after apache has been configured'

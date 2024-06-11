@@ -35,7 +35,7 @@ hostname: lam1
 timezone: US/Alaska
 
 runcmd:
- - keyName="lam1-Ubuntu-x86-No-Public-IPv4"
+ - keyName="lam1-Ubuntu-No-Public-IPv4"
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
@@ -55,6 +55,7 @@ runcmd:
  - export REGION=$(./REGION.bash)
  - rm REGION.bash
  - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
+ - echo "REGION=${REGION} EFS=${EFS}"
  - echo
  - echo 'AWS LAM setup root to aws ssh config'
  - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-config
@@ -122,17 +123,6 @@ runcmd:
  - echo 'AWS LAM Set aws s3 IPv6 endpoint-url'
  - IPv6='--endpoint-url https://s3.dualstack.us-west-2.amazonaws.com'
  - echo
- - echo 'AWS LAM Installing GNU which v2.21 compiled for Ubuntu Server 22.04'
- - aws s3 cp ${IPv6} s3://lamurakami/aws-lam1-ubuntu/which-Ubuntu-22-04.tgz - | tar -xzf - --directory /usr/local
- - file /usr/local/bin/which
- - echo
- - echo 'AWS LAM Installing GNU tnef 1.4.18 compiled for Ubuntu Server 22.04'
- - aws s3 cp ${IPv6} s3://lamurakami/aws-lam1-ubuntu/tnef-Ubuntu-22-04.tgz - | tar -xzf - --directory /usr/local
- - file /usr/local/bin/tnef
- - echo
- - echo 'AWS LAM Installing leafpad compiled for Ubuntu Server 22.04'
- - aws s3 cp ${IPv6} s3://lamurakami/aws-lam1-ubuntu/leafpad-Ubuntu-22-04.tgz - | tar -xzf - --directory /usr/local
- - echo
  - echo 'AWS LAM Create logs/ sybmolic link for Apache2 configuration use'
  - ln -s /var/log/apache2 /etc/apache2/logs
  - echo
@@ -140,6 +130,8 @@ runcmd:
  - wget --quiet https://lamurakami.github.io/aws-efs/aws-efs-www-git-clone.bash
  - chmod a+x aws-efs-www-git-clone.bash
  - ./aws-efs-www-git-clone.bash aws $keyName
+ - echo 'AWS LAM Installing extras compiled for Ubuntu Server 22.04'
+ - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash ubuntu
  - echo
  - echo 'AWS LAM Cloud Guest motd'
  - ln -s /var/www/aws/etc/update-motd.d/51-cloudguest /etc/update-motd.d

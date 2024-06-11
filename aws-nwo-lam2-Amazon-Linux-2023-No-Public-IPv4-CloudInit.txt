@@ -1,5 +1,7 @@
 #cloud-config
 
+# /var/www/aws/aws-nwo-lam2-Amazon-Linux-2023-No-Public-IPv4-CloudInit.txt
+
 # Tell cloud-init to log the output to a log file
 output : { all : '| tee -a /var/log/cloud-init-output.log' }
 
