@@ -12,9 +12,9 @@ output : { all : '| tee -a /var/log/cloud-init-output.log' }
 timezone: US/Alaska
 
 # Upgrade repo database on first boot
-repo_update: true
+package_update: true
 # Upgrade the instance on first boot
-repo_upgrade: all
+package_upgrade: true
 
 packages:
  - rcs
