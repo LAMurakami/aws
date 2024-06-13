@@ -47,7 +47,7 @@ hostname: lam2
 timezone: US/Alaska
 
 runcmd:
- - keyName="lam2-Ubuntu-x86"
+ - keyName="lam2-Ubuntu"
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
@@ -74,6 +74,7 @@ runcmd:
  - export REGION=$(./REGION.bash)
  - rm REGION.bash
  - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
+ - echo "REGION=${REGION} EFS=${EFS}"
  - echo
  - echo 'AWS LAM setup root to aws ssh config'
  - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-config
@@ -126,18 +127,6 @@ runcmd:
  - echo 'AWS LAM Set hostname and localhost alias in /etc/hosts'
  - sed -i '1s/localhost/lam2.lam1.us lam2 localhost/' /etc/hosts
  - echo
- - echo 'AWS LAM Installing leafpad compiled for Ubuntu Server 22.04'
- - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/leafpad-Ubuntu-22-04.tgz - | tar -xzf - --directory /usr/local
- - file /usr/local/bin/leafpad
- - echo
- - echo 'AWS LAM Installing GNU which v2.21 compiled for Ubuntu Server 22.04'
- - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/which-Ubuntu-22-04.tgz - | tar -xzf - --directory /usr/local
- - file /usr/local/bin/which
- - echo
- - echo 'AWS LAM Installing GNU tnef 1.4.18 compiled for Ubuntu Server 22-04'
- - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/tnef-Ubuntu-22-04.tgz - | tar -xzf - --directory /usr/local
- - file /usr/local/bin/tnef
- - echo
  - echo 'AWS LAM Create logs/ sybmolic link for Apache2 configuration use'
  - ln -s /var/log/apache2 /etc/apache2/logs
  - echo
@@ -148,6 +137,9 @@ runcmd:
  - sh -c "cd /var/www/aws;git checkout -b $keyName"
  - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/000-aws.conf
  - a2ensite 000-aws
+ - echo
+ - echo 'AWS LAM Installing extras compiled for Ubuntu Server 22.04'
+ - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash ubuntu
  - echo
  - echo 'AWS LAM Cloud Guest motd'
  - ln -s /var/www/aws/etc/update-motd.d/51-cloudguest /etc/update-motd.d
@@ -169,7 +161,7 @@ runcmd:
  - a2enmod rewrite
  - a2enmod cgi
  - echo
- - echo 'AWS LAM Install no-ssl web site'
+ - echo 'AWS LAM Install no-ssl site'
  - /var/www/aws/aws-lam-www-git-clone.bash no-ssl $keyName
  - rm /etc/apache2/apache2.conf
  - rm /etc/apache2/mods-available/alias.conf
@@ -190,7 +182,7 @@ runcmd:
  - sh -c "cd /var/www/lam;git stash"
  # Use lam1 branch for /var/www/lam/Create-lam-murakami-staff.bash
  - sh -c "cd /var/www/lam;git checkout lam1"
- - sh -c "cd /var/www/lam;git checkout -b lam1-Ubuntu-x86"
+ - sh -c "cd /var/www/lam;git checkout -b $keyName"
  - echo
  - echo 'AWS LAM Update from default to LAM AWS lam2 web configuration'
  - sed -i "s|aws|lam2|" /var/www/no-ssl/apache2.conf
