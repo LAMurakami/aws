@@ -143,6 +143,10 @@ runcmd:
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
  - cp /var/www/aws/etc/ssh/sshd_config /etc/ssh
  - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
+ - echo
+ - echo 'AWS LAM configure aws-gateway for No-Public-IPv4 instance'
+ - cp /var/www/aws/etc/ssh/ssh_config.d/aws-gateway.conf /etc/ssh/ssh_config.d
+ - cp /var/www/aws/etc/profile.d/ssh_tunnel.sh /etc/profile.d
  - systemctl restart ssh
  - echo
  - echo 'AWS LAM Install no-ssl web site'
