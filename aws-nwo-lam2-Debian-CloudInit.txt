@@ -229,6 +229,9 @@ runcmd:
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
  - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/sshd_config /etc/ssh/sshd_config
  - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
+ - echo
+ - echo 'AWS LAM Omit hashing of new known host entries'
+ - sed -i '/HashKnownHosts/d' /etc/ssh/ssh_config
  - systemctl restart sshd
  - echo
  - echo 'AWS LAM ***** Secure site *****'

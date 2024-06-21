@@ -147,6 +147,9 @@ runcmd:
  - echo 'AWS LAM configure aws-gateway for No-Public-IPv4 instance'
  - cp /var/www/aws/etc/ssh/ssh_config.d/aws-gateway.conf /etc/ssh/ssh_config.d
  - cp /var/www/aws/etc/profile.d/ssh_tunnel.sh /etc/profile.d
+ - echo
+ - echo 'AWS LAM Omit hashing of new known host entries'
+ - sed -i '/HashKnownHosts/d' /etc/ssh/ssh_config
  - systemctl restart ssh
  - echo
  - echo 'AWS LAM Install no-ssl web site'
