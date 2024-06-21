@@ -85,10 +85,7 @@ runcmd:
  - cat /proc/swaps
  - echo
  - echo 'AWS LAM Get EFS for REGION'
- - wget --quiet https://lamurakami.github.io/aws-efs/REGION.bash
- - chmod a+x REGION.bash
- - export REGION=$(./REGION.bash)
- - rm REGION.bash
+ - export REGION=$(cloud-init query region)
  - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
  - echo "REGION=${REGION} EFS=${EFS}"
  - echo
@@ -322,8 +319,8 @@ runcmd:
  - chown lam:staff /mnt/efs
  - echo
  - echo 'AWS LAM Refreshing lam database'
- - aws s3 cp s3://lamurakami/Bk-20-MySQL.lam.sql.gz - | gunzip -c | mysql --user=lam lam
- - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz - | gunzip -c | mysql --user=lam wikidb
+ - aws s3 cp s3://lamurakami/Bk-20-MySQL.lam.sql.gz - | gunzip -c | tail -n +2 | mariadb --user=lam lam
+ - aws s3 cp s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz - | gunzip -c | tail -n +2 | mariadb --user=lam wikidb
  - echo
  - echo 'AWS LAM Install man2html after apache has been configured'
  - apt-get install -y man2html

@@ -38,10 +38,7 @@ runcmd:
  - cat /proc/swaps
  - echo
  - echo 'AWS LAM Get EFS for REGION'
- - wget --quiet https://lamurakami.github.io/aws-efs/REGION.bash
- - chmod a+x REGION.bash
- - export REGION=$(./REGION.bash)
- - rm REGION.bash
+ - export REGION=$(cloud-init query region)
  - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
  - echo "REGION=${REGION} EFS=${EFS}"
  - echo
