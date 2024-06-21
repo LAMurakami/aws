@@ -242,9 +242,9 @@ runcmd:
  - echo 'AWS LAM Creating {lam|Mediawiki} database and user'
  - mysql --table < /var/www/lam/lam-user.sql
  - echo 'AWS LAM Restore latest lam database backup from AWS S3'
- - aws s3 cp ${IPv6} s3://lamurakami/Bk-20-MySQL.lam.sql.gz - | gunzip -c | mysql --user=lam lam
+ - aws s3 cp ${IPv6} s3://lamurakami/Bk-20-MySQL.lam.sql.gz - | gunzip -c | tail -n +2 | mariadb --user=lam lam
  - echo 'AWS LAM Restore latest LAM Alaska MediaWiki database backup from AWS S3'
- - aws s3 cp ${IPv6} s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz - | gunzip -c | mysql --user=lam wikidb
+ - aws s3 cp ${IPv6} s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz - | gunzip -c | tail -n +2 | mariadb --user=lam wikidb
  - echo
  - echo 'AWS LAM ***** Private Additional sites *****'
  - echo
