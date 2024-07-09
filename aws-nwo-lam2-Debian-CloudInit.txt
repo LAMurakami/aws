@@ -231,6 +231,9 @@ runcmd:
  - sed -i '/HashKnownHosts/d' /etc/ssh/ssh_config
  - systemctl restart sshd
  - echo
+ - echo 'AWS LAM configure lam-ak-lan for Public IPv4 access'
+ - cp /var/www/aws/etc/ssh/ssh_config.d/lam-ak-lan.conf /etc/ssh/ssh_config.d
+ - echo
  - echo 'AWS LAM ***** Secure site *****'
  - echo
  - echo 'AWS LAM Installing Let-s Encrypt certificates for TLS encryption (HTTPS)'
