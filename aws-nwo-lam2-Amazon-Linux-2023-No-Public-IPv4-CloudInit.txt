@@ -24,6 +24,36 @@ package_update: true
 # Upgrade the instance on first boot
 package_upgrade: true
 
+packages:
+ - httpd
+ - httpd-manual
+ - mod_ssl
+ - whois
+ - lynx
+ - perl-CGI
+ - perl-libwww-perl
+ - xauth
+ - php-fpm
+ - php-mysqli
+ - php-json
+ - php
+ - php-devel
+ - php-gd
+ - php-mbstring
+ - php-intl
+ - php-mysqlnd
+ - php-xml
+ - mariadb105-server
+ - gitweb
+ - xorg-x11-utils
+ - mod_perl
+ - gtk3
+ - perl-DBD-MySQL
+ - mlocate
+ - texlive
+ - libxkbfile
+ - xorg-x11-xbitmaps
+
 runcmd:
  - keyName="lam2-AL2023-No-Public-IPv4"
  - echo
@@ -53,9 +83,6 @@ runcmd:
  - echo 'AWS LAM Create git user'
  - groupadd -g 206 staff
  - useradd -u 4896 -g staff -G staff -M -d /mnt/efs/git git
- - echo
- - echo 'AWS LAM Install LAMipedia packages'
- - dnf -y install httpd httpd-manual mod_ssl whois lynx perl-CGI perl-libwww-perl xauth php-fpm php-mysqli php-json php php-devel php-gd php-mbstring php-intl php-mysqlnd php-xml mariadb105-server gitweb xorg-x11-utils mod_perl gtk3 perl-DBD-MySQL mlocate texlive libxkbfile xorg-x11-xbitmaps
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
