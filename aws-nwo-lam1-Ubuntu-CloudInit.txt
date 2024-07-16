@@ -62,7 +62,7 @@ runcmd:
  - echo 'AWS LAM Add aws and localhost to known_hosts'
  - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-known_hosts
  - mv root-ssh-known_hosts /etc/ssh/ssh_known_hosts
- - ssh-keyscan -H -t rsa localhost >> /etc/ssh/ssh_known_hosts
+ - ssh-keyscan -t rsa localhost >> /etc/ssh/ssh_known_hosts
  - echo
  - echo 'AWS LAM Create git user'
  - useradd -g staff -G staff -M -d /mnt/efs/git -u 4896 git
