@@ -5,7 +5,7 @@ The
 Project is a clone of the
 [github.com/LAMurakami/aws](https://github.com/LAMurakami/aws)
 Repostory.  My
-[gitlab.com/LAMurakmi](https://gitlab.com/LAMurakmi)
+[gitlab.com/LAMurakami](https://gitlab.com/LAMurakami)
 account was created so that Projects can be cloned using https without
 authentication over IPv6 as well as IPv4 unlike the
 [github.com/LAMurakami](https://github.com/LAMurakami)
