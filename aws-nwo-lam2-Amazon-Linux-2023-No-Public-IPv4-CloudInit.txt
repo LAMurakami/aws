@@ -135,9 +135,11 @@ runcmd:
  - IPv6='--endpoint-url https://s3.dualstack.us-west-2.amazonaws.com'
  - echo
  - echo 'AWS LAM Install aws.lam1.us web site'
- - wget --quiet https://lamurakami.github.io/aws-efs/aws-efs-www-git-clone.bash
- - chmod a+x aws-efs-www-git-clone.bash
- - ./aws-efs-www-git-clone.bash aws $keyName
+ - git clone https://gitlab.com/aws-lam/aws /var/www/aws
+ - sh -c "cd /var/www/aws;git remote set-url origin git@gitlab.com:aws-lam/aws"
+ - sh -c "cd /var/www/aws;git remote add github git@github.com:LAMurakami/aws"
+ - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
+ - sh -c "cd /var/www/aws;git checkout -b $keyName"
  - echo
  - echo 'AWS LAM Installing extras compiled for Amazon Linux 2023'
  - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash AL2023
@@ -167,7 +169,7 @@ runcmd:
  - cp /var/www/aws/Amazon-Linux-2-httpd.conf /etc/httpd/conf/httpd.conf
  - echo
  - echo 'AWS LAM Install no-ssl web site'
- - ./aws-efs-www-git-clone.bash no-ssl $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash no-ssl $keyName
  - ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/httpd/conf.d/zzz_999-no-ssl.conf
  - echo
  - echo 'AWS LAM Install LAM perl modules'
@@ -175,30 +177,30 @@ runcmd:
  - ln -s /var/www/no-ssl/site_perl-LAM /usr/local/share/perl5/5.32/LAM
  - echo
  - echo 'AWS LAM Installing z.lam1.us web site'
- - ./aws-efs-www-git-clone.bash z $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash z $keyName
  - ln -s /var/www/z/z_apache2.conf /etc/httpd/conf.d/zzz_050_z.conf
  - rm /etc/httpd/conf.d/welcome.conf
  - echo
  - echo 'AWS LAM ***** Additional sites *****'
  - echo
  - echo 'AWS LAM Installing sites.lam1.us web site'
- - ./aws-efs-www-git-clone.bash sites $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash sites $keyName
  - ln -s /var/www/sites/sites_apache2.conf /etc/httpd/conf.d/zzz_030_sites.conf
  - echo
  - echo 'AWS LAM Installing arsc.lam1.us web site'
- - ./aws-efs-www-git-clone.bash arsc $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash arsc $keyName
  - ln -s /var/www/arsc/arsc_apache2.conf /etc/httpd/conf.d/zzz_060_arsc.conf
  - echo
  - echo 'AWS LAM Installing cabo.lam1.us web site'
- - ./aws-efs-www-git-clone.bash cabo $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash cabo $keyName
  - ln -s /var/www/cabo/cabo_apache2.conf /etc/httpd/conf.d/zzz_040_cabo.conf
  - echo
  - echo 'AWS LAM Adding olnes www Content'
- - ./aws-efs-www-git-clone.bash olnes $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash olnes $keyName
  - ln -s /var/www/olnes/olnes_apache2.conf /etc/httpd/conf.d/zzz_052_olnes.conf
  - echo
  - echo 'AWS LAM Adding larryforalaska www Content'
- - ./aws-efs-www-git-clone.bash larryforalaska $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash larryforalaska $keyName
  - ln -s /var/www/larryforalaska/larryforalaska_apache2.conf /etc/httpd/conf.d/zzz_070_larryforalaska.conf
  - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
@@ -254,16 +256,16 @@ runcmd:
  - echo 'AWS LAM ***** Private Additional sites *****'
  - echo
  - echo 'AWS LAM Installing {new|old}.interiordems.com web sites'
- - ./aws-efs-www-git-clone.bash interiordems $keyName
+ - /var/www/aws/aws-efs-www-git-clone.bash interiordems $keyName
  - ln -s /var/www/interiordems/interiordems_apache2.conf /etc/httpd/conf.d/zzz_020_interiordems.conf
- - ./aws-efs-www-git-clone.bash oldinteriordems $keyName
+ - /var/www/aws/aws-efs-www-git-clone.bash oldinteriordems $keyName
  - ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf /etc/httpd/conf.d/zzz_010_oldinteriordems.conf
  - echo
  - echo 'AWS LAM Adding mike@mike.lam1.us user, group and www Content'
  - useradd --shell /bin/bash --create-home --groups users --uid 55501 mike
  - usermod --groups users,mike mike
  - aws s3 cp ${IPv6} s3://lamurakami/aws-lam1-ubuntu/mike.tgz - | tar -xzf - --directory /home
- - ./aws-efs-www-git-clone.bash mike $keyName
+ - /var/www/aws/aws-efs-www-git-clone.bash mike $keyName
  - ln -s /var/www/mike/mike_apache2.conf /etc/httpd/conf.d/zzz_081_mike.conf
  - echo
  - echo 'AWS LAM Adding blinkenshell www Content'
@@ -273,12 +275,11 @@ runcmd:
  - echo 'AWS LAM Tell git ownership of /var/www/blinkenshell/public_html is O.K.'
  - git config --system --add safe.directory /var/www/blinkenshell/public_html
  # Clone the blinkenshell repo and integrate it with blinkenshell archive
- - ./aws-efs-www-git-clone.bash blinkenshell $keyName /tmp/
+ - /var/www/aws/aws-lam-gitlab-clone.bash blinkenshell $keyName /tmp/
  - mv /tmp/blinkenshell/.git /var/www/blinkenshell/public_html
  - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
  - sh -c "cd /var/www/blinkenshell/public_html;git stash"
- - sh -c "cd /var/www/blinkenshell/public_html;git checkout master"
- - sh -c "cd /var/www/blinkenshell/public_html;git checkout -b $keyName"
+ - sh -c "cd /var/www/blinkenshell/public_html;git checkout $keyName"
  - ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf /etc/httpd/conf.d/zzz_051_blinkenshell.conf
  - echo
  - echo 'AWS LAM Adding alaskademocrat www Content'
@@ -338,9 +339,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Final Cloud-init etckeeper commit'
  - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
- - echo
- - echo 'AWS LAM Remove temp script'
- - rm aws-efs-www-git-clone.bash
  - echo
  - echo 'AWS LAM cloud-config YAML runcmd complete'
  - date

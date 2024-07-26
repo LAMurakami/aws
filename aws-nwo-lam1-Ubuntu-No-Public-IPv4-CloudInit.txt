@@ -124,9 +124,11 @@ runcmd:
  - ln -s /var/log/apache2 /etc/apache2/logs
  - echo
  - echo 'AWS LAM Installing aws.lam1.us web site'
- - wget --quiet https://lamurakami.github.io/aws-efs/aws-efs-www-git-clone.bash
- - chmod a+x aws-efs-www-git-clone.bash
- - ./aws-efs-www-git-clone.bash aws $keyName
+ - git clone https://gitlab.com/aws-lam/aws /var/www/aws
+ - sh -c "cd /var/www/aws;git remote set-url origin git@gitlab.com:aws-lam/aws"
+ - sh -c "cd /var/www/aws;git remote add github git@github.com:LAMurakami/aws"
+ - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
+ - sh -c "cd /var/www/aws;git checkout -b $keyName"
  - echo 'AWS LAM Installing extras compiled for Ubuntu Server 22.04'
  - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash ubuntu
  - echo
@@ -138,7 +140,7 @@ runcmd:
  - a2ensite 000-aws
  - echo
  - echo 'AWS LAM Install no-ssl web site'
- - ./aws-efs-www-git-clone.bash no-ssl $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash no-ssl $keyName
  - rm /etc/apache2/apache2.conf
  - rm /etc/apache2/mods-available/alias.conf
  - rm /etc/apache2/mods-available/autoindex.conf
@@ -156,7 +158,7 @@ runcmd:
  - ln -s /var/www/no-ssl/site_perl-LAM /usr/local/lib/site_perl/LAM
  - echo
  - echo 'AWS LAM Installing z.lam1.us web site'
- - ./aws-efs-www-git-clone.bash z $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash z $keyName
  - ln -s /var/www/z/z_apache2.conf /etc/apache2/sites-available/050_z.conf
  - a2ensite 050_z
  - echo
@@ -166,27 +168,27 @@ runcmd:
  - echo 'AWS LAM ***** Additional sites *****'
  - echo
  - echo 'AWS LAM Installing arsc.lam1.us web site'
- - ./aws-efs-www-git-clone.bash arsc $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash arsc $keyName
  - ln -s /var/www/arsc/arsc_apache2.conf /etc/apache2/sites-available/060_arsc.conf
  - a2ensite 060_arsc
  - echo
  - echo 'AWS LAM Installing sites.lam1.us web site'
- - ./aws-efs-www-git-clone.bash sites $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash sites $keyName
  - ln -s /var/www/sites/sites_apache2.conf /etc/apache2/sites-available/030_sites.conf
  - a2ensite 030_sites
  - echo
  - echo 'AWS LAM Installing cabo.lam1.us web site'
- - ./aws-efs-www-git-clone.bash cabo $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash cabo $keyName
  - ln -s /var/www/cabo/cabo_apache2.conf /etc/apache2/sites-available/040_cabo.conf
  - a2ensite 040_cabo
  - echo
  - echo 'AWS LAM Adding olnes www Content'
- - ./aws-efs-www-git-clone.bash olnes $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash olnes $keyName
  - ln -s /var/www/olnes/olnes_apache2.conf /etc/apache2/sites-available/052_olnes.conf
  - a2ensite 052_olnes
  - echo
  - echo 'AWS LAM Adding larryforalaska www Content'
- - ./aws-efs-www-git-clone.bash larryforalaska $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash larryforalaska $keyName
  - ln -s /var/www/larryforalaska/larryforalaska_apache2.conf /etc/apache2/sites-available/070_larryforalaska.conf
  - a2ensite 070_larryforalaska
  - echo
@@ -241,10 +243,10 @@ runcmd:
  - echo 'AWS LAM ***** Private Additional sites *****'
  - echo
  - echo 'AWS LAM Installing {new|old}.interiordems.com web sites'
- - ./aws-efs-www-git-clone.bash interiordems $keyName
+ - /var/www/aws/aws-efs-www-git-clone.bash interiordems $keyName
  - ln -s /var/www/interiordems/interiordems_apache2.conf /etc/apache2/sites-available/020_interiordems.conf
  - a2ensite 020_interiordems
- - ./aws-efs-www-git-clone.bash oldinteriordems $keyName
+ - /var/www/aws/aws-efs-www-git-clone.bash oldinteriordems $keyName
  - ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf /etc/apache2/sites-available/010_oldinteriordems.conf
  - a2ensite 010_oldinteriordems
  - echo
@@ -252,7 +254,7 @@ runcmd:
  - useradd --shell /bin/bash --create-home --groups users --uid 55501 mike
  - usermod --groups users,mike mike
  - aws s3 cp ${IPv6} s3://lamurakami/aws-lam1-ubuntu/mike.tgz - | tar -xzf - --directory /home
- - ./aws-efs-www-git-clone.bash mike $keyName
+ - /var/www/aws/aws-efs-www-git-clone.bash mike $keyName
  - ln -s /var/www/mike/mike_apache2.conf /etc/apache2/sites-available/081_mike.conf
  - a2ensite 081_mike
  - echo
@@ -263,17 +265,16 @@ runcmd:
  - echo 'AWS LAM Tell git ownership of /var/www/blinkenshell/public_html is O.K.'
  - git config --system --add safe.directory /var/www/blinkenshell/public_html
  # Clone the blinkenshell repo and integrate it with blinkenshell archive
- - ./aws-efs-www-git-clone.bash blinkenshell $keyName /tmp/
+ - /var/www/aws/aws-lam-gitlab-clone.bash blinkenshell $keyName /tmp/
  - mv /tmp/blinkenshell/.git /var/www/blinkenshell/public_html
  - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
  - sh -c "cd /var/www/blinkenshell/public_html;git stash"
- - sh -c "cd /var/www/blinkenshell/public_html;git checkout master"
- - sh -c "cd /var/www/blinkenshell/public_html;git checkout -b $keyName"
+ - sh -c "cd /var/www/blinkenshell/public_html;git checkout $keyName"
  - ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf /etc/apache2/sites-available/051_blinkenshell.conf
  - a2ensite 051_blinkenshell
  - echo
  - echo 'AWS LAM Adding alaskademocrat www Content'
- - ./aws-efs-www-git-clone.bash alaskademocrat $keyName
+ - /var/www/aws/aws-efs-www-git-clone.bash alaskademocrat $keyName
  - ln -s /var/www/alaskademocrat/alaskademocrat_apache2.conf /etc/apache2/sites-available/069_alaskademocrat.conf
  - a2ensite 069_alaskademocrat
  - echo
@@ -332,9 +333,6 @@ runcmd:
  - echo
  - echo 'AWS LAM List Installed Packages information'
  - dpkg -l
- - echo
- - echo 'AWS LAM Remove temp script'
- - rm aws-efs-www-git-clone.bash
  - echo
  - echo 'AWS LAM cloud-config YAML runcmd complete'
  - date
