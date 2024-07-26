@@ -20,7 +20,7 @@ The localhost / accessed by IP Address website for the
 [larryforalaska.duckdns.org](http://larryforalaska.duckdns.org/)
 Dynamic Domain Name Service subdomains possibly being served by the instance.
 
-The LAMurakami/aws repo contains content in the html folder and an apache2 configuration for a named virtual host for localhost and a number of aliases.
+The aws repo contains content in the html folder and an apache2 configuration for a named virtual host for localhost and a number of aliases.
 
 It also includes the CloudInit files to launch a new LAM AWS instance.  A Linux Apache MariaDB (LAM) Amazon Web Services (AWS) instance includes the Perl, Python and PHP application programming languages making it a LAMP model web service software stack instance.  A LAM AWS instance also has additional prerequisites for MediaWiki and the secure site web applications in a separate private lam repo.
 
