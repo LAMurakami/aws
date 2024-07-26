@@ -32,7 +32,7 @@ The Dynamic Domain Name Service subdomains used with DNS CNAME records
 to serve my domain names are also included in the apache2 ServerAlias.
 
 These values are used along with the instance-type on the main page for the
-virtual host in my version of the this http site is working main page.  The values for the main page and configuration file are applied during the CloudInit process by [cloud-init.pl](https://github.com/LAMurakami/aws/blob/master/cloud-init.pl) and [ec2-user-data.bash](https://github.com/LAMurakami/aws/blob/master/ec2-user-data.bash)
+virtual host in my version of the this http site is working main page.  The values for the main page and configuration file are applied during the CloudInit process by [cloud-init.pl](https://github.com/LAMurakami/aws/blob/master/cloud-init.pl) and [ec2-user-data.pl](https://github.com/LAMurakami/aws/blob/master/ec2-user-data.pl)
 
 A public-ipv6 value is also used to update the VirtualHost configuration for all the additional-sites possibly being served by the instance.
 Additional sites served by the instance possibly include:
