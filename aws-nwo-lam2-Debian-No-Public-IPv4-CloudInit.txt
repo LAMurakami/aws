@@ -159,6 +159,7 @@ runcmd:
  - sh -c "cd /var/www/aws;git remote add github git@github.com:LAMurakami/aws"
  - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
  - sh -c "cd /var/www/aws;git checkout -b $keyName"
+ - sh -c "cd /var/www/aws;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - echo
  - echo 'AWS LAM Installing extras compiled for Debian'
  - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash debian
@@ -257,6 +258,7 @@ runcmd:
  - sh -c "cd /var/www/lam;git stash"
  - sh -c "cd /var/www/lam;git checkout lam2-debian"
  - sh -c "cd /var/www/lam;git checkout -b $keyName"
+ - sh -c "cd /var/www/lam;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - rm /etc/apache2/mods-available/info.conf
  - rm /etc/apache2/mods-available/status.conf
  - /var/www/lam/Implement_lam_conf.bash
@@ -301,6 +303,7 @@ runcmd:
  - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
  - sh -c "cd /var/www/blinkenshell/public_html;git stash"
  - sh -c "cd /var/www/blinkenshell/public_html;git checkout $keyName"
+ - sh -c "cd /var/www/blinkenshell/public_html;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf /etc/apache2/sites-available/051_blinkenshell.conf
  - a2ensite 051_blinkenshell
  - echo

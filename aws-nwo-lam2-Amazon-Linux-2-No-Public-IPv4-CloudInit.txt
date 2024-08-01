@@ -135,6 +135,7 @@ runcmd:
  - sh -c "cd /var/www/aws;git remote add github git@github.com:LAMurakami/aws"
  - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
  - sh -c "cd /var/www/aws;git checkout -b $keyName"
+ - sh -c "cd /var/www/aws;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - echo 'AWS LAM Installing extras compiled for Amazon Linux 2'
  - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash AL2
  - echo
@@ -213,6 +214,7 @@ runcmd:
  - sh -c "cd /var/www/lam;git stash"
  - sh -c "cd /var/www/lam;git checkout lam2"
  - sh -c "cd /var/www/lam;git checkout -b $keyName"
+ - sh -c "cd /var/www/lam;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - echo
  - echo 'AWS LAM Create lam murakami staff credentials.'
  - /var/www/lam/Create-lam-murakami-staff.bash AL2
@@ -272,6 +274,7 @@ runcmd:
  - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
  - sh -c "cd /var/www/blinkenshell/public_html;git stash"
  - sh -c "cd /var/www/blinkenshell/public_html;git checkout $keyName"
+ - sh -c "cd /var/www/blinkenshell/public_html;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf /etc/httpd/conf.d/zzz_051_blinkenshell.conf
  - echo
  - echo 'AWS LAM Adding alaskademocrat www Content'
