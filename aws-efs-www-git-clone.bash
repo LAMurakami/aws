@@ -28,4 +28,6 @@ fi
 git clone $origin1$repo $target$repo
 
 cd $target$repo
+git remote set-url origin git@ak20:$repo
 git checkout -b $keyName
+git tag -a -m "AWS LAM Initialization for $keyName" b0-$keyName
