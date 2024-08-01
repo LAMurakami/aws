@@ -23,4 +23,4 @@ git remote set-url origin git@gitlab.com:aws-lam/${REPO}
 git remote add github git@github.com:LAMurakami/${REPO}
 git remote add ak20 git@ak20:${REPO}
 git checkout -b $keyName
-git tag b0-$keyName
+git tag -a -m "AWS LAM Initialization for $keyName" b0-$keyName
