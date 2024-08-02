@@ -100,8 +100,10 @@ runcmd:
  - echo 'AWS LAM Install aws.lam1.us web site'
  - git clone https://github.com/LAMurakami/aws /var/www/aws
  - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
+ - sh -c "cd /var/www/aws;git remote add gitlab git@gitlab.com:aws-lam/aws"
  - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
  - sh -c "cd /var/www/aws;git checkout -b $keyName"
+ - sh -c "cd /var/www/aws;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - echo
  - echo 'AWS LAM Report AWS EC2 metadata for this instance'
  - /var/www/aws/ec2-user-data.pl
@@ -123,7 +125,7 @@ runcmd:
  - cp /var/www/aws/Amazon-Linux-2-httpd.conf /etc/httpd/conf/httpd.conf
  - echo
  - echo 'AWS LAM Install no-ssl web site'
- - /var/www/aws/aws-lam-www-git-clone.bash no-ssl $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash no-ssl $keyName
  - ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/httpd/conf.d/zzz_999-no-ssl.conf
  - echo
  - echo 'AWS LAM Install LAM perl modules'
@@ -134,7 +136,7 @@ runcmd:
  - mkdir /var/www/Multicount
  - echo
  - echo 'AWS LAM Installing z.lam1.us web site'
- - /var/www/aws/aws-lam-www-git-clone.bash z $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash z $keyName
  - ln -s /var/www/z/z_apache2.conf /etc/httpd/conf.d/zzz_050_z.conf
  - rm /etc/httpd/conf.d/welcome.conf
  - echo
@@ -144,23 +146,23 @@ runcmd:
  - echo 'AWS LAM ***** Additional sites *****'
  - echo
  - echo 'AWS LAM Installing sites.lam1.us web site'
- - /var/www/aws/aws-lam-www-git-clone.bash sites $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash sites $keyName
  - ln -s /var/www/sites/sites_apache2.conf /etc/httpd/conf.d/zzz_030_sites.conf
  - echo
  - echo 'AWS LAM Installing arsc.lam1.us web site'
- - /var/www/aws/aws-lam-www-git-clone.bash arsc $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash arsc $keyName
  - ln -s /var/www/arsc/arsc_apache2.conf /etc/httpd/conf.d/zzz_060_arsc.conf
  - echo
  - echo 'AWS LAM Installing cabo.lam1.us web site'
- - /var/www/aws/aws-lam-www-git-clone.bash cabo $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash cabo $keyName
  - ln -s /var/www/cabo/cabo_apache2.conf /etc/httpd/conf.d/zzz_040_cabo.conf
  - echo
  - echo 'AWS LAM Adding olnes www Content'
- - /var/www/aws/aws-lam-www-git-clone.bash olnes $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash olnes $keyName
  - ln -s /var/www/olnes/olnes_apache2.conf /etc/httpd/conf.d/zzz_052_olnes.conf
  - echo
  - echo 'AWS LAM Adding larryforalaska www Content'
- - /var/www/aws/aws-lam-www-git-clone.bash larryforalaska $keyName
+ - /var/www/aws/aws-lam-gitlab-clone.bash larryforalaska $keyName
  - ln -s /var/www/larryforalaska/larryforalaska_apache2.conf /etc/httpd/conf.d/zzz_070_larryforalaska.conf
  - echo
  - echo 'AWS LAM Install mod_perl and man2html'
@@ -212,6 +214,7 @@ runcmd:
  - sh -c "cd /var/www/lam;git stash"
  - sh -c "cd /var/www/lam;git checkout lam2"
  - sh -c "cd /var/www/lam;git checkout -b $keyName"
+ - sh -c "cd /var/www/lam;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - echo
  - echo 'AWS LAM Create lam murakami staff credentials.'
  - /var/www/lam/Create-lam-murakami-staff.bash AL2
@@ -274,6 +277,7 @@ runcmd:
  - sh -c "cd /var/www/blinkenshell/public_html;git stash"
  - sh -c "cd /var/www/blinkenshell/public_html;git checkout master"
  - sh -c "cd /var/www/blinkenshell/public_html;git checkout -b $keyName"
+ - sh -c "cd /var/www/blinkenshell/public_html;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf /etc/httpd/conf.d/zzz_051_blinkenshell.conf
  - echo
  - echo 'AWS LAM Adding alaskademocrat www Content'
