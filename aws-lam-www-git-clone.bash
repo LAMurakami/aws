@@ -24,3 +24,4 @@ cd /var/www/$repo
 git remote set-url origin $origin2$repo
 [ -z $3 ] &&  git remote add ak20 git@ak20:$repo
 git checkout -b $keyName
+git tag -a -m "AWS LAM Initialization for $keyName" b0-$keyName
