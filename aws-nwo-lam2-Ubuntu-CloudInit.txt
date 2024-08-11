@@ -6,7 +6,7 @@ output: {all: '| tee -a /var/log/cloud-init-output.log'}
 # /var/www/aws/aws-nwo-lam2-Ubuntu-CloudInit.txt - Initialize lam2.duckdns.org
 #
 # This version uses the LAM EFS private repo copies and then sets the URL
-# to git@ak20:${REPO}.git or git@github.com:LAMurakami/${REPO}.git as
+# to git@aws:${REPO}.git or git@github.com:LAMurakami/${REPO}.git as
 # appropriate.
 # See aws-lam2-Ubuntu-CloudInit.txt for the Public repos only version.
 #
@@ -130,7 +130,7 @@ runcmd:
  - git clone https://github.com/LAMurakami/aws /var/www/aws
  - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
  - sh -c "cd /var/www/aws;git remote add gitlab git@gitlab.com:aws-lam/aws"
- - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
+ - sh -c "cd /var/www/aws;git remote add aws git@aws:aws"
  - sh -c "cd /var/www/aws;git checkout -b $keyName"
  - sh -c "cd /var/www/aws;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/000-aws.conf

@@ -127,7 +127,7 @@ runcmd:
  - git clone https://gitlab.com/aws-lam/aws /var/www/aws
  - sh -c "cd /var/www/aws;git remote set-url origin git@gitlab.com:aws-lam/aws"
  - sh -c "cd /var/www/aws;git remote add github git@github.com:LAMurakami/aws"
- - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
+ - sh -c "cd /var/www/aws;git remote add aws git@aws:aws"
  - sh -c "cd /var/www/aws;git checkout -b $keyName"
  - sh -c "cd /var/www/aws;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - echo 'AWS LAM Installing extras compiled for Ubuntu Server 22.04'

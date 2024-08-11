@@ -10,7 +10,7 @@ output: {all: '| tee -a /var/log/cloud-init-output.log'}
 #
 # This version clones from https://github.com/LAMurakami or the LAM EFS private
 # repo copies and then sets the URL to git@github.com:LAMurakami/${REPO}.git
-# or git@ak20:${REPO}.git as appropriate.
+# or git@aws:${REPO}.git as appropriate.
 
 bootcmd:
  - echo
@@ -134,7 +134,7 @@ runcmd:
  - git clone https://github.com/LAMurakami/aws /var/www/aws
  - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
  - sh -c "cd /var/www/aws;git remote add gitlab git@gitlab.com:aws-lam/aws"
- - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
+ - sh -c "cd /var/www/aws;git remote add aws git@aws:aws"
  - sh -c "cd /var/www/aws;git checkout -b $keyName"
  - sh -c "cd /var/www/aws;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - echo

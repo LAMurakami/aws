@@ -20,15 +20,15 @@ else                          # If private repos will be used REGION must be set
   else                 # If not in the us-west-2 Oregon region or region not set
     origin1='git@aws:'                 # use ssh to aws connection setup earlier
   fi
-  origin2='git@ak20:'
+  origin2='git@aws:'
 fi
 
 git clone $origin1$repo /var/www/$repo
 cd /var/www/$repo
 git remote set-url origin $origin2$repo
-if [ -z $3 ] ; then     # If public repos Set gitlab and ak20 additional remotes
+if [ -z $3 ] ; then     # If public repos Set gitlab and aws additional remotes
   git remote add gitlab git@gitlab.com:aws-lam/$repo
-  git remote add ak20 git@ak20:$repo
+  git remote add aws git@aws:$repo
 fi
 git checkout -b $keyName
 git tag -a -m "AWS LAM Initialization for $keyName" b0-$keyName

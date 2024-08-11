@@ -157,7 +157,7 @@ runcmd:
  - git clone https://gitlab.com/aws-lam/aws /var/www/aws
  - sh -c "cd /var/www/aws;git remote set-url origin git@gitlab.com:aws-lam/aws"
  - sh -c "cd /var/www/aws;git remote add github git@github.com:LAMurakami/aws"
- - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
+ - sh -c "cd /var/www/aws;git remote add aws git@aws:aws"
  - sh -c "cd /var/www/aws;git checkout -b $keyName"
  - sh -c "cd /var/www/aws;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - echo
@@ -303,7 +303,6 @@ runcmd:
  - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
  - sh -c "cd /var/www/blinkenshell/public_html;git stash"
  - sh -c "cd /var/www/blinkenshell/public_html;git checkout $keyName"
- - sh -c "cd /var/www/blinkenshell/public_html;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf /etc/apache2/sites-available/051_blinkenshell.conf
  - a2ensite 051_blinkenshell
  - echo
@@ -316,7 +315,7 @@ runcmd:
  - echo
  - echo 'AWS LAM update aws site with current public local name ipv4 ipv6'
  - /var/www/aws/cloud-init.pl
- - /var/www/aws/AWS-LAM-git-commit.bash $keyName aws
+ - /var/www/aws/AWS-LAM-git-commit.bash $keyName aws no-ssl
  - echo
  - echo 'AWS LAM Alaska Set lam as owner of /var/www'
  - chown -R lam:staff /var/www

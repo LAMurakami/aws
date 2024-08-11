@@ -72,7 +72,7 @@ runcmd:
  - echo 'AWS LAM Install aws.lam1.us web site'
  - git clone https://github.com/LAMurakami/aws /var/www/aws
  - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
- - sh -c "cd /var/www/aws;git remote add ak20 git@ak20:aws"
+ - sh -c "cd /var/www/aws;git remote add aws git@aws:aws"
  - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
  - cp /var/www/aws/Amazon-Linux-2-port-443-sshd_config /etc/ssh/sshd_config
@@ -92,7 +92,7 @@ runcmd:
  - echo 'AWS LAM Install no-ssl web site'
  - git clone https://github.com/LAMurakami/no-ssl /var/www/no-ssl
  - sh -c "cd /var/www/no-ssl;git remote set-url origin git@github.com:LAMurakami/no-ssl"
- - sh -c "cd /var/www/no-ssl;git remote add ak20 git@ak20:no-ssl"
+ - sh -c "cd /var/www/no-ssl;git remote add aws git@aws:no-ssl"
  - echo
  - echo 'AWS LAM create Multicount directory'
  - mkdir /var/www/Multicount
@@ -122,7 +122,7 @@ runcmd:
  - echo 'AWS LAM Installing arsc.lam1.us web site'
  - git clone https://github.com/LAMurakami/arsc /var/www/arsc
  - sh -c "cd /var/www/arsc;git remote set-url origin git@github.com:LAMurakami/arsc"
- - sh -c "cd /var/www/arsc;git remote add ak20 git@ak20:arsc"
+ - sh -c "cd /var/www/arsc;git remote add aws git@aws:arsc"
  - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
  - echo
