@@ -1,0 +1,7 @@
+Host localhost
+IdentityFile /root/.ssh/git_ak20_id_rsa
+
+Host aws aws.lam1.us
+AddressFamily inet6
+IdentityFile /root/.ssh/git_ak20_id_rsa
+Hostname aws.lam1.us
