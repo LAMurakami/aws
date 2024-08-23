@@ -46,16 +46,23 @@ runcmd:
  - free -h
  - cat /proc/swaps
  - echo
+ - echo 'AWS LAM Install aws.lam1.us web site'
+ - git clone https://gitlab.com/aws-lam/aws /var/www/aws
+ - sh -c "cd /var/www/aws;git remote set-url origin git@gitlab.com:aws-lam/aws"
+ - sh -c "cd /var/www/aws;git remote rename origin gitlab"
+ - sh -c "cd /var/www/aws;git remote add github git@github.com:LAMurakami/aws"
+ - sh -c "cd /var/www/aws;git remote add aws git@aws:aws"
+ - sh -c "cd /var/www/aws;git checkout -b $keyName"
+ - sh -c "cd /var/www/aws;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
+ - echo
+ - echo 'AWS LAM setup root to aws ssh config'
+ - cp /var/www/aws/root/ssh/config /root/.ssh/config
+ - cp /var/www/aws/etc/ssh/ssh_known_hosts /etc/ssh/ssh_known_hosts
+ - echo
  - echo 'AWS LAM Get EFS for REGION'
  - export REGION=$(cloud-init query region)
  - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
  - echo "REGION=${REGION} EFS=${EFS}"
- - echo
- - echo 'AWS LAM setup root to aws ssh config'
- - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-config
- - mv root-ssh-config /root/.ssh/config
- - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-known_hosts
- - mv root-ssh-known_hosts /etc/ssh/ssh_known_hosts
  - echo
  - echo 'AWS LAM Add localhost key to known_hosts'
  - ssh-keyscan -t ed25519 localhost >> /etc/ssh/ssh_known_hosts
@@ -129,13 +136,6 @@ runcmd:
  - echo 'AWS LAM Set aws s3 IPv6 endpoint-url'
  - IPv6='--endpoint-url https://s3.dualstack.us-west-2.amazonaws.com'
  - echo
- - echo 'AWS LAM Install aws.lam1.us web site'
- - git clone https://gitlab.com/aws-lam/aws /var/www/aws
- - sh -c "cd /var/www/aws;git remote set-url origin git@gitlab.com:aws-lam/aws"
- - sh -c "cd /var/www/aws;git remote add github git@github.com:LAMurakami/aws"
- - sh -c "cd /var/www/aws;git remote add aws git@aws:aws"
- - sh -c "cd /var/www/aws;git checkout -b $keyName"
- - sh -c "cd /var/www/aws;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - echo 'AWS LAM Installing extras compiled for Amazon Linux 2'
  - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash AL2
  - echo
