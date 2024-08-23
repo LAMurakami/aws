@@ -66,16 +66,24 @@ runcmd:
  - free -h
  - cat /proc/swaps
  - echo
- - echo 'AWS LAM Get EFS for REGION'
- - export REGION=$(cloud-init query region)
- - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
- - echo "REGION=${REGION} EFS=${EFS}"
+ - echo 'AWS LAM Install aws.lam1.us web site'
+ - git clone https://gitlab.com/aws-lam/aws /var/www/aws
+ - sh -c "cd /var/www/aws;git remote set-url origin git@gitlab.com:aws-lam/aws"
+ - sh -c "cd /var/www/aws;git remote rename origin gitlab"
+ - sh -c "cd /var/www/aws;git remote add github git@github.com:LAMurakami/aws"
+ - sh -c "cd /var/www/aws;git remote add aws git@aws:aws"
+ - sh -c "cd /var/www/aws;git checkout -b $keyName"
+ - sh -c "cd /var/www/aws;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - echo
  - echo 'AWS LAM setup root to aws ssh config'
- - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-config
- - mv root-ssh-config /root/.ssh/config
- - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-known_hosts
- - mv root-ssh-known_hosts /etc/ssh/ssh_known_hosts
+ - cp /var/www/aws/root/ssh/config /root/.ssh/config
+ - cp /var/www/aws/etc/ssh/ssh_known_hosts /etc/ssh/ssh_known_hosts
+ - echo
+ - echo 'AWS LAM Get EFS for REGION'
+ - export REGION=$(cloud-init query region)
+ - echo
+ - echo 'AWS LAM Adding nfs4 mount to AWS LAM VPC Elastic File System'
+ - /var/www/aws/aws-efs-mount.bash
  - echo
  - echo 'AWS LAM Add localhost key to known_hosts'
  - ssh-keyscan -t ed25519 localhost >> /etc/ssh/ssh_known_hosts
@@ -115,13 +123,6 @@ runcmd:
  - echo
  - echo 'AWS LAM ***** Use private LAM Alaska resources *****'
  - echo
- - echo 'AWS LAM Adding nfs4 mount to AWS NW-O VPC Elastic File System'
- - mkdir /mnt/efs
- - nfsOpt="_netdev,noresvport,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
- - echo "${EFS}:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
- - mount -a -t nfs4
- - df -Th -x supermount --exclude-type=tmpfs --exclude-type=devtmpfs
- - echo
  - echo 'AWS LAM Installing Amazon Linux 2 ec2-user bash resources'
  - tar -xzf /mnt/efs/Amazon-Linux-2023/ec2-user.tgz --directory /home/ec2-user
  - echo
@@ -133,14 +134,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Set aws s3 IPv6 endpoint-url'
  - IPv6='--endpoint-url https://s3.dualstack.us-west-2.amazonaws.com'
- - echo
- - echo 'AWS LAM Install aws.lam1.us web site'
- - git clone https://gitlab.com/aws-lam/aws /var/www/aws
- - sh -c "cd /var/www/aws;git remote set-url origin git@gitlab.com:aws-lam/aws"
- - sh -c "cd /var/www/aws;git remote add github git@github.com:LAMurakami/aws"
- - sh -c "cd /var/www/aws;git remote add aws git@aws:aws"
- - sh -c "cd /var/www/aws;git checkout -b $keyName"
- - sh -c "cd /var/www/aws;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - echo
  - echo 'AWS LAM Installing extras compiled for Amazon Linux 2023'
  - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash AL2023
