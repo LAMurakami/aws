@@ -297,7 +297,7 @@ runcmd:
  - a2ensite 051_blinkenshell
  - echo
  - echo 'AWS LAM Adding alaskademocrat www Content'
- - /var/www/aws/aws-lam-www-git-clone.bash alaskademocrat $keyName
+ - /var/www/aws/aws-lam-www-git-clone.bash alaskademocrat $keyName private
  - ln -s /var/www/alaskademocrat/alaskademocrat_apache2.conf /etc/apache2/sites-available/069_alaskademocrat.conf
  - a2ensite 069_alaskademocrat
  - echo
