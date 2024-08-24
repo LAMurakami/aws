@@ -146,5 +146,6 @@ nfsOpt="_netdev,noresvport,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=60
 
 mkdir /mnt/efs
 echo "${EFS}:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
+systemctl daemon-reload
 mount -a -t nfs4
 df -Th -x supermount --exclude-type=tmpfs --exclude-type=devtmpfs
