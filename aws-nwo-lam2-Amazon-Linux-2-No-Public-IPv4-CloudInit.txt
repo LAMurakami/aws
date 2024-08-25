@@ -59,10 +59,9 @@ runcmd:
  - cp /var/www/aws/root/ssh/config /root/.ssh/config
  - cp /var/www/aws/etc/ssh/ssh_known_hosts /etc/ssh/ssh_known_hosts
  - echo
- - echo 'AWS LAM Get EFS for REGION'
+ - echo 'AWS LAM Adding nfs4 mount to AWS LAM VPC Elastic File System'
  - export REGION=$(cloud-init query region)
- - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
- - echo "REGION=${REGION} EFS=${EFS}"
+ - /var/www/aws/aws-efs-mount.bash
  - echo
  - echo 'AWS LAM Add localhost key to known_hosts'
  - ssh-keyscan -t ed25519 localhost >> /etc/ssh/ssh_known_hosts
@@ -115,13 +114,6 @@ runcmd:
  - yum install -y mod_perl man2html
  - echo
  - echo 'AWS LAM ***** Use private LAM Alaska resources *****'
- - echo
- - echo 'AWS LAM Adding nfs4 mount to AWS NW-O VPC Elastic File System'
- - mkdir /mnt/efs
- - nfsOpt="_netdev,noresvport,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
- - echo "${EFS}:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
- - mount -a -t nfs4
- - df -Th -x supermount --exclude-type=tmpfs --exclude-type=devtmpfs
  - echo
  - echo 'AWS LAM Installing Amazon Linux 2 ec2-user bash resources'
  - tar -xzf /mnt/efs/Amazon-Linux-2023/ec2-user.tgz --directory /home/ec2-user
@@ -273,8 +265,6 @@ runcmd:
  - mv /tmp/blinkenshell/.git /var/www/blinkenshell/public_html
  - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
  - sh -c "cd /var/www/blinkenshell/public_html;git stash"
- - sh -c "cd /var/www/blinkenshell/public_html;git checkout $keyName"
- - sh -c "cd /var/www/blinkenshell/public_html;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf /etc/httpd/conf.d/zzz_051_blinkenshell.conf
  - echo
  - echo 'AWS LAM Adding alaskademocrat www Content'
