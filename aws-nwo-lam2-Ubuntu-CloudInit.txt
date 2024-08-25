@@ -67,20 +67,6 @@ runcmd:
  - free -h
  - cat /proc/swaps
  - echo
- - echo 'AWS LAM Get EFS for REGION'
- - export REGION=$(cloud-init query region)
- - EFS=$(curl -s https://lamurakami.github.io/aws-efs/${REGION})
- - echo "REGION=${REGION} EFS=${EFS}"
- - echo
- - echo 'AWS LAM setup root to aws ssh config'
- - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-config
- - mv root-ssh-config /root/.ssh/config
- - wget --quiet https://lamurakami.github.io/aws-efs/root-ssh-known_hosts
- - mv root-ssh-known_hosts /etc/ssh/ssh_known_hosts
- - echo
- - echo 'AWS LAM Add localhost key to known_hosts'
- - ssh-keyscan -t ed25519 localhost >> /etc/ssh/ssh_known_hosts
- - echo
  - echo 'AWS LAM Create git user'
  - useradd -g staff -G staff -M -d /mnt/efs/git -u 4896 git
  - echo
@@ -98,17 +84,33 @@ runcmd:
  - git config --system branch.autosetuprebase always
  - git config --system init.defaultBranch master
  - echo
+ - echo 'AWS LAM Installing aws.lam1.us web site'
+ - git clone https://github.com/LAMurakami/aws /var/www/aws
+ - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
+ - sh -c "cd /var/www/aws;git remote rename origin github"
+ - sh -c "cd /var/www/aws;git remote add gitlab git@gitlab.com:aws-lam/aws"
+ - sh -c "cd /var/www/aws;git remote add aws git@aws:aws"
+ - sh -c "cd /var/www/aws;git checkout -b $keyName"
+ - sh -c "cd /var/www/aws;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
+ - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/000-aws.conf
+ - a2ensite 000-aws
+ - echo
+ - echo 'AWS LAM Adding nfs4 mount to AWS LAM VPC Elastic File System'
+ - export REGION=$(cloud-init query region)
+ - /var/www/aws/aws-efs-mount.bash
+ - echo
+ - echo 'AWS LAM setup root to aws ssh config'
+ - cp /var/www/aws/root/ssh/config /root/.ssh/config
+ - cp /var/www/aws/etc/ssh/ssh_known_hosts /etc/ssh/ssh_known_hosts
+ - echo
+ - echo 'AWS LAM Add localhost key to known_hosts'
+ - ssh-keyscan -t ed25519 localhost >> /etc/ssh/ssh_known_hosts
+ - echo
  - echo 'AWS LAM Set vim as default editor for system'
  - update-alternatives --set editor /usr/bin/vim.basic
  - echo
  - echo 'AWS LAM Install etckeeper to track configuration changes'
  - apt-get install etckeeper
- - echo
- - echo 'AWS LAM Adding nfs4 mount to AWS NW-O VPC Elastic File System'
- - mkdir /mnt/efs
- - nfsOpt="_netdev,noresvport,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
- - echo "${EFS}:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
- - mount -a -t nfs4
  - echo
  - echo 'AWS LAM Installing ubuntu user bash resources'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/ubuntu.tgz --directory /home/ubuntu
@@ -125,16 +127,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Create logs/ sybmolic link for Apache2 configuration use'
  - ln -s /var/log/apache2 /etc/apache2/logs
- - echo
- - echo 'AWS LAM Installing aws.lam1.us web site'
- - git clone https://github.com/LAMurakami/aws /var/www/aws
- - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
- - sh -c "cd /var/www/aws;git remote add gitlab git@gitlab.com:aws-lam/aws"
- - sh -c "cd /var/www/aws;git remote add aws git@aws:aws"
- - sh -c "cd /var/www/aws;git checkout -b $keyName"
- - sh -c "cd /var/www/aws;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
- - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/000-aws.conf
- - a2ensite 000-aws
  - echo
  - echo 'AWS LAM Installing extras compiled for Ubuntu Server 22.04'
  - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash ubuntu
@@ -230,9 +222,6 @@ runcmd:
  - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
  - sh -c "cd /var/www/blinkenshell/public_html;git remote set-url origin git@github.com:LAMurakami/blinkenshell"
  - sh -c "cd /var/www/blinkenshell/public_html;git stash"
- - sh -c "cd /var/www/blinkenshell/public_html;git checkout master"
- - sh -c "cd /var/www/blinkenshell/public_html;git checkout -b $keyName"
- - sh -c "cd /var/www/blinkenshell/public_html;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf /etc/apache2/sites-available/051_blinkenshell.conf
  - a2ensite 051_blinkenshell
  - echo
