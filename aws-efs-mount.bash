@@ -57,6 +57,10 @@ case ${REGION} in
     EFS=fs-0994e5fd7ba4fc589.efs.ap-southeast-4.amazonaws.com
     ;;
 
+  ap-southeast-5)
+    EFS=fs-097997ec94e6b5581.efs.ap-southeast-5.amazonaws.com
+    ;;
+
   ca-central-1)
     EFS=fs-097d1db7b352a4500.efs.ca-central-1.amazonaws.com
     ;;
