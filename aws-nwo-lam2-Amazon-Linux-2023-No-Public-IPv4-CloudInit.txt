@@ -158,6 +158,7 @@ runcmd:
  - echo
  - echo 'AWS LAM enable aws site'
  - ln -s /var/www/aws/aws_apache2.conf /etc/httpd/conf.d/zzz_000-aws.conf
+ - ln -s /var/www/aws/aws_ssl_apache2.conf /etc/httpd/conf.d/zzz_001_aws_ssl.conf
  - echo
  - echo 'AWS LAM Update main apache2 configuration'
  - cp /var/www/aws/Amazon-Linux-2-httpd.conf /etc/httpd/conf/httpd.conf
@@ -226,7 +227,8 @@ runcmd:
  - echo
  - echo 'AWS LAM Update apache2 ssl configuration'
  - rm /etc/httpd/conf.d/ssl.conf
- - ln -s /var/www/lam/lam_apache2.conf /etc/httpd/conf.d/ssl.conf
+ - ln -s /var/www/lam/ssl.conf /etc/httpd/conf.d/ssl.conf
+ - ln -s /var/www/lam/lam_apache2.conf /etc/httpd/conf.d/zzz_990_lam-ssl.conf
  - echo
  - echo 'AWS LAM Update gitweb configuration'
  - sed -i '1 s|Alias /git /var/www/git|Alias /gitweb /var/www/git|' /etc/httpd/conf.d/gitweb.conf
