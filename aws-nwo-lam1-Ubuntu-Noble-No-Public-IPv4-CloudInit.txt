@@ -131,6 +131,13 @@ runcmd:
  - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/000-aws.conf
  - a2ensite 000-aws
  - echo
+ - echo 'AWS LAM enable name-based virtual hosting for ssl'
+ - cat /var/www/aws/ssl-NameVirtualHost.conf >> /etc/apache2/mods-available/ssl.conf
+ - echo
+ - echo 'AWS LAM enable aws site for ssl'
+ - ln -s /var/www/aws/aws_ssl_apache2.conf /etc/apache2/sites-available/001_aws_ssl.conf
+ - a2ensite 001_aws_ssl
+ - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
  - cp /var/www/aws/etc/ssh/sshd_config /etc/ssh
  - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
@@ -180,6 +187,8 @@ runcmd:
  - /var/www/aws/aws-lam-gitlab-clone.bash sites $keyName
  - ln -s /var/www/sites/sites_apache2.conf /etc/apache2/sites-available/030_sites.conf
  - a2ensite 030_sites
+ - ln -s /var/www/sites/sites_ssl-apache2.conf /etc/apache2/sites-available/031_sites_ssl.conf
+ - a2ensite 031_sites_ssl
  - echo
  - echo 'AWS LAM Installing cabo.lam1.us web site'
  - /var/www/aws/aws-lam-gitlab-clone.bash cabo $keyName
