@@ -51,27 +51,31 @@ a2ensite 001_aws_ssl_duckdns
 echo
 echo 'AWS LAM enable additional sites'
 
-# In file: /etc/apache2/sites-enabled/030_sites.conf
-
 ln -s /var/www/sites/sites_apache2.conf /etc/apache2/sites-available/030_sites.conf
 a2ensite 030_sites
 
-# In file: /etc/apache2/sites-enabled/031_sites_ssl.conf
-
-ln -s /var/www/sites/sites_ssl_lam1-apache2.conf /etc/apache2/sites-available/031_sites_ssl_lam1.conf
+ln -s /var/www/sites/sites_ssl_lam1-apache2.conf \
+/etc/apache2/sites-available/031_sites_ssl_lam1.conf
 a2ensite 031_sites_ssl_lam1
-
-# In file: /etc/apache2/sites-enabled/032_sites_ssl.conf
 
 ln -s /var/www/sites/sites_ssl_lamurakami-apache2.conf \
 /etc/apache2/sites-available/032_sites_ssl_lamurakami.conf
 a2ensite 032_sites_ssl_lamurakami
 
-# In file: /etc/apache2/sites-enabled/040_cabo.conf
-# In file: /etc/apache2/sites-enabled/041_cabo_ssl.conf
-# In file: /etc/apache2/sites-enabled/050_z.conf
+ln -s /var/www/cabo/sites-apache2.conf /etc/apache2/sites-available/040_cabo.conf
+a2ensite 040_cabo
 
+sudo ln -s /var/www/cabo/cabo_ssl_lam1_apache2.conf \
+/etc/apache2/sites-available/041_cabo_ssl_lam1.conf
+sudo a2ensite 041_cabo_ssl_lam1
+
+sudo ln -s /var/www/cabo/cabo_ssl_lamurakami_apache2.conf \
+/etc/apache2/sites-available/042_cabo_ssl_lamurakami.conf
+sudo a2ensite 042_cabo_ssl_lamurakami
+
+# In file: /etc/apache2/sites-enabled/050_z.conf
 # In file: /etc/apache2/sites-enabled/051_z_ssl.conf
+
 # In file: /etc/apache2/sites-enabled/060_arsc.conf
 # In file: /etc/apache2/sites-enabled/061_arsc_ssl.conf
 
