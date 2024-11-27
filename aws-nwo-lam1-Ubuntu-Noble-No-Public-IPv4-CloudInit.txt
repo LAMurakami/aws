@@ -167,8 +167,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Installing arsc.lam1.us web site'
  - /var/www/aws/aws-lam-gitlab-clone.bash arsc $keyName
- - ln -s /var/www/arsc/arsc_apache2.conf /etc/apache2/sites-available/060_arsc.conf
- - a2ensite 060_arsc
  - echo
  - echo 'AWS LAM Installing sites.lam1.us web site'
  - /var/www/aws/aws-lam-gitlab-clone.bash sites $keyName

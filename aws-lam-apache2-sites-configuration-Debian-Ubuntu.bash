@@ -65,28 +65,35 @@ a2ensite 032_sites_ssl_lamurakami
 ln -s /var/www/cabo/sites-apache2.conf /etc/apache2/sites-available/040_cabo.conf
 a2ensite 040_cabo
 
-sudo ln -s /var/www/cabo/cabo_ssl_lam1_apache2.conf \
+ln -s /var/www/cabo/cabo_ssl_lam1_apache2.conf \
 /etc/apache2/sites-available/041_cabo_ssl_lam1.conf
-sudo a2ensite 041_cabo_ssl_lam1
+a2ensite 041_cabo_ssl_lam1
 
-sudo ln -s /var/www/cabo/cabo_ssl_lamurakami_apache2.conf \
+ln -s /var/www/cabo/cabo_ssl_lamurakami_apache2.conf \
 /etc/apache2/sites-available/042_cabo_ssl_lamurakami.conf
-sudo a2ensite 042_cabo_ssl_lamurakami
+a2ensite 042_cabo_ssl_lamurakami
 
-sudo ln -s /var/www/z/z_apache2.conf \
-/etc/apache2/sites-available/050_z.conf
-sudo a2ensite 050_z
+ln -s /var/www/z/z_apache2.conf /etc/apache2/sites-available/050_z.conf
+a2ensite 050_z
 
-sudo ln -s /var/www/z/z_ssl_lam1_apache2.conf \
+ln -s /var/www/z/z_ssl_lam1_apache2.conf \
 /etc/apache2/sites-available/051_z_ssl_lam1.conf
-sudo a2ensite 051_z_ssl_lam1
+a2ensite 051_z_ssl_lam1
 
-sudo ln -s /var/www/z/z_ssl_lamurakami_apache2.conf \
+ln -s /var/www/z/z_ssl_lamurakami_apache2.conf \
 /etc/apache2/sites-available/052_z_ssl_lamurakami.conf
-sudo a2ensite 052_z_ssl_lamurakami
+a2ensite 052_z_ssl_lamurakami
 
-# In file: /etc/apache2/sites-enabled/060_arsc.conf
-# In file: /etc/apache2/sites-enabled/061_arsc_ssl.conf
+ln -s /var/www/arsc/arsc_apache2.conf /etc/apache2/sites-available/060_arsc.conf
+a2ensite 060_arsc
+
+ln -s /var/www/arsc/arsc_ssl_lam1_apache2.conf \
+/etc/apache2/sites-available/061_arsc_ssl_lam1.conf
+a2ensite 061_arsc_ssl_lam1
+
+ln -s /var/www/arsc/arsc_ssl_lamurakami_apache2.conf \
+/etc/apache2/sites-available/062_arsc_ssl_lamurakami.conf
+a2ensite 062_arsc_ssl_lamurakami
 
 # In file: /etc/apache2/sites-enabled/070_larryforalaska.conf
 
