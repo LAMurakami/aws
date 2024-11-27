@@ -100,7 +100,18 @@ a2ensite 062_arsc_ssl_lamurakami
 # In file: /etc/apache2/sites-enabled/081_mike.conf
 
 # In file: /etc/apache2/sites-enabled/110_blinkenshell.conf
-# In file: /etc/apache2/sites-enabled/120_olnes.conf
+
+ln -s /var/www/olnes/olnes_apache2.conf /etc/apache2/sites-available/120_olnes.conf
+a2ensite 120_olnes
+
+ln -s /var/www/olnes/olnes_ssl_lam1_apache2.conf \
+/etc/apache2/sites-available/121_olnes_ssl_lam1.conf
+a2ensite 121_olnes_ssl_lam1
+
+ln -s /var/www/olnes/olnes_ssl_lamurakami_apache2.conf \
+/etc/apache2/sites-available/122_olnes_ssl_lamurakami.conf
+a2ensite 122_olnes_ssl_lamurakami
+
 # In file: /etc/apache2/sites-enabled/130_alaskademocrat.conf
 # In file: /etc/apache2/sites-enabled/140_alaskademocrat.conf
 # In file: /etc/apache2/sites-enabled/150_oldinteriordems_apache2.conf

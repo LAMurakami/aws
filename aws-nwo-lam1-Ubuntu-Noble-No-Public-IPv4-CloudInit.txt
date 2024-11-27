@@ -176,8 +176,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Adding olnes www Content'
  - /var/www/aws/aws-lam-gitlab-clone.bash olnes $keyName
- - ln -s /var/www/olnes/olnes_apache2.conf /etc/apache2/sites-available/052_olnes.conf
- - a2ensite 052_olnes
  - echo
  - echo 'AWS LAM Adding larryforalaska www Content'
  - /var/www/aws/aws-lam-gitlab-clone.bash larryforalaska $keyName
