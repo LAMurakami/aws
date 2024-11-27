@@ -73,8 +73,17 @@ sudo ln -s /var/www/cabo/cabo_ssl_lamurakami_apache2.conf \
 /etc/apache2/sites-available/042_cabo_ssl_lamurakami.conf
 sudo a2ensite 042_cabo_ssl_lamurakami
 
-# In file: /etc/apache2/sites-enabled/050_z.conf
-# In file: /etc/apache2/sites-enabled/051_z_ssl.conf
+sudo ln -s /var/www/z/z_apache2.conf \
+/etc/apache2/sites-available/050_z.conf
+sudo a2ensite 050_z
+
+sudo ln -s /var/www/z/z_ssl_lam1_apache2.conf \
+/etc/apache2/sites-available/051_z_ssl_lam1.conf
+sudo a2ensite 051_z_ssl_lam1
+
+sudo ln -s /var/www/z/z_ssl_lamurakami_apache2.conf \
+/etc/apache2/sites-available/052_z_ssl_lamurakami.conf
+sudo a2ensite 052_z_ssl_lamurakami
 
 # In file: /etc/apache2/sites-enabled/060_arsc.conf
 # In file: /etc/apache2/sites-enabled/061_arsc_ssl.conf

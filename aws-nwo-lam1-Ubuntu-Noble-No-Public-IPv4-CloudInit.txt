@@ -162,8 +162,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Installing z.lam1.us web site'
  - /var/www/aws/aws-lam-gitlab-clone.bash z $keyName
- - ln -s /var/www/z/z_apache2.conf /etc/apache2/sites-available/050_z.conf
- - a2ensite 050_z
  - echo
  - echo 'AWS LAM ***** Additional sites *****'
  - echo
