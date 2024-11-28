@@ -99,7 +99,25 @@ a2ensite 062_arsc_ssl_lamurakami
 
 # In file: /etc/apache2/sites-enabled/081_mike.conf
 
-# In file: /etc/apache2/sites-enabled/110_blinkenshell.conf
+ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf \
+/etc/apache2/sites-available/110_blinkenshell.conf
+a2ensite 051_blinkenshell
+
+ln -s /var/www/blinkenshell/public_html/blinkenshell_ssl_lam1_apache2.conf \
+/etc/apache2/sites-available/111-blinkenshell_ssl_lam1.conf
+a2ensite 111-blinkenshell_ssl_lam1
+
+ln -s /var/www/blinkenshell/public_html/blinkenshell_ssl_lamurakami_apache2.conf \
+/etc/apache2/sites-available/112-blinkenshell_ssl_lamurakami.conf
+a2ensite 112-blinkenshell_ssl_lamurakami
+
+ln -s /var/www/blinkenshell/public_html/blinkenshell_ssl_larrymurakami_apache2.conf \
+/etc/apache2/sites-available/113-blinkenshell_ssl_larrymurakami.conf
+a2ensite 113-blinkenshell_ssl_larrymurakami
+
+ln -s /var/www/blinkenshell/public_html/blinkenshell_ssl_larryforalaska_apache2.conf \
+/etc/apache2/sites-available/114-blinkenshell_ssl_larryforalaska.conf
+a2ensite 114-blinkenshell_ssl_larryforalaska
 
 ln -s /var/www/olnes/olnes_apache2.conf /etc/apache2/sites-available/120_olnes.conf
 a2ensite 120_olnes

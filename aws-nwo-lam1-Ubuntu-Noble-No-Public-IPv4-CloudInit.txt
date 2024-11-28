@@ -247,8 +247,6 @@ runcmd:
  - mv /tmp/blinkenshell/.git /var/www/blinkenshell/public_html
  - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
  - sh -c "cd /var/www/blinkenshell/public_html;git stash"
- - ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf /etc/apache2/sites-available/051_blinkenshell.conf
- - a2ensite 051_blinkenshell
  - echo
  - echo 'AWS LAM Adding alaskademocrat www Content'
  - /var/www/aws/aws-efs-www-git-clone.bash alaskademocrat $keyName
