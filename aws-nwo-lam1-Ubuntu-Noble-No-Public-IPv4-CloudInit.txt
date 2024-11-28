@@ -179,8 +179,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Adding larryforalaska www Content'
  - /var/www/aws/aws-lam-gitlab-clone.bash larryforalaska $keyName
- - ln -s /var/www/larryforalaska/larryforalaska_apache2.conf /etc/apache2/sites-available/070_larryforalaska.conf
- - a2ensite 070_larryforalaska
  - echo
  - echo 'AWS LAM ***** Secure site *****'
  - echo

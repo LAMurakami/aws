@@ -95,7 +95,25 @@ ln -s /var/www/arsc/arsc_ssl_lamurakami_apache2.conf \
 /etc/apache2/sites-available/062_arsc_ssl_lamurakami.conf
 a2ensite 062_arsc_ssl_lamurakami
 
-# In file: /etc/apache2/sites-enabled/070_larryforalaska.conf
+ln -s /var/www/larryforalaska/larryforalaska_apache2.conf \
+/etc/apache2/sites-available/070_larryforalaska.conf
+a2ensite 070_larryforalaska
+
+ln -s /var/www/larryforalaska/larryforalaska_ssl_lam1_apache2.conf \
+/etc/apache2/sites-available/071_larryforalaska_ssl_lam1.conf
+a2ensite 071_larryforalaska_ssl_lam1
+
+ln -s /var/www/larryforalaska/larryforalaska_ssl_lamurakami_apache2.conf \
+/etc/apache2/sites-available/072_larryforalaska_ssl_lamurakami.conf
+a2ensite 072_larryforalaska_ssl_lamurakami
+
+ln -s /var/www/larryforalaska/larryforalaska_ssl_larryforalaska_apache2.conf \
+/etc/apache2/sites-available/073_larryforalaska_ssl_larrymurakami.conf
+a2ensite 073_larryforalaska_ssl_larrymurakami
+
+ln -s /var/www/larryforalaska/larryforalaska_ssl_larryforalaska_apache2.conf \
+/etc/apache2/sites-available/074_larryforalaska_ssl_larryforalaska.conf
+a2ensite 074_larryforalaska_ssl_larryforalaska
 
 # In file: /etc/apache2/sites-enabled/081_mike.conf
 
@@ -131,7 +149,7 @@ ln -s /var/www/olnes/olnes_ssl_lamurakami_apache2.conf \
 a2ensite 122_olnes_ssl_lamurakami
 
 # In file: /etc/apache2/sites-enabled/130_alaskademocrat.conf
-# In file: /etc/apache2/sites-enabled/140_alaskademocrat.conf
+# In file: /etc/apache2/sites-enabled/140_interiordems.conf
 # In file: /etc/apache2/sites-enabled/150_oldinteriordems_apache2.conf
 
 # In file: /etc/apache2/sites-enabled/980_no-ssl.conf
