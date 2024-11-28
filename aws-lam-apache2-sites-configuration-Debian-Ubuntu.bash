@@ -107,7 +107,7 @@ ln -s /var/www/larryforalaska/larryforalaska_ssl_lamurakami_apache2.conf \
 /etc/apache2/sites-available/072_larryforalaska_ssl_lamurakami.conf
 a2ensite 072_larryforalaska_ssl_lamurakami
 
-ln -s /var/www/larryforalaska/larryforalaska_ssl_larryforalaska_apache2.conf \
+ln -s /var/www/larryforalaska/larryforalaska_ssl_larrymurakami_apache2.conf \
 /etc/apache2/sites-available/073_larryforalaska_ssl_larrymurakami.conf
 a2ensite 073_larryforalaska_ssl_larrymurakami
 
