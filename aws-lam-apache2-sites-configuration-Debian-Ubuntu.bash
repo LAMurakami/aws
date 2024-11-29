@@ -98,22 +98,6 @@ ln -s /var/www/arsc/arsc_ssl_lamurakami_apache2.conf \
 /etc/apache2/sites-available/062_arsc_ssl_lamurakami.conf
 a2ensite 062_arsc_ssl_lamurakami
 
-ln -s /var/www/larryforalaska/larryforalaska_apache2.conf \
-/etc/apache2/sites-available/070_larryforalaska.conf
-a2ensite 070_larryforalaska
-
-ln -s /var/www/larryforalaska/larryforalaska_ssl_lam1_apache2.conf \
-/etc/apache2/sites-available/071_larryforalaska_ssl_lam1.conf
-a2ensite 071_larryforalaska_ssl_lam1
-
-ln -s /var/www/larryforalaska/larryforalaska_ssl_lamurakami_apache2.conf \
-/etc/apache2/sites-available/072_larryforalaska_ssl_lamurakami.conf
-a2ensite 072_larryforalaska_ssl_lamurakami
-
-ln -s /var/www/larryforalaska/larryforalaska_ssl_larrymurakami_apache2.conf \
-/etc/apache2/sites-available/073_larryforalaska_ssl_larrymurakami.conf
-a2ensite 073_larryforalaska_ssl_larrymurakami
-
 ln -s /var/www/larryforalaska/larryforalaska_ssl_larryforalaska_apache2.conf \
 /etc/apache2/sites-available/074_larryforalaska_ssl_larryforalaska.conf
 a2ensite 074_larryforalaska_ssl_larryforalaska
@@ -164,6 +148,22 @@ a2ensite 140_interiordems
 # In file: /etc/apache2/sites-enabled/150_oldinteriordems_apache2.conf
 ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf /etc/apache2/sites-available/150_oldinteriordems.conf
 a2ensite 150_oldinteriordems
+
+ln -s /var/www/larryforalaska/larryforalaska_apache2.conf \
+/etc/apache2/sites-available/970_larryforalaska.conf
+a2ensite 970_larryforalaska
+
+ln -s /var/www/larryforalaska/larryforalaska_ssl_lam1_apache2.conf \
+/etc/apache2/sites-available/971_larryforalaska_ssl_lam1.conf
+a2ensite 971_larryforalaska_ssl_lam1
+
+ln -s /var/www/larryforalaska/larryforalaska_ssl_lamurakami_apache2.conf \
+/etc/apache2/sites-available/972_larryforalaska_ssl_lamurakami.conf
+a2ensite 972_larryforalaska_ssl_lamurakami
+
+ln -s /var/www/larryforalaska/larryforalaska_ssl_larrymurakami_apache2.conf \
+/etc/apache2/sites-available/973_larryforalaska_ssl_larrymurakami.conf
+a2ensite 973_larryforalaska_ssl_larrymurakami
 
 # In file: /etc/apache2/sites-enabled/980_no-ssl.conf
 # In file: /etc/apache2/sites-enabled/990_lam-ssl.conf
