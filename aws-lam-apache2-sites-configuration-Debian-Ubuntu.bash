@@ -57,6 +57,14 @@ ln -s /var/www/sites/sites_ssl_lamurakami-apache2.conf \
 /etc/apache2/sites-available/032_sites_ssl_lamurakami.conf
 a2ensite 032_sites_ssl_lamurakami
 
+ln -s /var/www/sites/sites_ssl_larrymurakami-apache2.conf \
+/etc/apache2/sites-available/033_sites_ssl_larrymurakami.conf
+a2ensite 033_sites_ssl_larrymurakami
+
+ln -s /var/www/sites/sites_ssl_larryforalaska-apache2.conf \
+/etc/apache2/sites-available/034_sites_ssl_larryforalaska.conf
+a2ensite 034_sites_ssl_larryforalaska
+
 ln -s /var/www/cabo/cabo_apache2.conf /etc/apache2/sites-available/040_cabo.conf
 a2ensite 040_cabo
 
