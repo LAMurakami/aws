@@ -28,10 +28,9 @@
 #
 # Link to sites-available then use a2ensite for sites-enabled links
 # --:----|----:----|----:----|----:----|----:----|----:----|----:----|----:----|
-# This interim version includes comments about the current lam3 configuration
+# This interim includes comments about the current lam3 configuration
 # where I initially tested the name-based virtual host resolution for ssl.
-# I am in the process of renaming the ssl sites to include part of the
-# certificate name used for this vertual host.
+# Some of the comments remain when the site has not been configured for ssl.
 
 echo
 echo 'AWS LAM enable aws site'
@@ -116,6 +115,8 @@ ln -s /var/www/larryforalaska/larryforalaska_ssl_larryforalaska_apache2.conf \
 a2ensite 074_larryforalaska_ssl_larryforalaska
 
 # In file: /etc/apache2/sites-enabled/081_mike.conf
+ln -s /var/www/mike/mike_apache2.conf /etc/apache2/sites-available/081_mike.conf
+a2ensite 081_mike
 
 ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf \
 /etc/apache2/sites-available/110_blinkenshell.conf
@@ -149,8 +150,16 @@ ln -s /var/www/olnes/olnes_ssl_lamurakami_apache2.conf \
 a2ensite 122_olnes_ssl_lamurakami
 
 # In file: /etc/apache2/sites-enabled/130_alaskademocrat.conf
+ln -s /var/www/alaskademocrat/alaskademocrat_apache2.conf /etc/apache2/sites-available/130_alaskademocrat.conf
+a2ensite 130_alaskademocrat
+
 # In file: /etc/apache2/sites-enabled/140_interiordems.conf
+ln -s /var/www/interiordems/interiordems_apache2.conf /etc/apache2/sites-available/140_interiordems.conf
+a2ensite 140_interiordems
+
 # In file: /etc/apache2/sites-enabled/150_oldinteriordems_apache2.conf
+ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf /etc/apache2/sites-available/150_oldinteriordems.conf
+a2ensite 150_oldinteriordems
 
 # In file: /etc/apache2/sites-enabled/980_no-ssl.conf
 # In file: /etc/apache2/sites-enabled/990_lam-ssl.conf
