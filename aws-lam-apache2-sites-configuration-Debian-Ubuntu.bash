@@ -38,10 +38,6 @@ ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/000-aws.conf
 a2ensite 000-aws
 
 echo
-echo 'AWS LAM enable name-based virtual hosting for ssl'
-cat /var/www/aws/ssl-NameVirtualHost.conf >> /etc/apache2/mods-available/ssl.conf
-
-echo
 echo 'AWS LAM enable aws site for ssl'
 ln -s /var/www/aws/aws_ssl_duckdns_apache2.conf \
 /etc/apache2/sites-available/001_aws_ssl_duckdns.conf
@@ -61,7 +57,7 @@ ln -s /var/www/sites/sites_ssl_lamurakami-apache2.conf \
 /etc/apache2/sites-available/032_sites_ssl_lamurakami.conf
 a2ensite 032_sites_ssl_lamurakami
 
-ln -s /var/www/cabo/sites-apache2.conf /etc/apache2/sites-available/040_cabo.conf
+ln -s /var/www/cabo/cabo_apache2.conf /etc/apache2/sites-available/040_cabo.conf
 a2ensite 040_cabo
 
 ln -s /var/www/cabo/cabo_ssl_lam1_apache2.conf \
@@ -120,7 +116,7 @@ a2ensite 081_mike
 
 ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf \
 /etc/apache2/sites-available/110_blinkenshell.conf
-a2ensite 051_blinkenshell
+a2ensite 110_blinkenshell
 
 ln -s /var/www/blinkenshell/public_html/blinkenshell_ssl_lam1_apache2.conf \
 /etc/apache2/sites-available/111-blinkenshell_ssl_lam1.conf
