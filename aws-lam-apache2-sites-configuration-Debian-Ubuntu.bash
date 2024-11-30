@@ -87,6 +87,14 @@ ln -s /var/www/z/z_ssl_lamurakami_apache2.conf \
 /etc/apache2/sites-available/052_z_ssl_lamurakami.conf
 a2ensite 052_z_ssl_lamurakami
 
+ln -s /var/www/z/z_ssl_larrymurakami_apache2.conf \
+/etc/apache2/sites-available/053_z_ssl_larrymurakami.conf
+a2ensite 053_z_ssl_larrymurakami
+
+ln -s /var/www/z/z_ssl_larryforalaska_apache2.conf \
+/etc/apache2/sites-available/054_z_ssl_larryforalaska.conf
+a2ensite 054_z_ssl_larryforalaska
+
 ln -s /var/www/arsc/arsc_apache2.conf /etc/apache2/sites-available/060_arsc.conf
 a2ensite 060_arsc
 
