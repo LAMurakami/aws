@@ -93,11 +93,25 @@ ln -s /var/www/arsc/arsc_ssl_lam1_apache2.conf \
 ln -s /var/www/arsc/arsc_ssl_lamurakami_apache2.conf \
 /etc/httpd/conf.d/zzz_062_arsc_ssl_lamurakami.conf
 
-ln -s /var/www/larryforalaska/larryforalaska_ssl_larryforalaska_apache2.conf \
-/etc/httpd/conf.d/zzz_074_larryforalaska_ssl_larryforalaska.conf
+ln -s /var/www/larryforalaska/larryforalaska_apache2.conf \
+/etc/httpd/conf.d/zzz_070_larryforalaska.conf
 
-# In file: /etc/apache2/sites-enabled/081_mike.conf
-ln -s /var/www/mike/mike_apache2.conf /etc/httpd/conf.d/zzz_081_mike.conf
+ln -s /var/www/larryforalaska/larryforalaska_ssl_lam1_apache2.conf \
+/etc/httpd/conf.d/zzz_071_larryforalaska_ssl_lam1.conf
+
+ln -s /var/www/larryforalaska/larryforalaska_ssl_lamurakami_apache2.conf \
+/etc/httpd/conf.d/zzz_072_larryforalaska_ssl_lamurakami.conf
+
+ln -s /var/www/mike/mike_apache2.conf /etc/httpd/conf.d/zzz_080_mike.conf
+
+ln -s /var/www/mike/mike_ssl_lam1_apache2.conf \
+/etc/httpd/conf.d/zzz_081_mike_ssl_lam1.conf
+
+ln -s /var/www/mike/mike_ssl_lamurakami_apache2.conf \
+/etc/httpd/conf.d/zzz_082_mike_ssl_lamurakami.conf
+
+ln -s /var/www/mike/mike_ssl_larrymurakami_apache2.conf \
+/etc/httpd/conf.d/zzz_083_mike_ssl_larrymurakami.conf
 
 ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf \
 /etc/httpd/conf.d/zzz_110_blinkenshell.conf
@@ -131,17 +145,13 @@ ln -s /var/www/interiordems/interiordems_apache2.conf /etc/httpd/conf.d/zzz_140_
 # In file: /etc/apache2/sites-enabled/150_oldinteriordems_apache2.conf
 ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf /etc/httpd/conf.d/zzz_150_oldinteriordems.conf
 
-ln -s /var/www/larryforalaska/larryforalaska_apache2.conf \
-/etc/httpd/conf.d/zzz_970_larryforalaska.conf
-
-ln -s /var/www/larryforalaska/larryforalaska_ssl_lam1_apache2.conf \
-/etc/httpd/conf.d/zzz_971_larryforalaska_ssl_lam1.conf
-
-ln -s /var/www/larryforalaska/larryforalaska_ssl_lamurakami_apache2.conf \
-/etc/httpd/conf.d/zzz_972_larryforalaska_ssl_lamurakami.conf
-
+# *.larrymurakami.com must be after non wildcard configurations
 ln -s /var/www/larryforalaska/larryforalaska_ssl_larrymurakami_apache2.conf \
 /etc/httpd/conf.d/zzz_973_larryforalaska_ssl_larrymurakami.conf
+
+# *.larryforalaska.com must be after non wildcard configurations
+ln -s /var/www/larryforalaska/larryforalaska_ssl_larryforalaska_apache2.conf \
+/etc/httpd/conf.d/zzz_974_larryforalaska_ssl_larryforalaska.conf
 
 # /etc/httpd/conf.d/zzz_980_no-ssl.conf
 # /etc/httpd/conf.d/zzz_990_lam-ssl.conf

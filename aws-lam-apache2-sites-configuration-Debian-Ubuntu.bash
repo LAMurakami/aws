@@ -106,13 +106,32 @@ ln -s /var/www/arsc/arsc_ssl_lamurakami_apache2.conf \
 /etc/apache2/sites-available/062_arsc_ssl_lamurakami.conf
 a2ensite 062_arsc_ssl_lamurakami
 
-ln -s /var/www/larryforalaska/larryforalaska_ssl_larryforalaska_apache2.conf \
-/etc/apache2/sites-available/074_larryforalaska_ssl_larryforalaska.conf
-a2ensite 074_larryforalaska_ssl_larryforalaska
+ln -s /var/www/larryforalaska/larryforalaska_apache2.conf \
+/etc/apache2/sites-available/070_larryforalaska.conf
+a2ensite 070_larryforalaska
 
-# In file: /etc/apache2/sites-enabled/081_mike.conf
-ln -s /var/www/mike/mike_apache2.conf /etc/apache2/sites-available/081_mike.conf
-a2ensite 081_mike
+ln -s /var/www/larryforalaska/larryforalaska_ssl_lam1_apache2.conf \
+/etc/apache2/sites-available/071_larryforalaska_ssl_lam1.conf
+a2ensite 071_larryforalaska_ssl_lam1
+
+ln -s /var/www/larryforalaska/larryforalaska_ssl_lamurakami_apache2.conf \
+/etc/apache2/sites-available/072_larryforalaska_ssl_lamurakami.conf
+a2ensite 072_larryforalaska_ssl_lamurakami
+
+ln -s /var/www/mike/mike_apache2.conf /etc/apache2/sites-available/080_mike.conf
+a2ensite 080_mike
+
+ln -s /var/www/mike/mike_ssl_lam1_apache2.conf \
+/etc/apache2/sites-available/081_mike_ssl_lam1.conf
+a2ensite 081_mike_ssl_lam1
+
+ln -s /var/www/mike/mike_ssl_lamurakami_apache2.conf \
+/etc/apache2/sites-available/082_mike_ssl_lamurakami.conf
+a2ensite 082_mike_ssl_lamurakami
+
+ln -s /var/www/mike/mike_ssl_larrymurakami_apache2.conf \
+/etc/apache2/sites-available/083_mike_ssl_larrymurakami.conf
+a2ensite 083_mike_ssl_larrymurakami
 
 ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf \
 /etc/apache2/sites-available/110_blinkenshell.conf
@@ -157,17 +176,15 @@ a2ensite 140_interiordems
 ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf /etc/apache2/sites-available/150_oldinteriordems.conf
 a2ensite 150_oldinteriordems
 
-ln -s /var/www/larryforalaska/larryforalaska_apache2.conf \
-/etc/apache2/sites-available/970_larryforalaska.conf
-a2ensite 970_larryforalaska
+# *.larrymurakami.com must be after non wildcard configurations
+ln -s /var/www/larryforalaska/larryforalaska_ssl_larrymurakami_apache2.conf \
+/etc/apache2/sites-available/973_larryforalaska_ssl_larrymurakami.conf
+a2ensite 973_larryforalaska_ssl_larrymurakami
 
-ln -s /var/www/larryforalaska/larryforalaska_ssl_lam1_apache2.conf \
-/etc/apache2/sites-available/971_larryforalaska_ssl_lam1.conf
-a2ensite 971_larryforalaska_ssl_lam1
-
-ln -s /var/www/larryforalaska/larryforalaska_ssl_lamurakami_apache2.conf \
-/etc/apache2/sites-available/972_larryforalaska_ssl_lamurakami.conf
-a2ensite 972_larryforalaska_ssl_lamurakami
+# *.larryforalaska.com must be after non wildcard configurations
+ln -s /var/www/larryforalaska/larryforalaska_ssl_larryforalaska_apache2.conf \
+/etc/apache2/sites-available/974_larryforalaska_ssl_larryforalaska.conf
+a2ensite 974_larryforalaska_ssl_larryforalaska
 
 ln -s /var/www/larryforalaska/larryforalaska_ssl_larrymurakami_apache2.conf \
 /etc/apache2/sites-available/973_larryforalaska_ssl_larrymurakami.conf
