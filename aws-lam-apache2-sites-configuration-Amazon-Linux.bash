@@ -153,5 +153,6 @@ ln -s /var/www/larryforalaska/larryforalaska_ssl_larrymurakami_apache2.conf \
 ln -s /var/www/larryforalaska/larryforalaska_ssl_larryforalaska_apache2.conf \
 /etc/httpd/conf.d/zzz_974_larryforalaska_ssl_larryforalaska.conf
 
-# /etc/httpd/conf.d/zzz_980_no-ssl.conf
-# /etc/httpd/conf.d/zzz_990_lam-ssl.conf
+ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/httpd/conf.d/zzz_980-no-ssl.conf
+
+ln -s /var/www/lam/lam_apache2.conf /etc/httpd/conf.d/zzz_990_lam-ssl.conf
