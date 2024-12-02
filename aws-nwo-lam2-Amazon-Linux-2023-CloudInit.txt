@@ -272,6 +272,9 @@ runcmd:
  - /var/www/aws/cloud-init.pl
  - /var/www/aws/AWS-LAM-git-commit.bash $keyName aws no-ssl lam
  - echo
+ - echo 'AWS LAM Activate aws and additional sites'
+ - /var/www/aws/aws-lam-apache2-sites-configuration-Amazon-Linux.bash
+ - echo
  - echo 'AWS LAM Change ownership of /var/www'
  - sh -c "chown -R lam:apache /var/www"
  - chown apache:apache /var/www/Multicount
