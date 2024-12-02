@@ -204,7 +204,6 @@ runcmd:
  - echo 'AWS LAM Update apache2 ssl configuration'
  - rm /etc/httpd/conf.d/ssl.conf
  - ln -s /var/www/lam/ssl.conf /etc/httpd/conf.d/ssl.conf
- - ln -s /var/www/lam/lam_apache2.conf /etc/httpd/conf.d/zzz_990_lam-ssl.conf
  - echo
  - echo 'AWS LAM Update gitweb configuration'
  - sed -i '1 s|Alias /git /var/www/git|Alias /gitweb /var/www/git|' /etc/httpd/conf.d/git.conf
