@@ -27,10 +27,6 @@
 # instance.
 #
 # Link to sites-available then use a2ensite for sites-enabled links
-# --:----|----:----|----:----|----:----|----:----|----:----|----:----|----:----|
-# This interim includes comments about the current lam3 configuration
-# where I initially tested the name-based virtual host resolution for ssl.
-# Some of the comments remain when the site has not been configured for ssl.
 
 echo
 echo 'AWS LAM enable aws site'
@@ -186,5 +182,10 @@ ln -s /var/www/larryforalaska/larryforalaska_ssl_larryforalaska_apache2.conf \
 /etc/apache2/sites-available/974_larryforalaska_ssl_larryforalaska.conf
 a2ensite 974_larryforalaska_ssl_larryforalaska
 
-# In file: /etc/apache2/sites-enabled/980_no-ssl.conf
-# In file: /etc/apache2/sites-enabled/990_lam-ssl.conf
+ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/apache2/sites-available/980-no-ssl.conf
+a2ensite 980-no-ssl
+a2dissite 000-default
+
+ln -s /var/www/lam/lam_apache2.conf /etc/apache2/sites-available/990_lam-ssl.conf
+a2ensite 990_lam-ssl
+a2dissite default-ssl
