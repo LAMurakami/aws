@@ -179,7 +179,15 @@ runcmd:
  - rm /etc/apache2/mods-available/autoindex.conf
  - rm /etc/apache2/mods-available/dir.conf
  - a2enmod rewrite
- - /var/www/no-ssl/Implement_no-ssl_conf.bash
+ - echo
+ - echo '# /var/www/no-ssl/Implement_no-ssl_conf.bash'
+ - cp -p /var/www/no-ssl/apache2.conf /etc/apache2/apache2.conf
+ - ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/apache2/sites-available/980-no-ssl.conf
+ - a2ensite 980-no-ssl
+ - a2dissite 000-default
+ - ln -s /var/www/no-ssl/no-ssl_alias.conf /etc/apache2/mods-available/alias.conf
+ - ln -s /var/www/no-ssl/no-ssl_autoindex.conf /etc/apache2/mods-available/autoindex.conf
+ - ln -s /var/www/no-ssl/no-ssl_dir.conf /etc/apache2/mods-available/dir.conf
  - echo
  - echo 'AWS LAM Enable x11 forwarding over ssh for sudo'
  - ln -s /var/www/no-ssl/xauthority.sh /etc/profile.d
