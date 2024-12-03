@@ -186,9 +186,5 @@ ln -s /var/www/larryforalaska/larryforalaska_ssl_larryforalaska_apache2.conf \
 /etc/apache2/sites-available/974_larryforalaska_ssl_larryforalaska.conf
 a2ensite 974_larryforalaska_ssl_larryforalaska
 
-ln -s /var/www/larryforalaska/larryforalaska_ssl_larrymurakami_apache2.conf \
-/etc/apache2/sites-available/973_larryforalaska_ssl_larrymurakami.conf
-a2ensite 973_larryforalaska_ssl_larrymurakami
-
 # In file: /etc/apache2/sites-enabled/980_no-ssl.conf
 # In file: /etc/apache2/sites-enabled/990_lam-ssl.conf
