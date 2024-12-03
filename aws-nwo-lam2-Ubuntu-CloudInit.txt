@@ -159,11 +159,21 @@ runcmd:
  - echo
  - echo 'AWS LAM Install no-ssl site'
  - /var/www/aws/aws-lam-gitlab-clone.bash no-ssl $keyName
+ - echo
+ - echo 'AWS LAM Replace default site with no-ssl site'
  - rm /etc/apache2/apache2.conf
+ - cp -p /var/www/no-ssl/apache2.conf /etc/apache2/apache2.conf
+ - ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/apache2/sites-available/980-no-ssl.conf
+ - a2ensite 980-no-ssl
+ - a2dissite 000-default
+ - echo
+ - echo 'AWS LAM Use updated dir, alias and autoindex modules'
  - rm /etc/apache2/mods-available/alias.conf
  - rm /etc/apache2/mods-available/autoindex.conf
  - rm /etc/apache2/mods-available/dir.conf
- - /var/www/no-ssl/Implement_no-ssl_conf.bash
+ - ln -s /var/www/no-ssl/no-ssl_alias.conf /etc/apache2/mods-available/alias.conf
+ - ln -s /var/www/no-ssl/no-ssl_autoindex.conf /etc/apache2/mods-available/autoindex.conf
+ - ln -s /var/www/no-ssl/no-ssl_dir.conf /etc/apache2/mods-available/dir.conf
  - echo
  - echo 'AWS LAM Configuring perl to include LAM perl modules'
  - mkdir /usr/local/lib/site_perl
