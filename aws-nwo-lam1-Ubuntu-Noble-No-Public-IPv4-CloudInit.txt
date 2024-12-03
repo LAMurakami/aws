@@ -141,12 +141,22 @@ runcmd:
  - echo
  - echo 'AWS LAM Install no-ssl web site'
  - /var/www/aws/aws-lam-gitlab-clone.bash no-ssl $keyName
+ - echo
+ - echo 'AWS LAM Replace default site with no-ssl site'
+ - a2enmod rewrite
  - rm /etc/apache2/apache2.conf
+ - cp -p /var/www/no-ssl/apache2.conf /etc/apache2/apache2.conf
+ - ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/apache2/sites-available/980-no-ssl.conf
+ - a2ensite 980-no-ssl
+ - a2dissite 000-default
+ - echo
+ - echo 'AWS LAM Use updated dir, alias and autoindex modules'
  - rm /etc/apache2/mods-available/alias.conf
  - rm /etc/apache2/mods-available/autoindex.conf
  - rm /etc/apache2/mods-available/dir.conf
- - a2enmod rewrite
- - /var/www/no-ssl/Implement_no-ssl_conf.bash
+ - ln -s /var/www/no-ssl/no-ssl_alias.conf /etc/apache2/mods-available/alias.conf
+ - ln -s /var/www/no-ssl/no-ssl_autoindex.conf /etc/apache2/mods-available/autoindex.conf
+ - ln -s /var/www/no-ssl/no-ssl_dir.conf /etc/apache2/mods-available/dir.conf
  - echo
  - echo 'AWS LAM Update from default to LAM AWS lam1 web configuration'
  - sed -i "s|aws|lam1|" /var/www/no-ssl/apache2.conf
@@ -203,9 +213,19 @@ runcmd:
  - sh -c "cd /var/www/lam;git checkout lam1"
  - sh -c "cd /var/www/lam;git checkout -b $keyName"
  - sh -c "cd /var/www/lam;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
+ - echo
+ - echo 'AWS LAM Replace default-ssl site with lam site'
+ - ln -s /var/www/lam/lam_apache2.conf /etc/apache2/sites-available/990_lam-ssl.conf
+ - a2ensite 990_lam-ssl
+ - a2dissite default-ssl
+ - echo
+ - echo 'AWS LAM Use updated info and status modules'
  - rm /etc/apache2/mods-available/info.conf
  - rm /etc/apache2/mods-available/status.conf
- - /var/www/lam/Implement_lam_conf.bash
+ - ln -s /var/www/lam/lam_info.conf /etc/apache2/mods-available/info.conf
+ - a2enmod info
+ - ln -s /var/www/lam/lam_status.conf /etc/apache2/mods-available/status.conf
+ - a2enmod status
  - echo
  - echo 'AWS LAM Create lam murakami staff credentials.'
  - /var/www/lam/Create-lam-murakami-staff.bash
