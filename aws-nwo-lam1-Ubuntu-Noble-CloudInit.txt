@@ -115,7 +115,7 @@ runcmd:
  - echo 'AWS LAM Install no-ssl web site'
  - /var/www/aws/aws-lam-gitlab-clone.bash no-ssl $keyName
  - echo
- - echo 'AWS LAM Replace default site with no-ssl site'
+ - echo 'AWS LAM Replace main apache2 configuration with no-ssl configuration'
  - a2enmod rewrite
  - rm /etc/apache2/apache2.conf
  - cp -p /var/www/no-ssl/apache2.conf /etc/apache2/apache2.conf

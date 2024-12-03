@@ -151,7 +151,7 @@ runcmd:
  - a2enmod cgi
  - git clone https://github.com/LAMurakami/no-ssl /var/www/no-ssl
  - echo
- - echo 'AWS LAM Replace default site with no-ssl site'
+ - echo 'AWS LAM Replace main apache2 configuration with no-ssl configuration'
  - rm /etc/apache2/apache2.conf
  - cp -p /var/www/no-ssl/apache2.conf /etc/apache2/apache2.conf
  - ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/apache2/sites-available/980-no-ssl.conf
