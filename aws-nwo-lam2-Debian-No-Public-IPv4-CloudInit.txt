@@ -245,9 +245,19 @@ runcmd:
  - sh -c "cd /var/www/lam;git checkout lam2-debian"
  - sh -c "cd /var/www/lam;git checkout -b $keyName"
  - sh -c "cd /var/www/lam;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
+ - echo
+ - echo 'AWS LAM Replace default-ssl site with lam site'
+ - ln -s /var/www/lam/lam_apache2.conf /etc/apache2/sites-available/990_lam-ssl.conf
+ - a2ensite 990_lam-ssl
+ - a2dissite default-ssl
+ - echo
+ - echo 'AWS LAM Use updated info and status modules'
  - rm /etc/apache2/mods-available/info.conf
  - rm /etc/apache2/mods-available/status.conf
- - /var/www/lam/Implement_lam_conf.bash
+ - ln -s /var/www/lam/lam_info.conf /etc/apache2/mods-available/info.conf
+ - a2enmod info
+ - ln -s /var/www/lam/lam_status.conf /etc/apache2/mods-available/status.conf
+ - a2enmod status
  - echo
  - echo 'AWS LAM Create lam murakami staff credentials.'
  - /var/www/lam/Create-lam-murakami-staff.bash
