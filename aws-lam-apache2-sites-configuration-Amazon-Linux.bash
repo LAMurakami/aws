@@ -93,9 +93,6 @@ ln -s /var/www/arsc/arsc_ssl_lam1_apache2.conf \
 ln -s /var/www/arsc/arsc_ssl_lamurakami_apache2.conf \
 /etc/httpd/conf.d/zzz_062_arsc_ssl_lamurakami.conf
 
-ln -s /var/www/larryforalaska/larryforalaska_apache2.conf \
-/etc/httpd/conf.d/zzz_070_larryforalaska.conf
-
 ln -s /var/www/larryforalaska/larryforalaska_ssl_lam1_apache2.conf \
 /etc/httpd/conf.d/zzz_071_larryforalaska_ssl_lam1.conf
 
@@ -144,6 +141,10 @@ ln -s /var/www/interiordems/interiordems_apache2.conf /etc/httpd/conf.d/zzz_140_
 
 # In file: /etc/apache2/sites-enabled/150_oldinteriordems_apache2.conf
 ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf /etc/httpd/conf.d/zzz_150_oldinteriordems.conf
+
+# *.larryforalaska.com must be after non wildcard configurations
+ln -s /var/www/larryforalaska/larryforalaska_apache2.conf \
+/etc/httpd/conf.d/zzz_970_larryforalaska.conf
 
 # *.larrymurakami.com must be after non wildcard configurations
 ln -s /var/www/larryforalaska/larryforalaska_ssl_larrymurakami_apache2.conf \
