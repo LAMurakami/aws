@@ -35,9 +35,18 @@ a2ensite 000-aws
 
 echo
 echo 'AWS LAM enable aws site for ssl'
+ln -s /var/www/aws/aws_ssl_lam1_apache2.conf \
+/etc/apache2/sites-available/001_aws_ssl_lam1.conf
+a2ensite 001_aws_ssl_lam1.conf
 ln -s /var/www/aws/aws_ssl_duckdns_apache2.conf \
-/etc/apache2/sites-available/001_aws_ssl_duckdns.conf
-a2ensite 001_aws_ssl_duckdns
+/etc/apache2/sites-available/005_aws_ssl_duckdns.conf
+a2ensite 005_aws_ssl_duckdns
+
+echo
+echo 'AWS LAM enable lam site for ssl'
+ln -s /var/www/lam/lam_apache2.conf /etc/apache2/sites-available/011_lam-ssl.conf
+a2ensite 011_lam-ssl
+a2dissite default-ssl
 
 echo
 echo 'AWS LAM enable additional sites'
@@ -186,7 +195,3 @@ a2ensite 974_larryforalaska_ssl_larryforalaska
 ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/apache2/sites-available/980-no-ssl.conf
 a2ensite 980-no-ssl
 a2dissite 000-default
-
-ln -s /var/www/lam/lam_apache2.conf /etc/apache2/sites-available/990_lam-ssl.conf
-a2ensite 990_lam-ssl
-a2dissite default-ssl

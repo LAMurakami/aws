@@ -42,8 +42,14 @@ ln -s /var/www/aws/aws_apache2.conf /etc/httpd/conf.d/zzz_000_aws.conf
 
 echo
 echo 'AWS LAM enable aws site for ssl'
+ln -s /var/www/aws/aws_ssl_lam1_apache2.conf \
+/etc/httpd/conf.d/zzz_001_aws_ssl_lam1.conf
 ln -s /var/www/aws/aws_ssl_duckdns_apache2.conf \
-/etc/httpd/conf.d/zzz_001_aws_ssl_duckdns.conf
+/etc/httpd/conf.d/zzz_005_aws_ssl_duckdns.conf
+
+echo
+echo 'AWS LAM enable lam site for ssl'
+ln -s /var/www/lam/lam_apache2.conf /etc/httpd/conf.d/zzz_011_lam-ssl.conf
 
 echo
 echo 'AWS LAM enable additional sites'
@@ -155,5 +161,3 @@ ln -s /var/www/larryforalaska/larryforalaska_ssl_larryforalaska_apache2.conf \
 /etc/httpd/conf.d/zzz_974_larryforalaska_ssl_larryforalaska.conf
 
 ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/httpd/conf.d/zzz_980-no-ssl.conf
-
-ln -s /var/www/lam/lam_apache2.conf /etc/httpd/conf.d/zzz_990_lam-ssl.conf
