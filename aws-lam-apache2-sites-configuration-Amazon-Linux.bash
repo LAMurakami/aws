@@ -59,22 +59,10 @@ ln -s /var/www/sites/sites_apache2.conf /etc/httpd/conf.d/zzz_030_sites.conf
 ln -s /var/www/sites/sites_ssl_lam1-apache2.conf \
 /etc/httpd/conf.d/zzz_031_sites_ssl_lam1.conf
 
-ln -s /var/www/sites/sites_ssl_lamurakami-apache2.conf \
-/etc/httpd/conf.d/zzz_032_sites_ssl_lamurakami.conf
-
-ln -s /var/www/sites/sites_ssl_larrymurakami-apache2.conf \
-/etc/httpd/conf.d/zzz_033_sites_ssl_larrymurakami.conf
-
-ln -s /var/www/sites/sites_ssl_larryforalaska-apache2.conf \
-/etc/httpd/conf.d/zzz_034_sites_ssl_larryforalaska.conf
-
 ln -s /var/www/cabo/cabo_apache2.conf /etc/httpd/conf.d/zzz_040_cabo.conf
 
 ln -s /var/www/cabo/cabo_ssl_lam1_apache2.conf \
 /etc/httpd/conf.d/zzz_041_cabo_ssl_lam1.conf
-
-ln -s /var/www/cabo/cabo_ssl_lamurakami_apache2.conf \
-/etc/httpd/conf.d/zzz_042_cabo_ssl_lamurakami.conf
 
 rm /etc/httpd/conf.d/welcome.conf
 ln -s /var/www/z/z_apache2.conf /etc/httpd/conf.d/zzz_050_z.conf
@@ -82,39 +70,15 @@ ln -s /var/www/z/z_apache2.conf /etc/httpd/conf.d/zzz_050_z.conf
 ln -s /var/www/z/z_ssl_lam1_apache2.conf \
 /etc/httpd/conf.d/zzz_051_z_ssl_lam1.conf
 
-ln -s /var/www/z/z_ssl_lamurakami_apache2.conf \
-/etc/httpd/conf.d/zzz_052_z_ssl_lamurakami.conf
-
-ln -s /var/www/z/z_ssl_larrymurakami_apache2.conf \
-/etc/httpd/conf.d/zzz_053_z_ssl_larrymurakami.conf
-
-ln -s /var/www/z/z_ssl_larryforalaska_apache2.conf \
-/etc/httpd/conf.d/zzz_054_z_ssl_larryforalaska.conf
-
 ln -s /var/www/arsc/arsc_apache2.conf /etc/httpd/conf.d/zzz_060_arsc.conf
 
 ln -s /var/www/arsc/arsc_ssl_lam1_apache2.conf \
 /etc/httpd/conf.d/zzz_061_arsc_ssl_lam1.conf
 
-ln -s /var/www/arsc/arsc_ssl_lamurakami_apache2.conf \
-/etc/httpd/conf.d/zzz_062_arsc_ssl_lamurakami.conf
-
-ln -s /var/www/larryforalaska/larryforalaska_ssl_lam1_apache2.conf \
-/etc/httpd/conf.d/zzz_071_larryforalaska_ssl_lam1.conf
-
-ln -s /var/www/larryforalaska/larryforalaska_ssl_lamurakami_apache2.conf \
-/etc/httpd/conf.d/zzz_072_larryforalaska_ssl_lamurakami.conf
-
 ln -s /var/www/mike/mike_apache2.conf /etc/httpd/conf.d/zzz_080_mike.conf
 
 ln -s /var/www/mike/mike_ssl_lam1_apache2.conf \
 /etc/httpd/conf.d/zzz_081_mike_ssl_lam1.conf
-
-ln -s /var/www/mike/mike_ssl_lamurakami_apache2.conf \
-/etc/httpd/conf.d/zzz_082_mike_ssl_lamurakami.conf
-
-ln -s /var/www/mike/mike_ssl_larrymurakami_apache2.conf \
-/etc/httpd/conf.d/zzz_083_mike_ssl_larrymurakami.conf
 
 ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf \
 /etc/httpd/conf.d/zzz_110_blinkenshell.conf
@@ -122,22 +86,10 @@ ln -s /var/www/blinkenshell/public_html/blinkenshell_apache2.conf \
 ln -s /var/www/blinkenshell/public_html/blinkenshell_ssl_lam1_apache2.conf \
 /etc/httpd/conf.d/zzz_111-blinkenshell_ssl_lam1.conf
 
-ln -s /var/www/blinkenshell/public_html/blinkenshell_ssl_lamurakami_apache2.conf \
-/etc/httpd/conf.d/zzz_112-blinkenshell_ssl_lamurakami.conf
-
-ln -s /var/www/blinkenshell/public_html/blinkenshell_ssl_larrymurakami_apache2.conf \
-/etc/httpd/conf.d/zzz_113-blinkenshell_ssl_larrymurakami.conf
-
-ln -s /var/www/blinkenshell/public_html/blinkenshell_ssl_larryforalaska_apache2.conf \
-/etc/httpd/conf.d/zzz_114-blinkenshell_ssl_larryforalaska.conf
-
 ln -s /var/www/olnes/olnes_apache2.conf /etc/httpd/conf.d/zzz_120_olnes.conf
 
 ln -s /var/www/olnes/olnes_ssl_lam1_apache2.conf \
 /etc/httpd/conf.d/zzz_121_olnes_ssl_lam1.conf
-
-ln -s /var/www/olnes/olnes_ssl_lamurakami_apache2.conf \
-/etc/httpd/conf.d/zzz_122_olnes_ssl_lamurakami.conf
 
 # In file: /etc/apache2/sites-enabled/130_alaskademocrat.conf
 ln -s /var/www/alaskademocrat/alaskademocrat_apache2.conf /etc/httpd/conf.d/zzz_130_alaskademocrat.conf
@@ -150,14 +102,9 @@ ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf /etc/httpd/conf.d/zz
 
 # *.larryforalaska.com must be after non wildcard configurations
 ln -s /var/www/larryforalaska/larryforalaska_apache2.conf \
-/etc/httpd/conf.d/zzz_970_larryforalaska.conf
+/etc/httpd/conf.d/zzz_810_larryforalaska.conf
 
-# *.larrymurakami.com must be after non wildcard configurations
-ln -s /var/www/larryforalaska/larryforalaska_ssl_larrymurakami_apache2.conf \
-/etc/httpd/conf.d/zzz_973_larryforalaska_ssl_larrymurakami.conf
-
-# *.larryforalaska.com must be after non wildcard configurations
-ln -s /var/www/larryforalaska/larryforalaska_ssl_larryforalaska_apache2.conf \
-/etc/httpd/conf.d/zzz_974_larryforalaska_ssl_larryforalaska.conf
+ln -s /var/www/larryforalaska/larryforalaska_ssl_lam1_apache2.conf \
+/etc/httpd/conf.d/zzz_811_larryforalaska_ssl_lam1.conf
 
 ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/httpd/conf.d/zzz_980-no-ssl.conf
