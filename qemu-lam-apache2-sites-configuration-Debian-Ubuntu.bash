@@ -36,12 +36,12 @@
 #
 
 echo
-echo 'AWS LAM enable gci site'
+echo 'QEMU LAM enable gci site'
 ln -s /var/www/gci/gci_apache2.conf /etc/apache2/sites-available/000-gci.conf
 a2ensite 000-gci
 
 echo
-echo 'AWS LAM enable gci site for ssl'
+echo 'QEMU LAM enable gci site for ssl'
 ln -s /var/www/gci/gci_ssl_lam1_apache2.conf \
 /etc/apache2/sites-available/001_gci_ssl_lam1.conf
 a2ensite 001_gci_ssl_lam1.conf
@@ -51,13 +51,13 @@ ln -s /var/www/gci/gci_ssl_duckdns_apache2.conf \
 a2ensite 005_gci_ssl_duckdns
 
 echo
-echo 'AWS LAM enable lam site for ssl'
+echo 'QEMU LAM enable lam site for ssl'
 ln -s /var/www/lam/lam_apache2.conf /etc/apache2/sites-available/011_lam-ssl.conf
 a2ensite 011_lam-ssl
 a2dissite default-ssl
 
 echo
-echo 'AWS LAM enable additional sites'
+echo 'QEMU LAM enable additional sites'
 
 ln -s /var/www/sites/sites_apache2.conf /etc/apache2/sites-available/030_sites.conf
 a2ensite 030_sites
