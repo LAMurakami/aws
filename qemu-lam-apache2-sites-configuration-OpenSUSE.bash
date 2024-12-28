@@ -45,9 +45,6 @@ echo 'AWS LAM enable gci site for ssl'
 ln -s /var/www/gci/gci_ssl_lam1_apache2.conf \
 /etc/apache2/vhosts.d/001_gci_ssl_lam1.conf
 
-ln -s /var/www/gci/gci_ssl_lamurakami_apache2.conf \
-/etc/apache2/vhosts.d/003_gci_ssl_lamurakami.conf
-
 ln -s /var/www/gci/gci_ssl_duckdns_apache2.conf \
 /etc/apache2/vhosts.d/005_gci_ssl_duckdns.conf
 
@@ -63,27 +60,9 @@ ln -s /var/www/sites/sites_apache2.conf /etc/apache2/vhosts.d/030_sites.conf
 ln -s /var/www/sites/sites_ssl_lam1-apache2.conf \
 /etc/apache2/vhosts.d/031_sites_ssl_lam1.conf
 
-ln -s /var/www/sites/sites_ssl_lamurakami-apache2.conf \
-/etc/apache2/vhosts.d/032_sites_ssl_lamurakami.conf
-
-ln -s /var/www/sites/sites_ssl_larrymurakami-apache2.conf \
-/etc/apache2/vhosts.d/033_sites_ssl_larrymurakami.conf
-
-ln -s /var/www/sites/sites_ssl_larryforalaska-apache2.conf \
-/etc/apache2/vhosts.d/034_sites_ssl_larryforalaska.conf
-
 ln -s /var/www/z/z_apache2.conf /etc/apache2/vhosts.d/050_z.conf
 
 ln -s /var/www/z/z_ssl_lam1_apache2.conf \
 /etc/apache2/vhosts.d/051_z_ssl_lam1.conf
-
-ln -s /var/www/z/z_ssl_lamurakami_apache2.conf \
-/etc/apache2/vhosts.d/052_z_ssl_lamurakami.conf
-
-ln -s /var/www/z/z_ssl_larrymurakami_apache2.conf \
-/etc/apache2/vhosts.d/053_z_ssl_larrymurakami.conf
-
-ln -s /var/www/z/z_ssl_larryforalaska_apache2.conf \
-/etc/apache2/vhosts.d/054_z_ssl_larryforalaska.conf
 
 ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/apache2/vhosts.d/980-no-ssl.conf

@@ -46,10 +46,6 @@ ln -s /var/www/gci/gci_ssl_lam1_apache2.conf \
 /etc/apache2/sites-available/001_gci_ssl_lam1.conf
 a2ensite 001_gci_ssl_lam1.conf
 
-ln -s /var/www/gci/gci_ssl_lamurakami_apache2.conf \
-/etc/apache2/sites-available/003_gci_ssl_lamurakami.conf
-a2ensite 003_gci_ssl_lamurakami.conf
-
 ln -s /var/www/gci/gci_ssl_duckdns_apache2.conf \
 /etc/apache2/sites-available/005_gci_ssl_duckdns.conf
 a2ensite 005_gci_ssl_duckdns
@@ -70,36 +66,12 @@ ln -s /var/www/sites/sites_ssl_lam1-apache2.conf \
 /etc/apache2/sites-available/031_sites_ssl_lam1.conf
 a2ensite 031_sites_ssl_lam1
 
-ln -s /var/www/sites/sites_ssl_lamurakami-apache2.conf \
-/etc/apache2/sites-available/032_sites_ssl_lamurakami.conf
-a2ensite 032_sites_ssl_lamurakami
-
-ln -s /var/www/sites/sites_ssl_larrymurakami-apache2.conf \
-/etc/apache2/sites-available/033_sites_ssl_larrymurakami.conf
-a2ensite 033_sites_ssl_larrymurakami
-
-ln -s /var/www/sites/sites_ssl_larryforalaska-apache2.conf \
-/etc/apache2/sites-available/034_sites_ssl_larryforalaska.conf
-a2ensite 034_sites_ssl_larryforalaska
-
 ln -s /var/www/z/z_apache2.conf /etc/apache2/sites-available/050_z.conf
 a2ensite 050_z
 
 ln -s /var/www/z/z_ssl_lam1_apache2.conf \
 /etc/apache2/sites-available/051_z_ssl_lam1.conf
 a2ensite 051_z_ssl_lam1
-
-ln -s /var/www/z/z_ssl_lamurakami_apache2.conf \
-/etc/apache2/sites-available/052_z_ssl_lamurakami.conf
-a2ensite 052_z_ssl_lamurakami
-
-ln -s /var/www/z/z_ssl_larrymurakami_apache2.conf \
-/etc/apache2/sites-available/053_z_ssl_larrymurakami.conf
-a2ensite 053_z_ssl_larrymurakami
-
-ln -s /var/www/z/z_ssl_larryforalaska_apache2.conf \
-/etc/apache2/sites-available/054_z_ssl_larryforalaska.conf
-a2ensite 054_z_ssl_larryforalaska
 
 ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/apache2/sites-available/980-no-ssl.conf
 a2ensite 980-no-ssl
