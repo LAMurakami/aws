@@ -1,0 +1,301 @@
+#cloud-config
+
+# Tell cloud-init to log the output to a log file
+output: {all: '| tee -a /var/log/cloud-init-output.log'}
+
+# /var/www/aws/aws-lam2-openSUSE-No-Public-IPv4-CloudInit.txt
+# Initialize lam2.duckdns.org
+#
+# https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
+
+# Set hostname
+hostname: lam2
+
+# Set timezone
+timezone: US/Alaska
+
+packages:
+ - git
+ - rcs
+ - nfs-kernel-server
+ - aws-cli
+ - php8
+ - php8-gd
+ - lynx
+ - apache2-manual
+ - apache2-mod_perl
+ - mariadb-client
+ - mariadb
+ - php8-mysql
+ - apache2-mod_php8
+ - whois
+ - gtk2-devel
+ - mlocate
+ - php8-mbstring
+ - php8-intl
+ - php8-APCu
+ - leafpad
+ - vim
+ - man
+ - xauth
+ - perl-CGI
+ - perl-DBI
+ - perl-DBD-mysql
+ - php8-ctype
+ - php8-iconv
+ - php8-fileinfo
+ - libXmu6
+ - libxkbfile1
+ - libXaw7
+
+runcmd:
+ - keyName="lam2-opensuse-No-Public-IPv4"
+ - echo
+ - echo 'AWS LAM Alaska Allow any to read /var/log/cloud-init-output.log'
+ - chmod a+r /var/log/cloud-init-output.log
+ - echo
+ - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
+ # Allow for either gzip compressed user-data or plain text user-data
+ - (curl -s http://169.254.169.254/latest/user-data | gunzip) || curl -s http://169.254.169.254/latest/user-data
+ - echo
+ - echo 'AWS LAM Set git user name, email for system'
+ - git config --system user.name "LAMurakami"
+ - git config --system user.email GitHub@LAMurakami.com
+ - git config --system core.editor vi
+ - git config --system branch.autosetuprebase always
+ - git config --system init.defaultBranch master
+ - echo
+ - echo 'AWS LAM link which to /usr/local/bin *****'
+ - ln -s /usr/bin/which /usr/local/bin/which
+ - echo
+ - echo 'AWS LAM Adding a swapfile'
+ - dd if=/dev/zero of=/swapfile bs=32M count=16
+ - chmod 600 /swapfile
+ - mkswap /swapfile
+ - swapon /swapfile
+ - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+ - free -h
+ - cat /proc/swaps
+ - echo
+ - echo 'AWS LAM Alaska Install etckeeper to track configuration changes'
+ - zypper --non-interactive install etckeeper
+ - echo
+ - echo 'AWS LAM Initialize etckeeper'
+ - etckeeper init
+ - etckeeper commit -m 'LAM LAM Initial Cloud-init commit'
+ - echo
+ - echo 'AWS LAM Alaska Install texlive after swap is enabled'
+ - zypper --non-interactive install texlive
+ - echo
+ - echo 'AWS LAM enable and start MariaDB'
+ - systemctl enable mariadb
+ - systemctl start mariadb
+ - echo
+ - echo 'AWS LAM Set hostname and localhost alias in /etc/hosts'
+ - sed -i '12s/localhost/lam2.lam1.us lam2 localhost/' /etc/hosts
+ - echo
+ - echo 'AWS LAM Create logs/ sybmolic link for Apache2 configuration use'
+ - ln -s /var/log/apache2 /srv/www/logs
+ - echo
+ - echo 'AWS LAM Installing aws.lam1.us web site'
+ - git clone https://gitlab.com/aws-lam/aws /var/www/aws
+ - sh -c "cd /var/www/aws;git remote set-url origin git@gitlab.com:aws-lam/aws"
+ - sh -c "cd /var/www/aws;git remote rename origin gitlab"
+ - sh -c "cd /var/www/aws;git remote add github git@github.com:LAMurakami/aws"
+ - sh -c "cd /var/www/aws;git remote add aws git@aws:aws"
+ - sh -c "cd /var/www/aws;git checkout -b $keyName"
+ - sh -c "cd /var/www/aws;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
+ - echo
+ - echo 'AWS LAM Alaska Cloud Guest motd'
+ - ln -s /var/www/aws/etc/update-motd.d/51-cloudguest /etc/update-motd.d
+ - echo
+ - echo 'AWS LAM Check US Alaska local time for this system'
+ - ls -lF --time-style=long-iso /etc/localtime
+ - echo
+ - echo 'AWS LAM setup root to aws ssh config'
+ - cp /var/www/aws/root/ssh/config /root/.ssh/config
+ - cp /var/www/aws/etc/ssh/ssh_known_hosts /etc/ssh/ssh_known_hosts
+ - echo
+ - echo 'AWS LAM Get EFS for REGION'
+ - export REGION=$(cloud-init query region)
+ - echo
+ - echo 'AWS LAM Adding nfs4 mount to AWS LAM VPC Elastic File System'
+ - /var/www/aws/aws-efs-mount.bash
+ - echo
+ - echo 'AWS LAM Add localhost to known_hosts'
+ - ssh-keyscan -t ed25519 localhost >> /etc/ssh/ssh_known_hosts
+ - echo
+ - echo 'AWS LAM Create git user'
+ - useradd -g staff -G staff -u 4896 git -d /mnt/efs/git
+ - echo
+ - echo 'AWS LAM configure aws-gateway for No-Public-IPv4 instance'
+ - cp /var/www/aws/etc/ssh/ssh_config.d/aws-gateway.conf /etc/ssh/ssh_config.d
+ - cp /var/www/aws/etc/profile.d/ssh_tunnel.sh /etc/profile.d
+ - echo
+ - echo 'AWS LAM ***** Use private LAM Alaska resources *****'
+ - echo
+ - echo 'AWS LAM Installing ubuntu user bash resources for openSUSE'
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/ubuntu.tgz --directory /home/opensuse
+ - chown -R opensuse:users /home/opensuse
+ - echo
+ - echo 'AWS LAM Link to .aws resources for root'
+ - ln -s /home/opensuse/.aws /root/.aws
+ - echo
+ - echo 'AWS LAM Copy ssh key root'
+ - cp /home/opensuse/.ssh/git_ak20_id_rsa /root/.ssh
+ - echo
+ - echo 'AWS LAM Install no-ssl web site'
+ - /var/www/aws/aws-lam-gitlab-clone.bash no-ssl $keyName
+ - a2enmod mod_perl
+ - a2enmod rewrite
+ - echo
+ - echo 'AWS LAM Enable x11 forwarding over ssh for sudo'
+ - ln -s /var/www/no-ssl/xauthority.sh /etc/profile.d
+ - echo
+ - echo 'AWS LAM Configuring perl to include LAM perl modules'
+ - ln -s /var/www/no-ssl/site_perl-LAM /usr/lib/perl5/site_perl/LAM
+ - echo
+ - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
+ - cp /var/www/aws/etc/ssh/sshd_config /etc/ssh
+ - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
+ - echo
+ - echo 'AWS LAM ***** Secure site *****'
+ - echo
+ - echo 'AWS LAM Alaska Second Cloud-init etckeeper commit'
+ - etckeeper commit -m 'AWS LAM Alaska Second Cloud-init etckeeper commit'
+ - echo
+ - echo 'AWS LAM Installing Let-s Encrypt certificates for TLS encryption (HTTPS)'
+ - /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/letsencrypt.tgz /etc
+ - echo
+ - echo 'AWS LAM Alaska Let-s Encrypt certificates etckeeper commit'
+ - etckeeper commit -m 'AWS LAM Alaska Second Let-s Encrypt certificates etckeeper commit'
+ - echo
+ - echo 'AWS LAM Updating apache2 configuration for lam1'
+ - a2enmod info
+ - a2enmod authz_groupfile.load
+ - a2enflag SSL
+ - a2enflag STATUS
+ - echo
+ - echo 'AWS LAM Tell git installing in /var/www/lam is O.K.'
+ - git config --system --add safe.directory /var/www/lam
+ - echo
+ # Extract lam from archive that includes MediWiki and git repo
+ - /var/www/aws/aws-efs-tar-extract.bash lam.tgz /var/www
+ # Use opensuse branch to serve secure site at https://opensuse.lam1.us
+ - sh -c "cd /var/www/lam;git stash"
+ - sh -c "cd /var/www/lam;git checkout opensuse"
+ - sh -c "cd /var/www/lam;git checkout -b $keyName"
+ - sh -c "cd /var/www/lam;git tag -a -m 'QEMU LAM Initialization' b0-$keyName"
+ - echo
+ - echo 'AWS LAM Configure /server-info and /server-status'
+ - rm /etc/apache2/mod_info.conf
+ - ln -s /var/www/lam/lam_info.conf /etc/apache2/mod_info.conf
+ - rm /etc/apache2/mod_status.conf
+ - ln -s /var/www/lam/lam_status.conf /etc/apache2/mod_status.conf
+ - a2enmod mod_status
+ - echo
+ - echo 'AWS LAM Setup openSuSE default server configuration'
+ - rm /etc/apache2/default-server.conf
+ - cp /var/www/lam/apache2.conf /etc/apache2/default-server.conf
+ - echo
+ - echo 'QEMU LAM Create lam murakami staff credentials.'
+ - /var/www/lam/Create-lam-murakami-staff.bash
+ - echo
+ - echo 'QEMU LAM Create Multicount directory'
+ - mkdir /var/www/Multicount
+ - chown wwwrun:www /var/www/Multicount
+ - chmod 775 /var/www/Multicount
+ - echo
+ - echo 'QEMU LAM Creating {lam|Mediawiki} database and user'
+ - mysql --table < /var/www/lam/lam-user.sql
+ - echo
+ - echo 'AWS LAM ***** Additional sites *****'
+ - echo
+ - echo 'AWS LAM Install sites web site'
+ - /var/www/aws/aws-lam-gitlab-clone.bash sites $keyName
+ - echo
+ - echo 'AWS LAM Install z web site'
+ - /var/www/aws/aws-lam-gitlab-clone.bash z $keyName
+ - echo
+ - echo 'AWS LAM Installing arsc.lam1.us web site'
+ - /var/www/aws/aws-lam-gitlab-clone.bash arsc $keyName
+ - echo
+ - echo 'AWS LAM Installing cabo.lam1.us web site'
+ - /var/www/aws/aws-lam-gitlab-clone.bash cabo $keyName
+ - echo
+ - echo 'AWS LAM Adding olnes www Content'
+ - /var/www/aws/aws-lam-gitlab-clone.bash olnes $keyName
+ - echo
+ - echo 'AWS LAM Adding larryforalaska www Content'
+ - /var/www/aws/aws-lam-gitlab-clone.bash larryforalaska $keyName
+ - echo
+ - echo 'AWS LAM ***** Private Additional sites *****'
+ - echo
+ - echo 'AWS LAM Installing {new|old}.interiordems.com web sites'
+ - /var/www/aws/aws-efs-www-git-clone.bash interiordems $keyName
+ - /var/www/aws/aws-efs-www-git-clone.bash oldinteriordems $keyName
+ - echo
+ - echo 'AWS LAM Adding mike@mike.lam1.us user, group and www Content'
+ - useradd --shell /bin/bash --create-home --groups users --uid 55501 mike
+ - usermod --groups users,mike mike
+ - /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/mike.tgz /home
+ - /var/www/aws/aws-efs-www-git-clone.bash mike $keyName
+ - echo
+ - echo 'AWS LAM Adding blinkenshell www Content'
+ # Extract blinkenshell from archive that includes date time stamps
+ - /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/blinkenshell.tgz /var/www
+ - echo
+ - echo 'AWS LAM Tell git ownership of /var/www/blinkenshell/public_html is O.K.'
+ - git config --system --add safe.directory /var/www/blinkenshell/public_html
+ # Clone the blinkenshell repo and integrate it with blinkenshell archive
+ - /var/www/aws/aws-lam-gitlab-clone.bash blinkenshell $keyName /tmp/
+ - mv /tmp/blinkenshell/.git /var/www/blinkenshell/public_html
+ - rm -rf /tmp/blinkenshell # Remove the blinkenshell repo fragment
+ - sh -c "cd /var/www/blinkenshell/public_html;git stash"
+ - echo
+ - echo 'AWS LAM Adding alaskademocrat www Content'
+ - /var/www/aws/aws-efs-www-git-clone.bash alaskademocrat $keyName
+ - echo
+ - echo 'AWS LAM ***** Final Initialization Steps *****'
+ - echo
+ - echo 'AWS LAM Install gitweb after apache has been configured'
+ - zypper --non-interactive install git-web
+ - sed -i '1 s|Alias /git "/usr/share/gitweb/"|Alias /gitweb "/usr/share/gitweb/"|' /etc/apache2/conf.d/gitweb.conf
+ - cp /var/www/aws/etc/gitweb.conf /etc/gitweb.conf
+ - echo
+ - echo 'AWS LAM update aws site with current public local name ipv4 ipv6'
+ - /var/www/aws/cloud-init.pl
+ - /var/www/aws/AWS-LAM-git-commit.bash $keyName aws no-ssl
+ - echo
+ - echo 'AWS LAM Activate aws and additional sites'
+ - /var/www/aws/aws-lam-apache2-sites-configuration-OpenSUSE.bash
+ - echo
+ - echo 'AWS LAM Alaska Set lam as owner of /var/www'
+ - chown -R lam:www /var/www
+ - chown lam:staff /mnt/efs
+ - echo
+ - echo 'AWS LAM Refreshing lam database'
+ - /var/www/aws/aws-efs-db-extract.bash Bk-20-MySQL.lam.sql.gz lam
+ - /var/www/aws/aws-efs-db-extract.bash Bk-20-MySQL.wikidb.sql.gz wikidb
+ - echo
+ - echo 'AWS LAM Update all packages replacing files if necessary'
+ - zypper --non-interactive update --replacefiles
+ - echo
+ - echo 'AWS LAM enable and start apache2'
+ - systemctl enable apache2
+ - systemctl start apache2
+ - echo
+ - echo 'AWS LAM ***** Update mlocate database *****'
+ - updatedb
+ - echo
+ - echo 'AWS LAM Alaska Final Cloud-init etckeeper commit'
+ - etckeeper commit -m 'AWS LAM Alaska Final Cloud-init etckeeper commit'
+ - echo
+ - echo 'AWS LAM Alaska List Installed Packages information'
+ - zypper search -i
+ - echo
+ - echo 'AWS LAM report reboot hint'
+ - zypper ps -s
+ - echo
+ - echo 'AWS LAM cloud-init complete'
+ - echo
