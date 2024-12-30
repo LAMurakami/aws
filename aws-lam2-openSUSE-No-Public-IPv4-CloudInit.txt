@@ -14,6 +14,11 @@ hostname: lam2
 # Set timezone
 timezone: US/Alaska
 
+# Upgrade repo database on first boot
+package_update: true
+# Upgrade the instance on first boot
+package_upgrade: true
+
 packages:
  - git
  - rcs
@@ -44,8 +49,7 @@ runcmd:
  - chmod a+r /var/log/cloud-init-output.log
  - echo
  - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
- # Allow for either gzip compressed user-data or plain text user-data
- - (curl -s http://169.254.169.254/latest/user-data | gunzip) || curl -s http://169.254.169.254/latest/user-data
+ - /var/www/aws/ec2-instance-user-data.bash
  - echo
  - echo 'AWS LAM Set git user name, email for system'
  - git config --system user.name "LAMurakami"
@@ -274,6 +278,9 @@ runcmd:
  - echo 'AWS LAM enable and start apache2'
  - systemctl enable apache2
  - systemctl start apache2
+ - echo
+ - echo 'AWS LAM Updating lam2.duckdns.org IP address'
+ - /var/www/aws/Update-DuckDNS-IPv6.bash lam2
  - echo
  - echo 'AWS LAM ***** Update mlocate database *****'
  - updatedb
