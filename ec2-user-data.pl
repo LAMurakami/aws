@@ -45,5 +45,5 @@ my $security_groups = qx(curl -sH "X-aws-ec2-metadata-token: $TOKEN" http://169.
 my $availability_zone = qx(curl -sH "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/placement/availability-zone);
  print 'availability-zone = ', $availability_zone, "\n";
 
-my $public_ipv6 = qx(ip a | grep inet6 | grep 'scope global dynamic' | awk '{print \$2;}' | sed 's|/128||' | sed 's|/64||');
+my $public_ipv6 = qx(ip a | grep inet6 | grep 'scope global dynamic' | awk '{print \$2;}' | sed 's|/.*||');
  print 'public-ipv6 = ', $public_ipv6, "\n";
