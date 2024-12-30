@@ -48,9 +48,6 @@ runcmd:
  - echo 'AWS LAM Alaska Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
  - echo
- - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
- - /var/www/aws/ec2-instance-user-data.bash
- - echo
  - echo 'AWS LAM Set git user name, email for system'
  - git config --system user.name "LAMurakami"
  - git config --system user.email GitHub@LAMurakami.com
@@ -98,6 +95,9 @@ runcmd:
  - sh -c "cd /var/www/aws;git remote add aws git@aws:aws"
  - sh -c "cd /var/www/aws;git checkout -b $keyName"
  - sh -c "cd /var/www/aws;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
+ - echo
+ - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
+ - /var/www/aws/ec2-instance-user-data.bash
  - echo
  - echo 'AWS LAM Alaska Cloud Guest motd'
  - ln -s /var/www/aws/etc/update-motd.d/51-cloudguest /etc/update-motd.d

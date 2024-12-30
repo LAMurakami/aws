@@ -12,7 +12,7 @@ Subdomain=$1
 
 IPv6_Address=$(ip a | grep inet6 \
 | grep 'scope global dynamic' | awk '{print $2;}' \
-| sed 's|/128||' | tr -d '\n')
+| sed 's|/128||' | sed 's|/64||' | tr -d '\n')
 
 ssh aws "/var/www/aws/Update-DuckDNS-IPv6-from-IPv4.bash \
 ${Subdomain} ${IPv6_Address}"
