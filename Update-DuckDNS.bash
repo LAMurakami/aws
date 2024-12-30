@@ -10,7 +10,7 @@ echo url="https://www.duckdns.org/update?domains=$1&token=$(cat \
 
 IPv6_Address=$(ip a | grep inet6 \
 | grep 'scope global dynamic' | awk '{print $2;}' \
-| sed 's|/128||' | tr -d '\n')
+| sed 's|/.*||' | tr -d '\n')
 
 echo url="https://www.duckdns.org/update?domains=$1&token=$(cat \
 ~/.duckdns)&verbose=true&ip=&ipv6=${IPv6_Address}"| curl -s -k -K -; echo \
