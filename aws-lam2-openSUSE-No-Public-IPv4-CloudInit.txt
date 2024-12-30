@@ -17,13 +17,8 @@ timezone: US/Alaska
 packages:
  - git
  - rcs
- - nfs-kernel-server
- - aws-cli
  - php8
  - php8-gd
- - lynx
- - apache2-manual
- - apache2-mod_perl
  - mariadb-client
  - mariadb
  - php8-mysql
@@ -33,18 +28,12 @@ packages:
  - mlocate
  - php8-mbstring
  - php8-intl
- - php8-APCu
- - leafpad
- - vim
- - man
  - xauth
- - perl-CGI
  - perl-DBI
  - perl-DBD-mysql
  - php8-ctype
  - php8-iconv
  - php8-fileinfo
- - libXmu6
  - libxkbfile1
  - libXaw7
 
@@ -126,6 +115,7 @@ runcmd:
  - ssh-keyscan -t ed25519 localhost >> /etc/ssh/ssh_known_hosts
  - echo
  - echo 'AWS LAM Create git user'
+ - groupadd -g 206 staff
  - useradd -g staff -G staff -u 4896 git -d /mnt/efs/git
  - echo
  - echo 'AWS LAM configure aws-gateway for No-Public-IPv4 instance'
@@ -135,14 +125,14 @@ runcmd:
  - echo 'AWS LAM ***** Use private LAM Alaska resources *****'
  - echo
  - echo 'AWS LAM Installing ubuntu user bash resources for openSUSE'
- - tar -xzf /mnt/efs/aws-lam1-ubuntu/ubuntu.tgz --directory /home/opensuse
- - chown -R opensuse:users /home/opensuse
+ - tar -xzf /mnt/efs/aws-lam1-ubuntu/ubuntu.tgz --directory /home/ec2-user
+ - chown -R ec2-user:users /home/ec2-user
  - echo
  - echo 'AWS LAM Link to .aws resources for root'
- - ln -s /home/opensuse/.aws /root/.aws
+ - ln -s /home/ec2-user/.aws /root/.aws
  - echo
  - echo 'AWS LAM Copy ssh key root'
- - cp /home/opensuse/.ssh/git_ak20_id_rsa /root/.ssh
+ - cp /home/ec2-user/.ssh/git_ak20_id_rsa /root/.ssh
  - echo
  - echo 'AWS LAM Install no-ssl web site'
  - /var/www/aws/aws-lam-gitlab-clone.bash no-ssl $keyName
@@ -181,9 +171,9 @@ runcmd:
  - echo
  # Extract lam from archive that includes MediWiki and git repo
  - /var/www/aws/aws-efs-tar-extract.bash lam.tgz /var/www
- # Use opensuse branch to serve secure site at https://opensuse.lam1.us
+ # Use lam2-opensuse branch to serve secure site at https://lam2.lam1.us
  - sh -c "cd /var/www/lam;git stash"
- - sh -c "cd /var/www/lam;git checkout opensuse"
+ - sh -c "cd /var/www/lam;git checkout lam2-opensuse"
  - sh -c "cd /var/www/lam;git checkout -b $keyName"
  - sh -c "cd /var/www/lam;git tag -a -m 'QEMU LAM Initialization' b0-$keyName"
  - echo
