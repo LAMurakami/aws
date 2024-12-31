@@ -1,5 +1,6 @@
 #!/usr/bin/bash
 # Update-DuckDNS.bash
+# Uses ${Public_IPv4} exported in parent process
 
 if [ -z $1 ] ; then
   echo "One argument needed!"
@@ -12,9 +13,6 @@ Subdomain=$1
 IPv6_Address=$(ip a | grep inet6 \
 | grep 'scope global dynamic' | awk '{print $2;}' \
 | sed 's|/.*||' | tr -d '\n')
-
-Public_IPv4=$(/var/www/aws/ec2-user-data.pl \
-| grep public-ipv4 | awk "{print \$3;}")
 
 if [[ ${Public_IPv4} == 'none' ]] ; then
  ssh aws "/var/www/aws/Update-DuckDNS-IPv6-from-IPv4.bash \

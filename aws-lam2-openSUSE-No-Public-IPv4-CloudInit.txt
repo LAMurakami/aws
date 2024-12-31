@@ -122,9 +122,11 @@ runcmd:
  - groupadd -g 206 staff
  - useradd -g staff -G staff -u 4896 git -d /mnt/efs/git
  - echo
- - echo 'AWS LAM configure aws-gateway for No-Public-IPv4 instance'
- - cp /var/www/aws/etc/ssh/ssh_config.d/aws-gateway.conf /etc/ssh/ssh_config.d
- - cp /var/www/aws/etc/profile.d/ssh_tunnel.sh /etc/profile.d
+ - echo 'AWS LAM Get Public_IPv4 from Instance Metadata Service Version 2 values'
+ - export Public_IPv4=$(/var/www/aws/ec2-user-data.pl | grep public-ipv4 | awk "{print \$3;}" | tr -d '\n')
+ - echo
+ - echo 'AWS LAM Configure lam-ak lan ssh access'
+ - /var/www/aws/Configure-lam-ak-lan-ssh-access.bash
  - echo
  - echo 'AWS LAM ***** Use private LAM Alaska resources *****'
  - echo
@@ -280,6 +282,7 @@ runcmd:
  - systemctl start apache2
  - echo
  - echo 'AWS LAM Updating lam2.duckdns.org IP address'
+ - ln -s /home/ec2-user/.duckdns /root/.duckdns
  - /var/www/aws/Update-DuckDNS.bash lam2
  - echo
  - echo 'AWS LAM ***** Update mlocate database *****'
