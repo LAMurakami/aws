@@ -280,7 +280,7 @@ runcmd:
  - systemctl start apache2
  - echo
  - echo 'AWS LAM Updating lam2.duckdns.org IP address'
- - /var/www/aws/Update-DuckDNS-IPv6.bash lam2
+ - /var/www/aws/Update-DuckDNS.bash lam2
  - echo
  - echo 'AWS LAM ***** Update mlocate database *****'
  - updatedb
