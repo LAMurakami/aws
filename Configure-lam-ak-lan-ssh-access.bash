@@ -2,7 +2,7 @@
 # Configure-lam-ak-lan-ssh-access.bash
 # Uses ${Public_IPv4} exported in parent process
 
-echo ${Public_IPv4}
+echo "Public_IPv4=${Public_IPv4}"
 if [[ ${Public_IPv4} != 'none' ]] ; then
  echo 'AWS LAM configure lam-ak-lan for Public IPv4 access'
  cp /var/www/aws/etc/ssh/ssh_config.d/lam-ak-lan.conf /etc/ssh/ssh_config.d
