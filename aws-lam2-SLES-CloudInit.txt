@@ -4,6 +4,11 @@
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
 # /var/www/aws/aws-lam2-SLES-CloudInit.txt
+#
+# AWS AMIs are SLES version 15 service pack 6
+# SLES 15 was released in 2017
+# AWS provides SUSE Linux Enterprise Server (SLES) AMIs
+#
 # Initialize lam2.duckdns.org
 #
 # https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
@@ -177,9 +182,9 @@ runcmd:
  - echo
  # Extract lam from archive that includes MediWiki and git repo
  - /var/www/aws/aws-efs-tar-extract.bash lam.tgz /var/www
- # Use lam2-opensuse branch to serve secure site at https://lam2.lam1.us
+ # Use lam2-suse branch to serve secure site at https://lam2.lam1.us
  - sh -c "cd /var/www/lam;git stash"
- - sh -c "cd /var/www/lam;git checkout lam2-opensuse"
+ - sh -c "cd /var/www/lam;git checkout lam2-suse"
  - sh -c "cd /var/www/lam;git checkout -b $keyName"
  - sh -c "cd /var/www/lam;git tag -a -m 'QEMU LAM Initialization' b0-$keyName"
  - echo
