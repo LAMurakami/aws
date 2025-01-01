@@ -3,7 +3,7 @@
 # Tell cloud-init to log the output to a log file
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
-# /var/www/aws/aws-lam2-openSUSE-No-Public-IPv4-CloudInit.txt
+# /var/www/aws/aws-lam2-SLES-CloudInit.txt
 # Initialize lam2.duckdns.org
 #
 # https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
@@ -43,7 +43,7 @@ packages:
  - libXaw7
 
 runcmd:
- - keyName="lam2-opensuse-No-Public-IPv4"
+ - keyName="lam2-SLES"
  - echo
  - echo 'AWS LAM Alaska Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log

@@ -3,7 +3,8 @@
 # Tell cloud-init to log the output to a log file
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
-# /var/www/aws/aws-nwo-lam1-Ubuntu-No-Public-IPv4-CloudInit.txt
+# /var/www/aws/aws-lam1-Ubuntu-24-Noble-CloudInit.txt
+#
 # Initialize lam1.duckdns.org
 #
 # https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
@@ -25,6 +26,7 @@ bootcmd:
  - echo
  - echo 'AWS LAM List Installed Packages information'
  - dpkg -l
+ - echo
  - echo 'AWS LAM cloud-config YAML bootcmd complete'
  - date
 
@@ -35,13 +37,13 @@ hostname: lam1
 timezone: US/Alaska
 
 runcmd:
- - keyName="lam1-Ubuntu-No-Public-IPv4"
+ - keyName="lam1-Ubuntu-24-Noble"
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
  - echo
  - echo 'AWS LAM Adding a swapfile'
- - dd if=/dev/zero of=/swapfile bs=32M count=24
+ - dd if=/dev/zero of=/swapfile bs=32M count=16
  - chmod 600 /swapfile
  - mkswap /swapfile
  - swapon /swapfile
@@ -50,7 +52,7 @@ runcmd:
  - cat /proc/swaps
  - echo
  - echo 'AWS LAM Create git user'
- - useradd -g staff -G staff -M -d /mnt/efs/git -u 4896 git
+ - useradd -g staff -G staff -u 4896 git -d /mnt/efs/git
  - echo
  - echo 'AWS LAM Check US Alaska local time for this system'
  - ls -lF --time-style=long-iso /etc/localtime
@@ -60,11 +62,8 @@ runcmd:
  - apt upgrade --yes
  - echo
  - echo 'AWS LAM Install additional packages on first boot'
- - apt-get install --yes rcs nfs-common awscli swish++ libio-captureoutput-perl libcgi-pm-perl libdbi-perl libdbd-mysql-perl php php-gd texlive php-xml* lynx apache2-doc libapache2-mod-perl2 libbsd-resource-perl libapache2-reload-perl apache2-suexec-custom php-mysql libapache2-mod-php x11-apps whois libgtk2.0-0 php-mbstring php-intl php-apcu l3afpad
- - echo
- - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
- # Allow for either gzip compressed user-data or plain text user-data
- - (curl -s http://169.254.169.254/latest/user-data | gunzip) || curl -s http://169.254.169.254/latest/user-data
+ - export DEBIAN_FRONTEND=noninteractive
+ - apt-get -yqq install rcs nfs-common mailutils swish++ libio-captureoutput-perl libcgi-pm-perl libdbi-perl libdbd-mysql-perl php php-gd texlive php-xml* lynx apache2-doc libapache2-mod-perl2 libbsd-resource-perl libapache2-reload-perl apache2-suexec-custom php-mysql libapache2-mod-php x11-apps whois libgtk2.0-0 php-mbstring php-intl php-apcu l3afpad
  - echo
  - echo 'AWS LAM Set git user name, email for system'
  - git config --system user.name "LAMurakami"
@@ -102,14 +101,13 @@ runcmd:
  - echo 'AWS LAM Set hostname and localhost alias in /etc/hosts'
  - sed -i '1s/localhost/lam1.lam1.us lam1 localhost/' /etc/hosts
  - echo
- - echo 'AWS LAM create Multicount directory'
- - mkdir /var/www/Multicount
+ - echo 'AWS LAM Enable x11 forwarding over ssh for sudo'
+ - ln -s /var/www/no-ssl/xauthority.sh /etc/profile.d
  - echo
  - echo 'AWS LAM ***** Use private LAM Alaska resources *****'
  - echo
  - echo 'AWS LAM Installing ubuntu user bash resources'
  - tar -xzf /mnt/efs/aws-lam1-ubuntu/ubuntu.tgz --directory /home/ubuntu
- - chown -R ubuntu:ubuntu /home/ubuntu
  - echo
  - echo 'AWS LAM Link to .aws resources for root'
  - ln -s /home/ubuntu/.aws /root/.aws
@@ -117,17 +115,31 @@ runcmd:
  - echo 'AWS LAM Copy ssh key root'
  - cp /home/ubuntu/.ssh/git_ak20_id_rsa /root/.ssh
  - echo
- - echo 'AWS LAM Set aws s3 IPv6 endpoint-url'
- - IPv6='--endpoint-url https://s3.dualstack.us-west-2.amazonaws.com'
- - echo
  - echo 'AWS LAM Create logs/ sybmolic link for Apache2 configuration use'
  - ln -s /var/log/apache2 /etc/apache2/logs
+ - echo
+ - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
+ - /var/www/aws/ec2-instance-user-data.bash
  - echo
  - echo 'AWS LAM Installing extras compiled for Ubuntu Server 22.04'
  - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash ubuntu
  - echo
  - echo 'AWS LAM Cloud Guest motd'
  - ln -s /var/www/aws/etc/update-motd.d/51-cloudguest /etc/update-motd.d
+ - echo
+ - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
+ - cp /var/www/aws/etc/ssh/sshd_config /etc/ssh
+ - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
+ - echo
+ - echo 'AWS LAM Get Public_IPv4 from Instance Metadata Service Version 2 values'
+ - export Public_IPv4=$(/var/www/aws/ec2-user-data.pl | grep public-ipv4 | awk "{print \$3;}" | tr -d '\n')
+ - echo
+ - echo 'AWS LAM Configure lam-ak lan ssh access'
+ - /var/www/aws/Configure-lam-ak-lan-ssh-access.bash
+ - echo
+ - echo 'AWS LAM Omit hashing of new known host entries'
+ - sed -i '/HashKnownHosts/d' /etc/ssh/ssh_config
+ - systemctl restart ssh
  - echo
  - echo 'AWS LAM Install no-ssl web site'
  - /var/www/aws/aws-lam-gitlab-clone.bash no-ssl $keyName
@@ -154,11 +166,11 @@ runcmd:
  - mkdir /usr/local/lib/site_perl
  - ln -s /var/www/no-ssl/site_perl-LAM /usr/local/lib/site_perl/LAM
  - echo
+ - echo 'AWS LAM create Multicount directory'
+ - mkdir /var/www/Multicount
+ - echo
  - echo 'AWS LAM Installing z.lam1.us web site'
  - /var/www/aws/aws-lam-gitlab-clone.bash z $keyName
- - echo
- - echo 'AWS LAM Enable x11 forwarding over ssh for sudo'
- - ln -s /var/www/no-ssl/xauthority.sh /etc/profile.d
  - echo
  - echo 'AWS LAM ***** Additional sites *****'
  - echo
@@ -177,25 +189,10 @@ runcmd:
  - echo 'AWS LAM Adding larryforalaska www Content'
  - /var/www/aws/aws-lam-gitlab-clone.bash larryforalaska $keyName
  - echo
- - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
- - aws s3 cp ${IPv6} s3://lamurakami/aws-lam1-ubuntu/sshd_config /etc/ssh/sshd_config
- - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
- - echo
- - echo 'AWS LAM Get Public_IPv4 from Instance Metadata Service Version 2 values'
- - export Public_IPv4=$(/var/www/aws/ec2-user-data.pl | grep public-ipv4 | awk "{print \$3;}" | tr -d '\n')
- - echo
- - echo 'AWS LAM Configure lam-ak lan ssh access'
- - /var/www/aws/Configure-lam-ak-lan-ssh-access.bash
- - echo
- - echo 'AWS LAM Omit hashing of new known host entries'
- - sed -i '/HashKnownHosts/d' /etc/ssh/ssh_config
- - systemctl restart sshd
- - echo
- - echo
  - echo 'AWS LAM ***** Secure site *****'
  - echo
  - echo 'AWS LAM Installing Let-s Encrypt certificates for TLS encryption (HTTPS)'
- - aws s3 cp ${IPv6} s3://lamurakami/aws-lam1-ubuntu/letsencrypt.tgz - | tar -xzf - --directory /etc
+ - /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/letsencrypt.tgz /etc
  - echo
  - echo 'AWS LAM Updating apache2 configuration for lam1'
  - a2enmod ssl
@@ -242,12 +239,12 @@ runcmd:
  - echo 'AWS LAM Adding mike@mike.lam1.us user, group and www Content'
  - useradd --shell /bin/bash --create-home --groups users --uid 55501 mike
  - usermod --groups users,mike mike
- - aws s3 cp ${IPv6} s3://lamurakami/aws-lam1-ubuntu/mike.tgz - | tar -xzf - --directory /home
+ - /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/mike.tgz /home
  - /var/www/aws/aws-efs-www-git-clone.bash mike $keyName
  - echo
  - echo 'AWS LAM Adding blinkenshell www Content'
  # Extract blinkenshell from archive that includes date time stamps
- - aws s3 cp ${IPv6} s3://lamurakami/aws-lam1-ubuntu/blinkenshell.tgz - | tar -xzf - --directory /var/www
+ - /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/blinkenshell.tgz /var/www
  - echo
  - echo 'AWS LAM Tell git ownership of /var/www/blinkenshell/public_html is O.K.'
  - git config --system --add safe.directory /var/www/blinkenshell/public_html
@@ -270,13 +267,14 @@ runcmd:
  - /var/www/aws/aws-lam-apache2-sites-configuration-Debian-Ubuntu.bash
  - echo
  - echo 'AWS LAM Change ownership of /var/www /mnt/efs'
- - sh -c "chown -R lam:www-data /var/www"
+ - chown -R lam:www-data /var/www
  - chown www-data:www-data /var/www/Multicount
  - chown lam:staff /mnt/efs
+ - chown -R ubuntu:ubuntu /home/ubuntu
  - echo
  - echo 'AWS LAM Refreshing lam database'
- - aws s3 cp ${IPv6} s3://lamurakami/Bk-20-MySQL.lam.sql.gz - | gunzip -c | mysql --user=lam lam
- - aws s3 cp ${IPv6} s3://lamurakami/Bk-20-MySQL.wikidb.sql.gz - | gunzip -c | mysql --user=lam wikidb
+ - /var/www/aws/aws-efs-db-extract.bash Bk-20-MySQL.lam.sql.gz lam
+ - /var/www/aws/aws-efs-db-extract.bash Bk-20-MySQL.wikidb.sql.gz wikidb
  - systemctl restart apache2
  - echo
  - echo "AWS LAM Changes from $keyName-CloudInit etckeeper commit"
@@ -288,6 +286,8 @@ runcmd:
  - echo 'AWS LAM Add root alias so default AWS ubuntu user gets root mail'
  - cp /var/www/aws/etc/aliases /etc/aliases
  - cp /var/www/aws/etc/dovecot/conf.d/10-master.conf /etc/dovecot/conf.d/10-master.conf
+ - newaliases
+ - echo
  - etckeeper commit -m "AWS LAM Changes from $keyName-CloudInit"
  - echo
  - echo 'AWS LAM Install gitweb after apache has been configured'

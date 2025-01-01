@@ -3,7 +3,9 @@
 # Tell cloud-init to log the output to a log file
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
-# /var/www/aws/aws-nwo-lam2-Ubuntu-CloudInit.txt - Initialize lam2.duckdns.org
+# /var/www/aws/aws-lam2-ssh443-Ubuntu-22-Jammy-CloudInit.txt
+#
+# Initialize lam2.duckdns.org
 #
 # This version uses the LAM EFS private repo copies and then sets the URL
 # to git@aws:${REPO}.git or git@github.com:LAMurakami/${REPO}.git as
@@ -47,7 +49,7 @@ hostname: lam2
 timezone: US/Alaska
 
 runcmd:
- - keyName="lam2-Ubuntu"
+ - keyName="lam2-ssh443-Ubuntu-22-Jammy"
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log

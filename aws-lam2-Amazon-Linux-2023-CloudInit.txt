@@ -1,6 +1,6 @@
 #cloud-config
 
-# /var/www/aws/aws-nwo-lam2-Amazon-Linux-2023-No-Public-IPv4-CloudInit.txt
+# /var/www/aws/aws-lam2-Amazon-Linux-2023-CloudInit.txt
 
 # Tell cloud-init to log the output to a log file
 output : { all : '| tee -a /var/log/cloud-init-output.log' }
@@ -55,7 +55,7 @@ packages:
  - xorg-x11-xbitmaps
 
 runcmd:
- - keyName="lam2-AL2023-No-Public-IPv4"
+ - keyName="lam2-Amazon-Linux-2023"
  - echo
  - echo 'AWS LAM Add a swapfile'
  - dd if=/dev/zero of=/swapfile bs=32M count=24
