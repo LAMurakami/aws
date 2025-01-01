@@ -106,6 +106,13 @@ memory since the
 on swapless machines with 1G or less
 of RAM was fixed
 
+* [aws-lam2-Amazon-Linux-2-CloudInit.txt](https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam2-Amazon-Linux-2-CloudInit.txt?ref_type=heads)
+and
+[aws-nwo-lam2-Amazon-Linux-2-CloudInit.txt](https://gitlab.com/aws-lam/aws/-/blob/master/aws-nwo-lam2-Amazon-Linux-2-CloudInit.txt?ref_type=heads)
+are alternate initializations for an LAM AWS EC2 using Amazon Linux 2.
+
+* [aws-lam2-SLES-CloudInit.txt](https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam2-SLES-CloudInit.txt?ref_type=heads) is the cloud-config configuration file for the initializaton of a SLES 15 sp6 instance.
+
 * [aws-lam2-ssh443-Amazon-Linux-2-CloudInit.txt](https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam2-ssh443-Amazon-Linux-2-CloudInit.txt?ref_type=heads)
 is an alternate initialization
 for an LAM AWS EC2 using Amazon Linux 2 rather than Ubuntu Server as the
