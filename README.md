@@ -32,20 +32,20 @@ The Dynamic Domain Name Service subdomains used with DNS CNAME records
 to serve my domain names are also included in the apache2 ServerAlias.
 
 These values are used along with the instance-type on the main page for the
-virtual host in my version of the this http site is working main page.  The values for the main page and configuration file are applied during the CloudInit process by [cloud-init.pl](https://github.com/LAMurakami/aws/blob/master/cloud-init.pl) and [ec2-user-data.pl](https://github.com/LAMurakami/aws/blob/master/ec2-user-data.pl)
+virtual host in my version of the this http site is working main page.  The values for the main page and configuration file are applied during the CloudInit process by [cloud-init.pl](https://gitlab.com/aws-lam/aws/-/blob/master/cloud-init.pl?ref_type=heads) and [ec2-user-data.pl](https://gitlab.com/aws-lam/aws/-/blob/master/ec2-user-data.pl?ref_type=heads)
 
 A public-ipv6 value is also used to update the VirtualHost configuration for all the additional-sites possibly being served by the instance.
 Additional sites served by the instance possibly include:
 lam
-[no-ssl](https://github.com/LAMurakami/no-ssl)
-[arsc](https://github.com/LAMurakami/arsc)
-[sites](https://github.com/LAMurakami/sites)
-[cabo](https://github.com/LAMurakami/cabo)
-[z](https://github.com/LAMurakami/z)
-[blinkenshell](https://github.com/LAMurakami/blinkenshell)
-[olnes](https://github.com/LAMurakami/olnes)
+[no-ssl](https://gitlab.com/aws-lam/no-ssl/-/tree/master?ref_type=heads)
+[arsc](https://gitlab.com/aws-lam/arsc/-/tree/master?ref_type=heads)
+[sites](https://gitlab.com/aws-lam/sites/-/tree/master?ref_type=heads)
+[cabo](https://gitlab.com/aws-lam/cabo/-/tree/master?ref_type=heads)
+[z](https://gitlab.com/aws-lam/z/-/tree/master?ref_type=heads)
+[blinkenshell](https://gitlab.com/aws-lam/blinkenshell/-/tree/master?ref_type=heads)
+[olnes](https://gitlab.com/aws-lam/olnes/-/tree/master?ref_type=heads)
 alaskademocrat
-[larryforalaska](https://github.com/LAMurakami/larryforalaska)
+[larryforalaska](https://gitlab.com/aws-lam/larryforalaska/-/tree/master?ref_type=heads)
 mike
 interiordems
 oldinteriordems
@@ -67,9 +67,9 @@ content in a html/ subdirectory as outlined below:
          |-- aws_apache2.conf
          |-- html/   DocumentRoot /var/www/aws/html/</pre>
 
-* [aws-nwo-lam1-Ubuntu-Noble-No-Public-IPv4-CloudInit.txt](https://github.com/LAMurakami/aws/blob/master/aws-nwo-lam1-Ubuntu-Noble-No-Public-IPv4-CloudInit.txt)
+* [aws-lam1-Ubuntu-24-Noble-CloudInit.txt](https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam1-Ubuntu-24-Noble-CloudInit.txt?ref_type=heads)
 and
-[aws-nwo-lam1-Ubuntu-CloudInit.txt](https://github.com/LAMurakami/aws/blob/master/aws-nwo-lam1-Ubuntu-CloudInit.txt)
+[aws-nwo-lam1-Ubuntu-CloudInit.txt](https://gitlab.com/aws-lam/aws/-/blob/master/aws-nwo-lam1-Ubuntu-CloudInit.txt?ref_type=heads)
 are the cloud-config configuration files for the initializaton
 of an Ubuntu 24.04 Noble Numbat instance.  During the first boot all the
 installed packages are updated and then additional packages are installed
@@ -84,21 +84,21 @@ A No-Public-IPv4 instance may require the main instance in the us-west-2 Oregon
 region be up and running as a dual stack IPv4 and IPv6 ssh server to support
 some initialization steps.
 
-* [aws-nwo-lam1-Ubuntu-No-Public-IPv4-CloudInit.txt](https://github.com/LAMurakami/aws/blob/master/aws-nwo-lam1-Ubuntu-No-Public-IPv4-CloudInit.txt)
+* [aws-lam1-Ubuntu-22-Jammy-CloudInit.txt](https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam1-Ubuntu-22-Jammy-CloudInit.txt?ref_type=heads)
 and
-[aws-nwo-lam1-Ubuntu-CloudInit.txt](https://github.com/LAMurakami/aws/blob/master/aws-nwo-lam1-Ubuntu-CloudInit.txt)
+[aws-nwo-lam1-Ubuntu-CloudInit.txt](https://gitlab.com/aws-lam/aws/-/blob/master/aws-nwo-lam1-Ubuntu-CloudInit.txt?ref_type=heads)
 are the cloud-config configuration files for the initializaton
 of an Ubuntu 22.04 Jammy Jellyfish instance.
 
-* [aws-nwo-lam2-Debian-No-Public-IPv4-CloudInit.txt](https://github.com/LAMurakami/aws/blob/master/aws-nwo-lam2-Debian-No-Public-IPv4-CloudInit.txt)
+* [aws-lam2-Debian-CloudInit.txt](https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam2-Debian-CloudInit.txt?ref_type=heads)
 and
-[aws-nwo-lam2-Debian-CloudInit.txt](https://github.com/LAMurakami/aws/blob/master/aws-nwo-lam2-Debian-CloudInit.txt)
+[aws-nwo-lam2-Debian-CloudInit.txt](https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam2-Debian-CloudInit.txt?ref_type=heads)
 are the cloud-config configuration files for the initializaton
 of a Debian 12 instance.
 
-* [aws-nwo-lam2-Amazon-Linux-2023-No-Public-IPv4-CloudInit.txt](https://github.com/LAMurakami/aws/blob/master/aws-nwo-lam2-Amazon-Linux-2023-No-Public-IPv4-CloudInit.txt)
+* [aws-lam2-Amazon-Linux-2023-CloudInit.txt](https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam2-Amazon-Linux-2023-CloudInit.txt?ref_type=heads)
 and
-[aws-nwo-lam2-Amazon-Linux-2023-CloudInit.txt](https://github.com/LAMurakami/aws/blob/master/aws-nwo-lam2-Amazon-Linux-2023-CloudInit.txt)
+[aws-nwo-lam2-Amazon-Linux-2023-CloudInit.txt](https://gitlab.com/aws-lam/aws/-/blob/master/aws-nwo-lam2-Amazon-Linux-2023-CloudInit.txt?ref_type=heads)
 are alternate initializations for an LAM AWS EC2 using Amazon Linux 2023.
 These cloud-config files can be used on a t3.nano instance with only 0.5 GiB of
 memory since the
@@ -106,14 +106,14 @@ memory since the
 on swapless machines with 1G or less
 of RAM was fixed
 
-* [aws-nwo-lam2-Amazon-Linux-2-CloudInit.txt](https://github.com/LAMurakami/aws/blob/master/aws-nwo-lam2-Amazon-Linux-2-CloudInit.txt)
+* [aws-lam2-ssh443-Amazon-Linux-2-CloudInit.txt](https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam2-ssh443-Amazon-Linux-2-CloudInit.txt?ref_type=heads)
 is an alternate initialization
 for an LAM AWS EC2 using Amazon Linux 2 rather than Ubuntu Server as the
 Linux component of the LAMP model web server.  Adding epel, php7.4 and
 mariadb10.5 repositories using amazon-linux-extras enables this instance
 to support the MediaWiki installation and be an AWS LAM clone.
 
-* [cloud-init.pl](https://github.com/LAMurakami/aws/blob/master/cloud-init.pl)
+* [cloud-init.pl](https://gitlab.com/aws-lam/aws/-/blob/master/cloud-init.pl?ref_type=heads)
 applies the public-hostname, public-ipv4, local-hostname and
 local-ipv4 values from the /var/log/cloud-init-output.log to the
 /var/www/aws/html/index.html and /var/www/aws/aws_apache2.conf files so the
@@ -132,7 +132,6 @@ changes in configuration files with:
 <pre>systemctl reload apache2</pre>
 
 See Also:
-* [no-ssl repo README.md](https://github.com/LAMurakami/no-ssl#readme)
-* [arsc repo README.md](https://github.com/LAMurakami/arsc#readme)
-* [ubuntu-etc repo README.md](https://github.com/LAMurakami/ubuntu-etc#readme) Ubuntu Server 20.04 configuration changes for LAM AWS VPC EC2 instances
+* [no-ssl repo](https://gitlab.com/aws-lam/no-ssl/-/tree/master?ref_type=heads)
+* [arsc repo](https://gitlab.com/aws-lam/arsc/-/tree/master?ref_type=heads)
 * [A Cloud-init script that anyone could launch on AWS](https://lamurakami.github.io/blog/2020/08/04/Cloud-init-script-that-anyone-could-launch-on-AWS.html)
