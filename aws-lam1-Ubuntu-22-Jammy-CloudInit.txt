@@ -4,6 +4,9 @@
 output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
 # /var/www/aws/aws-lam1-Ubuntu-22-Jammy-CloudInit.txt
+# aws-lam1-Ubuntu-22-Jammy-CloudInit.txt - aws repo - master branch
+# https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam1-Ubuntu-22-Jammy-CloudInit.txt?ref_type=heads
+#
 # Initialize lam1.duckdns.org
 #
 # https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
