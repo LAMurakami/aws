@@ -1,10 +1,13 @@
 #cloud-config
 
+# /var/www/aws/aws-nwo-lam2-Amazon-Linux-2023-CloudInit.txt
+# aws-nwo-lam2-Amazon-Linux-2023-CloudInit.txt - aws repo - master branch
+# https://gitlab.com/aws-lam/aws/-/blob/master/aws-nwo-lam2-Amazon-Linux-2023-CloudInit.txt?ref_type=heads
+#
+# Initialize lam2.duckdns.
+
 # Tell cloud-init to log the output to a log file
 output : { all : '| tee -a /var/log/cloud-init-output.log' }
-
-# /var/www/aws/aws-nwo-lam2-Amazon-Linux-2023-CloudInit-no-packages.txt
-# Initialize lam2.duckdns.
 
 bootcmd:
  - echo
