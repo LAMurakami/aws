@@ -1,9 +1,8 @@
 #cloud-config
 
-# Tell cloud-init to log the output to a log file
-output: {all: '| tee -a /var/log/cloud-init-output.log'}
-
 # /var/www/aws/aws-lam2-SLES-CloudInit.txt
+# aws-lam2-SLES-CloudInit.txt - aws repo - master branch
+# https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam2-SLES-CloudInit.txt?ref_type=heads
 #
 # AWS AMIs are SLES version 15 service pack 6
 # SLES 15 was released in 2017
@@ -12,6 +11,9 @@ output: {all: '| tee -a /var/log/cloud-init-output.log'}
 # Initialize lam2.duckdns.org
 #
 # https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
+
+# Tell cloud-init to log the output to a log file
+output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
 # Set hostname
 hostname: lam2
