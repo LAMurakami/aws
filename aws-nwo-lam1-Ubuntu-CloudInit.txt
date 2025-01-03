@@ -1,11 +1,6 @@
 #cloud-config
 
-# /var/www/aws/aws-nwo-lam1-Ubuntu-CloudInit.txt
-
-# Tell cloud-init to log the output to a log file
-output: {all: '| tee -a /var/log/cloud-init-output.log'}
-
-# /var/www/aws/aws-nwo-lam1-Ubuntu-CloudInit.txt
+# /var/www/aws/aws-nwo-lam1-Ubuntu-CloudInit.txt - Ubuntu 22.04 Jammy Jellyfish
 # aws-nwo-lam1-Ubuntu-CloudInit.txt - aws repo - master branch
 # https://gitlab.com/aws-lam/aws/-/blob/master/aws-nwo-lam1-Ubuntu-CloudInit.txt?ref_type=heads
 #
@@ -16,6 +11,9 @@ output: {all: '| tee -a /var/log/cloud-init-output.log'}
 # This version clones from https://github.com/LAMurakami or the LAM EFS private
 # repo copies and then sets the URL to git@github.com:LAMurakami/${REPO}.git
 # or git@aws:${REPO}.git as appropriate.
+
+# Tell cloud-init to log the output to a log file
+output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
 bootcmd:
  - echo
@@ -40,7 +38,7 @@ hostname: lam1
 timezone: US/Alaska
 
 runcmd:
- - keyName="lam1-Ubuntu"
+ - keyName="lam1-Ubuntu-22-Jammy"
  - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
