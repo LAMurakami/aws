@@ -1,12 +1,13 @@
 #cloud-config
 
 # /var/www/aws/aws-nwo-lam2-Amazon-Linux-2-CloudInit.txt
+# aws-nwo-lam2-Amazon-Linux-2-CloudInit.txt - aws repo - master branch
+# https://gitlab.com/aws-lam/aws/-/blob/master/aws-nwo-lam2-Amazon-Linux-2-CloudInit.txt?ref_type=heads
+#
+# Initialize lam2.duckdns.org
 
 # Tell cloud-init to log the output to a log file
 output : { all : '| tee -a /var/log/cloud-init-output.log' }
-
-# /var/www/aws/aws-nwo-lam2-Amazon-Linux-2-CloudInit.txt
-# Initialize lam2.duckdns.org
 
 # Set timezone
 timezone: US/Alaska

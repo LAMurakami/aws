@@ -1,8 +1,5 @@
 #cloud-config
 
-# Tell cloud-init to log the output to a log file
-output: {all: '| tee -a /var/log/cloud-init-output.log'}
-
 # /var/www/aws/aws-lam1-Ubuntu-24-Noble-CloudInit.txt
 # aws-lam1-Ubuntu-24-Noble-CloudInit.txt - aws repo - master branch
 # https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam1-Ubuntu-24-Noble-CloudInit.txt?ref_type=heads
@@ -11,6 +8,9 @@ output: {all: '| tee -a /var/log/cloud-init-output.log'}
 #
 # https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
 #
+
+# Tell cloud-init to log the output to a log file
+output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
 bootcmd:
  - echo

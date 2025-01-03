@@ -1,8 +1,5 @@
 #cloud-config
 
-# Tell cloud-init to log the output to a log file
-output: {all: '| tee -a /var/log/cloud-init-output.log'}
-
 # /var/www/aws/aws-nwo-lam1-Ubuntu-Noble-CloudInit.txt
 # Initialize lam1.duckdns.org
 #
@@ -11,6 +8,9 @@ output: {all: '| tee -a /var/log/cloud-init-output.log'}
 # This version clones from https://github.com/LAMurakami or the LAM EFS private
 # repo copies and then sets the URL to git@github.com:LAMurakami/${REPO}.git
 # or git@aws:${REPO}.git as appropriate.
+
+# Tell cloud-init to log the output to a log file
+output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
 bootcmd:
  - echo
