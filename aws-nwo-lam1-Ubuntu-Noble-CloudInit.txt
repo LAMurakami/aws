@@ -1,6 +1,9 @@
 #cloud-config
 
 # /var/www/aws/aws-nwo-lam1-Ubuntu-Noble-CloudInit.txt
+# aws-nwo-lam1-Ubuntu-Noble-CloudInit.txt - aws repo - master branch
+# https://gitlab.com/aws-lam/aws/-/blob/master/aws-nwo-lam1-Ubuntu-Noble-CloudInit.txt?ref_type=heads
+#
 # Initialize lam1.duckdns.org
 #
 # https://aws.lam1.us/a/Amazon_Web_Services_(AWS)

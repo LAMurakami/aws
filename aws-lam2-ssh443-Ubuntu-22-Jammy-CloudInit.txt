@@ -1,9 +1,8 @@
 #cloud-config
 
-# Tell cloud-init to log the output to a log file
-output: {all: '| tee -a /var/log/cloud-init-output.log'}
-
 # /var/www/aws/aws-lam2-ssh443-Ubuntu-22-Jammy-CloudInit.txt
+# aws-lam2-ssh443-Ubuntu-22-Jammy-CloudInit.txt - aws repo - master branch
+# https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam2-ssh443-Ubuntu-22-Jammy-CloudInit.txt?ref_type=heads
 #
 # Initialize lam2.duckdns.org
 #
@@ -27,6 +26,9 @@ output: {all: '| tee -a /var/log/cloud-init-output.log'}
 # enabled.  The databeses for the secure site are not installed.
 #
 # https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
+
+# Tell cloud-init to log the output to a log file
+output: {all: '| tee -a /var/log/cloud-init-output.log'}
 
 bootcmd:
  - echo
@@ -249,8 +251,8 @@ runcmd:
  - echo
  - echo 'AWS LAM Adding larryforalaska www Content'
  - /var/www/aws/aws-lam-gitlab-clone.bash larryforalaska $keyName
- - ln -s /var/www/larryforalaska/larryforalaska_apache2.conf /etc/apache2/sites-available/070_larryforalaska.conf
- - a2ensite 070_larryforalaska
+ - ln -s /var/www/larryforalaska/larryforalaska_apache2.conf /etc/apache2/sites-available/810_larryforalaska.conf
+ - a2ensite 810_larryforalaska
  - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
  - echo

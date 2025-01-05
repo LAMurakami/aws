@@ -1,5 +1,8 @@
 #cloud-config
-# aws-lam2-ssh443-Amazon-Linux-2-CloudInit.txt
+
+# /var/www/aws/aws-lam2-ssh443-Amazon-Linux-2-CloudInit.txt
+# aws-lam2-ssh443-Amazon-Linux-2-CloudInit.txt - aws repo - master branch
+# https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam2-ssh443-Amazon-Linux-2-CloudInit.txt?ref_type=heads
 
 # Tell cloud-init to log the output to a log file
 output : { all : '| tee -a /var/log/cloud-init-output.log' }
@@ -85,8 +88,7 @@ runcmd:
  - /var/www/aws/ec2-user-data.pl
  - echo
  - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
- # Allow for either gzip compressed user-data or plain text user-data
- - (curl -s http://169.254.169.254/latest/user-data | gunzip) || curl -s http://169.254.169.254/latest/user-data
+ - /var/www/aws/ec2-instance-user-data.bash
  - echo
  - echo 'AWS LAM Check US Alaska local time for this system'
  - ls -lF --time-style=long-iso /etc/localtime
