@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 # /var/www/aws/Update-DuckDNS-IPv6-from-IPv4.bash # 1=name 2=IPv6 address
 

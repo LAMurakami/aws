@@ -1,3 +1,4 @@
+#!/usr/bin/bash
 # qemu-lam-apache2-sites-configuration-Debian-Ubuntu.bash
 #
 # This script does apache2 sites configuration for Debian and Ubuntu systems

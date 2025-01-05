@@ -1,3 +1,4 @@
+#!/usr/bin/bash
 # aws-lam-apache2-sites-configuration-Amazon-Linux.bash
 #
 # This script does apache2 sites configuration for Amazon Linux systems

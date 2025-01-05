@@ -1,3 +1,4 @@
+#!/usr/bin/bash
 # qemu-lam-apache2-sites-configuration-OpenSUSE.bash
 #
 # This script does apache2 sites configuration for OpenSUSE systems
