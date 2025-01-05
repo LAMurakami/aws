@@ -1,4 +1,7 @@
-# aws-lam-apache2-sites-configuration-Debian-Ubuntu.bash
+#!/usr/bin/bash
+# /var/www/aws/aws-lam-apache2-sites-configuration-Debian-Ubuntu.bash
+# aws-lam-apache2-sites-configuration-Debian-Ubuntu.bash - aws repo - master branch
+# https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam-apache2-sites-configuration-Debian-Ubuntu.bash?ref_type=heads
 #
 # This script does apache2 sites configuration for Debian and Ubuntu systems
 # Debian and Ubuntu has apache2 commands to enable or disable site configuration
