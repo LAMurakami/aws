@@ -75,6 +75,9 @@ a2ensite 140_interiordems
 ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf /etc/apache2/sites-available/150_oldinteriordems.conf
 a2ensite 150_oldinteriordems
 
+ln -s /var/www/cape_fairbanks/cape_fairbanks_apache2.conf /etc/apache2/sites-available/210_cape_fairbanks.conf
+a2ensite 210_cape_fairbanks
+
 # *.larryforalaska.com must be after non wildcard configurations
 ln -s /var/www/larryforalaska/larryforalaska_apache2.conf /etc/apache2/sites-available/810_larryforalaska.conf
 a2ensite 810_larryforalaska
@@ -127,6 +130,10 @@ a2ensite 111-blinkenshell_ssl_lam1
 ln -s /var/www/olnes/olnes_ssl_lam1_apache2.conf \
 /etc/apache2/sites-available/121_olnes_ssl_lam1.conf
 a2ensite 121_olnes_ssl_lam1
+
+ln -s /var/www/cape_fairbanks/cape_fairbanks_ssl_lam1_apache2.conf \
+/etc/apache2/sites-available/211_cape_fairbanks_ssl_lam1.conf
+a2ensite 211_cape_fairbanks_ssl_lam1
 
 ln -s /var/www/larryforalaska/larryforalaska_ssl_lam1_apache2.conf /etc/apache2/sites-available/811_larryforalaska_ssl_lam1.conf
 a2ensite 811_larryforalaska_ssl_lam1
