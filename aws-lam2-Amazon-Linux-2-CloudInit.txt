@@ -172,6 +172,9 @@ runcmd:
  - echo 'AWS LAM Adding larryforalaska www Content'
  - /var/www/aws/aws-lam-gitlab-clone.bash larryforalaska $keyName
  - echo
+ - echo 'AWS LAM Adding cape_fairbanks www Content'
+ - /var/www/aws/aws-lam-gitlab-clone.bash cape_fairbanks $keyName
+ - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
  - cp /var/www/aws/Amazon-Linux-2-sshd_config /etc/ssh/sshd_config
  - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh

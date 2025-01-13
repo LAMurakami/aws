@@ -99,6 +99,12 @@ ln -s /var/www/interiordems/interiordems_apache2.conf \
 ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf \
 /etc/apache2/vhosts.d/150_oldinteriordems.conf
 
+ln -s /var/www/cape_fairbanks/cape_fairbanks_apache2.conf \
+/etc/apache2/vhosts.d/210_cape_fairbanks.conf
+
+ln -s /var/www/cape_fairbanks/cape_fairbanks_ssl_lam1_apache2.conf \
+/etc/apache2/vhosts.d/211_cape_fairbanks_ssl_lam1.conf
+
 # *.larryforalaska.com must be after non wildcard configurations
 ln -s /var/www/larryforalaska/larryforalaska_apache2.conf \
 /etc/apache2/vhosts.d/810_larryforalaska.conf

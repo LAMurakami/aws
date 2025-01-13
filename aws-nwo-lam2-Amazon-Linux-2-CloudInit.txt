@@ -154,6 +154,9 @@ runcmd:
  - echo 'AWS LAM Adding larryforalaska www Content'
  - /var/www/aws/aws-lam-gitlab-clone.bash larryforalaska $keyName
  - echo
+ - echo 'AWS LAM Adding cape_fairbanks www Content'
+ - /var/www/aws/aws-lam-gitlab-clone.bash cape_fairbanks $keyName
+ - echo
  - echo 'AWS LAM Install mod_perl and man2html'
  - yum install -y mod_perl man2html
  - echo
