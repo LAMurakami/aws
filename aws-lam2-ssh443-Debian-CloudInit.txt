@@ -225,6 +225,9 @@ runcmd:
  - echo 'AWS LAM Adding larryforalaska www Content'
  - /var/www/aws/aws-lam-gitlab-clone.bash larryforalaska $keyName
  - echo
+ - echo 'AWS LAM Adding cape_fairbanks www Content'
+ - /var/www/aws/aws-lam-gitlab-clone.bash cape_fairbanks $keyName
+ - echo
  - echo 'AWS LAM ***** Secure site *****'
  - echo
  - echo 'AWS LAM Installing Let-s Encrypt certificates for TLS encryption (HTTPS)'

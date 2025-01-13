@@ -190,6 +190,9 @@ runcmd:
  - echo 'AWS LAM Adding larryforalaska www Content'
  - /var/www/aws/aws-lam-www-git-clone.bash larryforalaska $keyName
  - echo
+ - echo 'AWS LAM Adding cape_fairbanks www Content'
+ - /var/www/aws/aws-lam-gitlab-clone.bash cape_fairbanks $keyName
+ - echo
  - echo 'AWS LAM Use l3afpad fork of leafpad'
  - ln -s /usr/bin/l3afpad /usr/bin/leafpad
  - echo

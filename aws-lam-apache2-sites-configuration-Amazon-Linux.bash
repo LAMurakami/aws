@@ -101,6 +101,12 @@ ln -s /var/www/interiordems/interiordems_apache2.conf /etc/httpd/conf.d/zzz_140_
 # In file: /etc/apache2/sites-enabled/150_oldinteriordems_apache2.conf
 ln -s /var/www/oldinteriordems/oldinteriordems_apache2.conf /etc/httpd/conf.d/zzz_150_oldinteriordems.conf
 
+ln -s /var/www/cape_fairbanks/cape_fairbanks_apache2.conf \
+/etc/httpd/conf.d/zzz_210_cape_fairbanks.conf
+
+ln -s /var/www/cape_fairbanks/cape_fairbanks_ssl_lam1_apache2.conf \
+/etc/httpd/conf.d/zzz_211_cape_fairbanks_ssl_lam1.conf
+
 # *.larryforalaska.com must be after non wildcard configurations
 ln -s /var/www/larryforalaska/larryforalaska_apache2.conf \
 /etc/httpd/conf.d/zzz_810_larryforalaska.conf

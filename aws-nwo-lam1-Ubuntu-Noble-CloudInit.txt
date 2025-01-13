@@ -166,6 +166,9 @@ runcmd:
  - echo 'AWS LAM Adding larryforalaska www Content'
  - /var/www/aws/aws-lam-gitlab-clone.bash larryforalaska $keyName
  - echo
+ - echo 'AWS LAM Adding cape_fairbanks www Content'
+ - /var/www/aws/aws-lam-gitlab-clone.bash cape_fairbanks $keyName
+ - echo
  - echo 'AWS LAM ***** Use private LAM Alaska resources *****'
  - echo
  - echo 'AWS LAM Installing ubuntu user bash resources'
