@@ -146,6 +146,9 @@ runcmd:
  - echo 'AWS LAM Enable x11 forwarding over ssh for sudo'
  - ln -s /var/www/no-ssl/xauthority.sh /etc/profile.d
  - echo
+ - echo 'AWS LAM Set color=auto alias for ip command'
+ - ln -s /var/www/aws/etc/profile.d/ip-color.sh /etc/profile.d
+ - echo
  - echo 'AWS LAM ***** Additional sites *****'
  - echo
  - echo 'AWS LAM Installing arsc.lam1.us web site'

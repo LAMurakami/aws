@@ -147,6 +147,9 @@ runcmd:
  - echo
  - echo 'AWS LAM ***** http sites *****'
  - echo
+ - echo 'AWS LAM Create logs/ sybmolic link for Apache2 configuration use'
+ - ln -s /var/log/apache2 /etc/apache2/logs
+ - echo
  - echo 'AWS LAM Updating apache2 configuration for lam2'
  - a2enmod info
  - a2enmod status
@@ -188,9 +191,12 @@ runcmd:
  - echo
  - echo 'AWS LAM Installing aws.lam1.us web site'
  - git clone https://github.com/LAMurakami/aws /var/www/aws
- - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/080_aws.conf
- - a2ensite 080_aws
+ - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/000-aws.conf
+ - a2ensite 000-aws
  - /var/www/aws/cloud-init.pl
+ - echo
+ - echo 'AWS LAM Set color=auto alias for ip command'
+ - ln -s /var/www/aws/etc/profile.d/ip-color.sh /etc/profile.d
  - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
  - echo
