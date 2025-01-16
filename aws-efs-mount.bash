@@ -25,14 +25,17 @@ case ${REGION} in
 
   ap-northeast-1)
     EFS=fs-0055911a273d2036c.efs.ap-northeast-1.amazonaws.com
+    EFS2=fs-0b58add49289f1962.efs.ap-northeast-1.amazonaws.com
     ;;
 
   ap-northeast-2)
     EFS=fs-02d7c10d8f355782c.efs.ap-northeast-2.amazonaws.com
+    EFS2=fs-009003d8adbd3493b.efs.ap-northeast-2.amazonaws.com
     ;;
 
   ap-northeast-3)
     EFS=fs-0eabb3afc0fcafaf0.efs.ap-northeast-3.amazonaws.com
+    EFS2=fs-0da4c20db8ea93172.efs.ap-northeast-3.amazonaws.com
     ;;
 
   ap-south-1)
