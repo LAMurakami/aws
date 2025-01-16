@@ -281,7 +281,6 @@ runcmd:
  - echo 'AWS LAM Change ownership of /var/www /mnt/efs'
  - sh -c "chown -R lam:www-data /var/www"
  - chown www-data:www-data /var/www/Multicount
- - chown lam:staff /mnt/efs
  - echo
  - echo 'AWS LAM Refreshing lam database'
  - aws s3 cp ${IPv6} s3://lamurakami/Bk-20-MySQL.lam.sql.gz - | gunzip -c | mysql --user=lam lam

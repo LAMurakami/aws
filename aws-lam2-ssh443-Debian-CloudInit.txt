@@ -100,7 +100,7 @@ runcmd:
  - echo 'AWS LAM Get EFS for REGION'
  - export REGION=$(cloud-init query region)
  - echo
- - echo 'AWS LAM Adding nfs4 mount to AWS LAM VPC Elastic File System'
+ - echo 'AWS LAM Adding nfs4 mounts for AWS LAM VPC Elastic File Systems'
  - /var/www/aws/aws-efs-mount.bash
  - echo
  - echo 'AWS LAM Add localhost to known_hosts'
@@ -312,7 +312,6 @@ runcmd:
  - echo 'AWS LAM Alaska Set lam as owner of /var/www'
  - chown -R lam:staff /var/www
  - chown www-data:www-data /var/www/Multicount
- - chown lam:staff /mnt/efs
  - echo
  - echo 'AWS LAM Refreshing lam database'
  - aws s3 cp ${IPv6} s3://lamurakami/Bk-20-MySQL.lam.sql.gz - | gunzip -c | tail -n +2 | mariadb --user=lam lam

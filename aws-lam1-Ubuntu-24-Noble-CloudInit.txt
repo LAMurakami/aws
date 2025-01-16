@@ -277,7 +277,6 @@ runcmd:
  - echo 'AWS LAM Change ownership of /var/www /mnt/efs'
  - chown -R lam:www-data /var/www
  - chown www-data:www-data /var/www/Multicount
- - chown lam:staff /mnt/efs
  - chown -R ubuntu:ubuntu /home/ubuntu
  - echo
  - echo 'AWS LAM Refreshing lam database'

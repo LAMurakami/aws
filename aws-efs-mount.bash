@@ -15,10 +15,12 @@ case ${REGION} in
 
   af-south-1)
     EFS=fs-0efb2a6616ad77e76.efs.af-south-1.amazonaws.com
+    EFS2=fs-0febee1c1999ee5df.efs.af-south-1.amazonaws.com
     ;;
 
   ap-east-1)
     EFS=fs-07b8bea7d36fbd423.efs.ap-east-1.amazonaws.com
+    EFS2=fs-0135807df97f2cf6e.efs.ap-east-1.amazonaws.com
     ;;
 
   ap-northeast-1)
@@ -135,6 +137,7 @@ case ${REGION} in
 
   us-west-2)
     EFS=fs-6f45fac6.efs.us-west-2.amazonaws.com
+    EFS2=fs-0bf0b691780876b53.efs.us-west-2.amazonaws.com
     ;;
 
 # If we do not know the EFS for the REGION we exit as an error.
@@ -147,13 +150,15 @@ case ${REGION} in
 esac
 
 echo "REGION=${REGION} EFS=${EFS}"
+echo "                 EFS2=${EFS2}"
 
 # Mount the EFS using nfsv4
 
 nfsOpt="_netdev,noresvport,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
 
-mkdir /mnt/efs
+mkdir /mnt/efs /mnt/efs2
 echo "${EFS}:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
+echo "${EFS2}:/ /mnt/efs2 nfs4 ${nfsOpt}" >> /etc/fstab
 systemctl daemon-reload
 mount -a -t nfs4
 df -Th -x supermount --exclude-type=tmpfs --exclude-type=devtmpfs

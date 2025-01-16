@@ -86,7 +86,7 @@ runcmd:
  - sh -c "cd /var/www/aws;git checkout -b $keyName"
  - sh -c "cd /var/www/aws;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - echo
- - echo 'AWS LAM Adding nfs4 mount to AWS LAM VPC Elastic File System'
+ - echo 'AWS LAM Adding nfs4 mounts for AWS LAM VPC Elastic File Systems'
  - export REGION=$(cloud-init query region)
  - /var/www/aws/aws-efs-mount.bash
  - echo
@@ -275,7 +275,6 @@ runcmd:
  - echo 'AWS LAM Change ownership of /var/www /mnt/efs'
  - sh -c "chown -R lam:www-data /var/www"
  - chown www-data:www-data /var/www/Multicount
- - chown lam:staff /mnt/efs
  - echo
  - echo 'AWS LAM Refreshing lam database'
  - aws s3 cp s3://lamurakami/Bk-20-MySQL.lam.sql.gz - | gunzip -c | mysql --user=lam lam

@@ -286,7 +286,6 @@ runcmd:
  - echo 'AWS LAM Change ownership of /var/www'
  - sh -c "chown -R lam:apache /var/www"
  - chown apache:apache /var/www/Multicount
- - chown lam:staff /mnt/efs
  - echo
  - echo 'AWS LAM systemctl start httpd'
  - systemctl start httpd
