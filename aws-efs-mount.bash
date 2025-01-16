@@ -13,36 +13,37 @@
 
 case ${REGION} in
 
-  af-south-1)
+  af-south-1) # Cape Town
     EFS=fs-0efb2a6616ad77e76.efs.af-south-1.amazonaws.com
     EFS2=fs-0febee1c1999ee5df.efs.af-south-1.amazonaws.com
     ;;
 
-  ap-east-1)
+  ap-east-1) # Hong Kong
     EFS=fs-07b8bea7d36fbd423.efs.ap-east-1.amazonaws.com
     EFS2=fs-0135807df97f2cf6e.efs.ap-east-1.amazonaws.com
     ;;
 
-  ap-northeast-1)
+  ap-northeast-1) # Tokyo
     EFS=fs-0055911a273d2036c.efs.ap-northeast-1.amazonaws.com
     EFS2=fs-0b58add49289f1962.efs.ap-northeast-1.amazonaws.com
     ;;
 
-  ap-northeast-2)
+  ap-northeast-2) # Seoul
     EFS=fs-02d7c10d8f355782c.efs.ap-northeast-2.amazonaws.com
     EFS2=fs-009003d8adbd3493b.efs.ap-northeast-2.amazonaws.com
     ;;
 
-  ap-northeast-3)
+  ap-northeast-3) # Osaka
     EFS=fs-0eabb3afc0fcafaf0.efs.ap-northeast-3.amazonaws.com
     EFS2=fs-0da4c20db8ea93172.efs.ap-northeast-3.amazonaws.com
     ;;
 
-  ap-south-1)
+  ap-south-1) # Mumbai
     EFS=fs-08e7b5179413223f5.efs.ap-south-1.amazonaws.com
+    EFS2=fs-02abfd66659412fe9.efs.ap-south-1.amazonaws.com
     ;;
 
-  ap-south-2)
+  ap-south-2) # Hyderabad (India)
     EFS=fs-0f3c49954793b0430.efs.ap-south-2.amazonaws.com
     ;;
 

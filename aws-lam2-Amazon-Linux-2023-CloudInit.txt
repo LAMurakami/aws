@@ -84,7 +84,7 @@ runcmd:
  - echo 'AWS LAM Get EFS for REGION'
  - export REGION=$(cloud-init query region)
  - echo
- - echo 'AWS LAM Adding nfs4 mount to AWS LAM VPC Elastic File System'
+ - echo 'AWS LAM Adding nfs4 mounts for AWS LAM VPC Elastic File Systems'
  - /var/www/aws/aws-efs-mount.bash
  - echo
  - echo 'AWS LAM Add localhost key to known_hosts'

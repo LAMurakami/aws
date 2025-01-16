@@ -61,7 +61,7 @@ runcmd:
  - cp /var/www/aws/root/ssh/config /root/.ssh/config
  - cp /var/www/aws/etc/ssh/ssh_known_hosts /etc/ssh/ssh_known_hosts
  - echo
- - echo 'AWS LAM Adding nfs4 mount to AWS LAM VPC Elastic File System'
+ - echo 'AWS LAM Adding nfs4 mounts for AWS LAM VPC Elastic File Systems'
  - export REGION=$(cloud-init query region)
  - /var/www/aws/aws-efs-mount.bash
  - echo
