@@ -13,133 +13,157 @@
 
 case ${REGION} in
 
-  af-south-1) # Cape Town
+  af-south-1) # Africa (Cape Town)
     EFS=fs-0efb2a6616ad77e76.efs.af-south-1.amazonaws.com
     EFS2=fs-0febee1c1999ee5df.efs.af-south-1.amazonaws.com
     ;;
 
-  ap-east-1) # Hong Kong
+  ap-east-1) # Asia Pacific (Hong Kong)
     EFS=fs-07b8bea7d36fbd423.efs.ap-east-1.amazonaws.com
     EFS2=fs-0135807df97f2cf6e.efs.ap-east-1.amazonaws.com
     ;;
 
-  ap-northeast-1) # Tokyo
+  ap-northeast-1) # Asia Pacific (Tokyo)
     EFS=fs-0055911a273d2036c.efs.ap-northeast-1.amazonaws.com
     EFS2=fs-0b58add49289f1962.efs.ap-northeast-1.amazonaws.com
     ;;
 
-  ap-northeast-2) # Seoul
+  ap-northeast-2) # Asia Pacific (Seoul)
     EFS=fs-02d7c10d8f355782c.efs.ap-northeast-2.amazonaws.com
     EFS2=fs-009003d8adbd3493b.efs.ap-northeast-2.amazonaws.com
     ;;
 
-  ap-northeast-3) # Osaka
+  ap-northeast-3) # Asia Pacific (Osaka)
     EFS=fs-0eabb3afc0fcafaf0.efs.ap-northeast-3.amazonaws.com
     EFS2=fs-0da4c20db8ea93172.efs.ap-northeast-3.amazonaws.com
     ;;
 
-  ap-south-1) # Mumbai
+  ap-south-1) # Asia Pacific (Mumbai)
     EFS=fs-08e7b5179413223f5.efs.ap-south-1.amazonaws.com
     EFS2=fs-02abfd66659412fe9.efs.ap-south-1.amazonaws.com
     ;;
 
-  ap-south-2) # Hyderabad (India)
+  ap-south-2) # Asia Pacific (Hyderabad) (India)
     EFS=fs-0f3c49954793b0430.efs.ap-south-2.amazonaws.com
+    EFS2=fs-0cb333b3b0bb96ffa.efs.ap-south-2.amazonaws.com
     ;;
 
-  ap-southeast-1)
+  ap-southeast-1) # Asia Pacific (Singapore)
     EFS=fs-0bc20791f1e218e75.efs.ap-southeast-1.amazonaws.com
+    EFS2=fs-02bf11cf21591bd70.efs.ap-southeast-1.amazonaws.com
     ;;
 
-  ap-southeast-2)
+  ap-southeast-2) # Asia Pacific (Sydney)
     EFS=fs-052b468ab85811127.efs.ap-southeast-2.amazonaws.com
+    EFS2=fs-00d3c74b38f5ec3a9.efs.ap-southeast-2.amazonaws.com
     ;;
 
-  ap-southeast-3)
+  ap-southeast-3) # Asia Pacific (Jakarta) {Indonesia)
     EFS=fs-0235fe95dd1a70c55.efs.ap-southeast-3.amazonaws.com
+    EFS2=fs-057d1c0b60930cabc.efs.ap-southeast-3.amazonaws.com
     ;;
 
-  ap-southeast-4)
+  ap-southeast-4) # Asia Pacific (Melbourne)
     EFS=fs-0994e5fd7ba4fc589.efs.ap-southeast-4.amazonaws.com
+    EFS2=fs-050a6e2b9c9de77c2.efs.ap-southeast-4.amazonaws.com
     ;;
 
-  ap-southeast-5)
+  ap-southeast-5) # Asia Pacific (Malaysia)
     EFS=fs-097997ec94e6b5581.efs.ap-southeast-5.amazonaws.com
+    EFS2=fs-05899392e5708808f.efs.ap-southeast-5.amazonaws.com
     ;;
 
-  ap-southeast-7)
+  ap-southeast-7) # Asia Pacific (Thailand)
     EFS=fs-0cdd71000ba1a3219.efs.ap-southeast-7.amazonaws.com
+    EFS2=fs-08ab13c7a2a5370a0.efs.ap-southeast-7.amazonaws.com
     ;;
 
-  ca-central-1)
+  ca-central-1) # Canada (Central)
     EFS=fs-097d1db7b352a4500.efs.ca-central-1.amazonaws.com
+    EFS2=fs-0e52702bbefb606c7.efs.ca-central-1.amazonaws.com
     ;;
 
-  ca-west-1)
+  ca-west-1) # Canada (Calgary)
     EFS=fs-07ec130e68a08c1f5.efs.ca-west-1.amazonaws.com
+    EFS2=fs-02808550ea2a16821.efs.ca-west-1.amazonaws.com
     ;;
 
-  eu-central-1)
+  eu-central-1) # Europe (Frankfurt)
     EFS=fs-04e350b9678ec7514.efs.eu-central-1.amazonaws.com
+    EFS2=fs-01bd1373368406d01.efs.eu-central-1.amazonaws.com
     ;;
 
-  eu-central-2)
+  eu-central-2) # Europe (Zurich)
     EFS=fs-02f9285fc8f4641d1.efs.eu-central-2.amazonaws.com
+    EFS2=fs-083a9c510dffff85e.efs.eu-central-2.amazonaws.com
     ;;
 
-  eu-north-1)
+  eu-north-1) # Europe (Stockholm)
     EFS=fs-01ac02b17de17c958.efs.eu-north-1.amazonaws.com
+    EFS2=fs-0939161bcebeb94ff.efs.eu-north-1.amazonaws.com
     ;;
 
-  eu-south-1)
+  eu-south-1) # Europe (Milan) (Italy)
     EFS=fs-0e556fc5b3f845477.efs.eu-south-1.amazonaws.com
+    EFS2=fs-0b11a48b79f56f4ea.efs.eu-south-1.amazonaws.com
     ;;
 
-  eu-south-2)
+  eu-south-2) # Europe (Spain)
     EFS=fs-07b7207cb5cdb0fc8.efs.eu-south-2.amazonaws.com
+    EFS2=fs-00971dc2515ac7893.efs.eu-south-2.amazonaws.com
     ;;
 
-  eu-west-1)
+  eu-west-1) # Europe (Ireland)
     EFS=fs-0674ed15d7c1778ee.efs.eu-west-1.amazonaws.com
+    EFS2=fs-0cc130732641d633b.efs.eu-west-1.amazonaws.com
     ;;
 
-  eu-west-2)
+  eu-west-2) # Europe (London)
     EFS=fs-0825e9a369572f872.efs.eu-west-2.amazonaws.com
+    EFS2=fs-06f4d5c8f7de17823.efs.eu-west-2.amazonaws.com
     ;;
 
-  eu-west-3)
+  eu-west-3) # Europe (Paris)
     EFS=fs-0d87e55159aed8001.efs.eu-west-3.amazonaws.com
+    EFS2=fs-02b4db3ea075197a1.efs.eu-west-3.amazonaws.com
     ;;
 
-  il-central-1)
+  il-central-1) # Israel (Tel Aviv)
     EFS=fs-00330568057577874.efs.il-central-1.amazonaws.com
+    EFS2=fs-03a8b49a78ecd13df.efs.il-central-1.amazonaws.com
     ;;
 
-  me-central-1)
+  me-central-1) # Middle East (UAE) United Arab Emirates
     EFS=fs-0d20d1b5a09698f87.efs.me-central-1.amazonaws.com
+    EFS2=fs-0683efd88b4944281.efs.me-central-1.amazonaws.com
     ;;
 
-  me-south-1)
+  me-south-1) # Middle East (Bahrain)
     EFS=fs-070ebe5207ef277ec.efs.me-south-1.amazonaws.com
+    EFS2=fs-073e69178f808658e.efs.me-south-1.amazonaws.com
     ;;
 
-  sa-east-1)
+  sa-east-1) # South America (Sao Paulo)
     EFS=fs-0ad6de574706f8e5c.efs.sa-east-1.amazonaws.com
+    EFS2=fs-0a9d09d0b2dec94a0.efs.sa-east-1.amazonaws.com
     ;;
 
-  us-east-1)
+  us-east-1) # United States (N. Virginia)
     EFS=fs-08390e7e2f64fa292.efs.us-east-1.amazonaws.com
+    EFS2=fs-09cc6cbf3cfa6ae09.efs.us-east-1.amazonaws.com
     ;;
 
-  us-east-2)
+  us-east-2) # United States (Ohio)
     EFS=fs-076bd139f4c16a023.efs.us-east-2.amazonaws.com
+    EFS2=fs-0520efc0d7ca8629f.efs.us-east-2.amazonaws.com
     ;;
 
-  us-west-1)
+  us-west-1) # United States (California)
     EFS=fs-00596c6c130ced74d.efs.us-west-1.amazonaws.com
+    EFS2=fs-08948ede5b2eb842a.efs.us-west-1.amazonaws.com
     ;;
 
-  us-west-2)
+  us-west-2) # United States (Oregon)
     EFS=fs-6f45fac6.efs.us-west-2.amazonaws.com
     EFS2=fs-0bf0b691780876b53.efs.us-west-2.amazonaws.com
     ;;
