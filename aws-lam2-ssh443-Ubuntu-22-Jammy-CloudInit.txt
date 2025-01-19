@@ -248,7 +248,7 @@ runcmd:
  - echo 'AWS LAM Create lam murakami staff credentials.'
  - /var/www/lam/Create-lam-murakami-staff.bash
  - echo
- - echo 'AWS LAM Change ownership of /var/www /mnt/efs'
+ - echo 'AWS LAM Change ownership of /var/www'
  - sh -c "chown -R lam:www-data /var/www"
  - chown www-data:www-data /var/www/Multicount
  - echo

@@ -143,6 +143,11 @@ case ${REGION} in
     EFS2=fs-073e69178f808658e.efs.me-south-1.amazonaws.com
     ;;
 
+  mx-central-1) # Mexico (Central)
+    EFS=fs-0bcbd4f061273a68b.efs.mx-central-1.amazonaws.com
+    EFS2=fs-0b7cf1a8c1d79223c.efs.mx-central-1.amazonaws.com
+    ;;
+
   sa-east-1) # South America (Sao Paulo)
     EFS=fs-0ad6de574706f8e5c.efs.sa-east-1.amazonaws.com
     EFS2=fs-0a9d09d0b2dec94a0.efs.sa-east-1.amazonaws.com

@@ -278,7 +278,7 @@ runcmd:
  - echo 'AWS LAM Activate aws and additional sites'
  - /var/www/aws/aws-lam-apache2-sites-configuration-Debian-Ubuntu.bash
  - echo
- - echo 'AWS LAM Change ownership of /var/www /mnt/efs'
+ - echo 'AWS LAM Change ownership of /var/www'
  - sh -c "chown -R lam:www-data /var/www"
  - chown www-data:www-data /var/www/Multicount
  - echo
