@@ -7,9 +7,13 @@
 # IPv6 only workaround for git before putting my public git
 # repos on GitLab that can be accessed with IPv6 as well as IPv4
 
-# The first section uses the REGION environment variable
+# The first case section uses the REGION environment variable
 # to set the unique file system ID for the LAM VPC EFS
 # for that region.
+
+# The second case section uses the Availability_Zone environment variable
+# to set the unique file system ID for the LAM VPC EFS
+# for that Availability_Zone.
 
 case ${REGION} in
 
@@ -185,6 +189,15 @@ esac
 echo "REGION=${REGION} EFS=${EFS}"
 echo "                 EFS2=${EFS2}"
 
+EFS3=''
+case ${Availability_Zone} in
+
+  us-west-2d)
+    EFS3=fs-090fdf8e9505d1f8a.efs.us-west-2.amazonaws.com
+    ;;
+
+esac
+
 # Mount the EFS using nfsv4
 
 nfsOpt="_netdev,noresvport,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2 0 0"
@@ -192,6 +205,15 @@ nfsOpt="_netdev,noresvport,nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=60
 mkdir /mnt/efs /mnt/efs2
 echo "${EFS}:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
 echo "${EFS2}:/ /mnt/efs2 nfs4 ${nfsOpt}" >> /etc/fstab
+
+if [ -z ${EFS3} ]; then
+  echo "Unknown EFS for Availability_Zone=${Availability_Zone}" >&2
+else
+  echo "                 EFS3=${EFS3}"
+  mkdir /mnt/efs3
+  echo "${EFS3}:/ /mnt/efs3 nfs4 ${nfsOpt}" >> /etc/fstab
+fi
+
 systemctl daemon-reload
 mount -a -t nfs4
 df -Th -x supermount --exclude-type=tmpfs --exclude-type=devtmpfs
