@@ -97,6 +97,9 @@ runcmd:
  - echo 'AWS LAM Report AWS EC2 user-data for this instance (CloudInit directives)'
  - /var/www/aws/ec2-instance-user-data.bash
  - echo
+ - echo 'AWS LAM Get Availability_Zone from cloud-init values'
+ - export Availability_Zone=$(cloud-init query availability-zone)
+ - echo
  - echo 'AWS LAM Adding nfs4 mounts for AWS LAM VPC Elastic File Systems'
  - export REGION=$(cloud-init query region)
  - /var/www/aws/aws-efs-mount.bash

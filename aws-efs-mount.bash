@@ -209,7 +209,7 @@ echo "${EFS2}:/ /mnt/efs2 nfs4 ${nfsOpt}" >> /etc/fstab
 if [ -z ${EFS3} ]; then
   echo "Unknown EFS for Availability_Zone=${Availability_Zone}" >&2
 else
-  echo "                 EFS3=${EFS3}"
+  echo "Availability_Zone=${Availability_Zone} EFS3=${EFS3}"
   mkdir /mnt/efs3
   echo "${EFS3}:/ /mnt/efs3 nfs4 ${nfsOpt}" >> /etc/fstab
 fi

@@ -100,6 +100,9 @@ runcmd:
  - echo 'AWS LAM Get EFS for REGION'
  - export REGION=$(cloud-init query region)
  - echo
+ - echo 'AWS LAM Get Availability_Zone from cloud-init values'
+ - export Availability_Zone=$(cloud-init query availability-zone)
+ - echo
  - echo 'AWS LAM Adding nfs4 mounts for AWS LAM VPC Elastic File Systems'
  - /var/www/aws/aws-efs-mount.bash
  - echo
