@@ -219,7 +219,7 @@ case ${Availability_Zone} in
 
 #  us-east-1e) One Zone storage classes are not currently supported in this AZ.
 #    EFS3=
-$    ;;
+#    ;;
 
   us-east-1f)
     EFS3=fs-046b3ae5e1ee46109.efs.us-east-1.amazonaws.com
