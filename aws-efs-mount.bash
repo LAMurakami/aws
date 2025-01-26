@@ -2,18 +2,27 @@
 
 # aws-efs-mount.bash
 
-# This program replaces the (AWS) Elastic File System (EFS)
-# metadata directory method used when I was addressing the
-# IPv6 only workaround for git before putting my public git
-# repos on GitLab that can be accessed with IPv6 as well as IPv4
+# This program replaces the (AWS) Elastic File System (EFS) metadata directory
+# method used when I was addressing the IPv6 only workaround for git before
+# putting my public git repos on GitLab that can be accessed with IPv6 as well
+# as IPv4.
 
-# The first case section uses the REGION environment variable
-# to set the unique file system ID for the LAM VPC EFS
-# for that region.
+# I am now mounting three filesystems as part of initialization for a region.
+# efs1 - Standard - All files are always online - All that was available in 2017
+# efs2 - With Lifecycle Management - Standard, Infrequent Access, and Archive
+# efs3 - One Zone with Lifecycle Management - Standard and Infrequent Access
 
-# The second case section uses the Availability_Zone environment variable
-# to set the unique file system ID for the LAM VPC EFS
-# for that Availability_Zone.
+# efs1 is populated in all regions with a copy of the bash user resources
+# archive files needed to complete the initialization.
+# The other two filesystems are not required to complete initialization.
+
+# One Zone EFS are not currently supported in all AZs
+
+# The first case section uses the REGION environment variable to set the unique
+# file system ID for the LAM VPC EFS for that region.
+
+# The second case section uses the Availability_Zone environment variable to set
+# the unique file system ID for the LAM VPC EFS for that Availability_Zone (AZ).
 
 case ${REGION} in
 
@@ -192,6 +201,30 @@ echo "                 EFS2=${EFS2}"
 EFS3=''
 case ${Availability_Zone} in
 
+  us-east-1a)
+    EFS3=fs-092d75881922e554a.efs.us-east-1.amazonaws.com
+    ;;
+
+  us-east-1b)
+    EFS3=fs-022e6f8c059b775a7.efs.us-east-1.amazonaws.com
+    ;;
+
+  us-east-1c)
+    EFS3=fs-07dc643f63dd5ed50.efs.us-east-1.amazonaws.com
+    ;;
+
+  us-east-1d)
+    EFS3=fs-0601aaae4764f98d2.efs.us-east-1.amazonaws.com
+    ;;
+
+#  us-east-1e) One Zone storage classes are not currently supported in this AZ.
+#    EFS3=
+$    ;;
+
+  us-east-1f)
+    EFS3=fs-046b3ae5e1ee46109.efs.us-east-1.amazonaws.com
+    ;;
+
   us-west-2a)
     EFS3=fs-0be97de4c8c35cf91.efs.us-west-2.amazonaws.com
     ;;
@@ -219,7 +252,7 @@ echo "${EFS}:/ /mnt/efs nfs4 ${nfsOpt}" >> /etc/fstab
 echo "${EFS2}:/ /mnt/efs2 nfs4 ${nfsOpt}" >> /etc/fstab
 
 if [ -z ${EFS3} ]; then
-  echo "Unknown EFS for Availability_Zone=${Availability_Zone}" >&2
+  echo "One Zone EFS not available for Availability_Zone=${Availability_Zone}" >&2
 else
   echo "Availability_Zone=${Availability_Zone} EFS3=${EFS3}"
   mkdir /mnt/efs3
