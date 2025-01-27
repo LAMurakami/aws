@@ -237,6 +237,14 @@ case ${Availability_Zone} in
     EFS3=fs-06676d82cc7a67d99.efs.us-east-2.amazonaws.com
     ;;
 
+  us-west-1a)
+    EFS3=fs-0553e8c849818f7a8.efs.us-west-1.amazonaws.com
+    ;;
+
+  us-west-1c)
+    EFS3=fs-0e0ca6de0f251f3cb.efs.us-west-1.amazonaws.com
+    ;;
+
   us-west-2a)
     EFS3=fs-0be97de4c8c35cf91.efs.us-west-2.amazonaws.com
     ;;
