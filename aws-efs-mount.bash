@@ -201,6 +201,18 @@ echo "                 EFS2=${EFS2}"
 EFS3=''
 case ${Availability_Zone} in
 
+  af-south-1a)
+    EFS3=fs-0caa55b2b07b0df46.efs.af-south-1.amazonaws.com
+    ;;
+
+  af-south-1b)
+    EFS3=fs-08f47662d92425e3c.efs.af-south-1.amazonaws.com
+    ;;
+
+  af-south-1c)
+    EFS3=fs-045e547c836b9a5ca.efs.af-south-1.amazonaws.com
+    ;;
+
   us-east-1a)
     EFS3=fs-092d75881922e554a.efs.us-east-1.amazonaws.com
     ;;
