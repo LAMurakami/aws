@@ -62,7 +62,7 @@ runcmd:
  - cp /var/www/aws/etc/ssh/ssh_known_hosts /etc/ssh/ssh_known_hosts
  - echo
  - echo 'AWS LAM Get Availability_Zone from cloud-init values'
- - export Availability_Zone=$(cloud-init query availability-zone)
+ - export Availability_Zone=$(/var/www/aws/ec2-user-data.pl | grep availability-zone | awk "{print \$3;}" | tr -d '\n')
  - echo
  - echo 'AWS LAM Adding nfs4 mounts for AWS LAM VPC Elastic File Systems'
  - export REGION=$(cloud-init query region)
