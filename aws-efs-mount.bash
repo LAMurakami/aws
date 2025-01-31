@@ -233,6 +233,22 @@ case ${Availability_Zone} in
 #    EFS3=
 #    ;;
 
+#  me-central-1{a,b,c}) One Zone storage classes are not currently supported in this REGION
+#    EFS3=
+#    ;;
+
+  me-south-1a)
+    EFS3=fs-046462671b276063e.efs.me-south-1.amazonaws.com
+    ;;
+
+  me-south-1b)
+    EFS3=fs-05794f38a85b46b34.efs.me-south-1.amazonaws.com
+    ;;
+
+  me-south-1c)
+    EFS3=fs-0caf1a774c92e81ca.efs.me-south-1.amazonaws.com
+    ;;
+
 #  mx-central-1{a,b,c}) One Zone storage classes are not currently supported in this REGION
 #    EFS3=
 #    ;;
