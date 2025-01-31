@@ -213,6 +213,22 @@ case ${Availability_Zone} in
     EFS3=fs-045e547c836b9a5ca.efs.af-south-1.amazonaws.com
     ;;
 
+  ca-central-1a)
+    EFS3=fs-0c3dc538894a8120d.efs.ca-central-1.amazonaws.com
+    ;;
+
+  ca-central-1b)
+    EFS3=fs-0951ad75965dd7fa7.efs.ca-central-1.amazonaws.com
+    ;;
+
+#  ca-central-1d) One Zone storage classes are not currently supported in this AZ.
+#    EFS3=
+#    ;;
+
+#  ca-west-1{a,b,c}) One Zone storage classes are not currently supported in this REGION
+#    EFS3=
+#    ;;
+
 #  il-central-1{a,b,c}) One Zone storage classes are not currently supported in this REGION
 #    EFS3=
 #    ;;
