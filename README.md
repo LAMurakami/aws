@@ -120,6 +120,13 @@ Linux component of the LAMP model web server.  Adding epel, php7.4 and
 mariadb10.5 repositories using amazon-linux-extras enables this instance
 to support the MediaWiki installation and be an AWS LAM clone.
 
+* [aws-efs-mount.bash](https://gitlab.com/aws-lam/aws/-/blob/master/aws-efs-mount.bash?ref_type=heads)
+mounts the AWS LAM VPC Elastic File Systems that have been created for each region
+and availability zone when avaialble.  All 32 REGIONs enabled for my AWS account,
+as of January 2025, support Standard and Lifecycle Management EFS but a number of
+Availability Zones including all for many REGIONs do not yet support One Zone
+Lifecycle Managed EFS.
+
 * [cloud-init.pl](https://gitlab.com/aws-lam/aws/-/blob/master/cloud-init.pl?ref_type=heads)
 applies the public-hostname, public-ipv4, local-hostname and
 local-ipv4 values from the /var/log/cloud-init-output.log to the
