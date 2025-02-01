@@ -213,6 +213,22 @@ case ${Availability_Zone} in
     EFS3=fs-045e547c836b9a5ca.efs.af-south-1.amazonaws.com
     ;;
 
+  ap-east-1a)
+    EFS3=fs-0b99e82891c9e01b6.efs.ap-east-1.amazonaws.com
+    ;;
+
+  ap-east-1b)
+    EFS3=fs-0ae79eb793c27e047.efs.ap-east-1.amazonaws.com
+    ;;
+
+  ap-east-1c)
+    EFS3=fs-0994350d719f8851c.efs.ap-east-1.amazonaws.com
+    ;;
+
+#  ap-south-2{a,b,c}) One Zone storage classes are not currently supported in this REGION
+#    EFS3=
+#    ;;
+
   ca-central-1a)
     EFS3=fs-0c3dc538894a8120d.efs.ca-central-1.amazonaws.com
     ;;
