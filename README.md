@@ -140,10 +140,15 @@ additional-sites.
 * &lt;site&gt;_apache2.conf is the site apache2 configuration file.  The LAM AWS
 EC2 LAMP instance does not support .htaccess files.  The &lt;site&gt;_apache2.conf
 file is linked into /etc/apache2/sites-available and then enabled with
-a2ensite in the Implement_more_sites_conf.bash script which also assigns
+a2ensite in the
+[aws-lam-apache2-sites-configuration-Amazon-Linux.bash](https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam-apache2-sites-configuration-Amazon-Linux.bash?ref_type=heads),
+[aws-lam-apache2-sites-configuration-Debian-Ubuntu.bash](https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam-apache2-sites-configuration-Debian-Ubuntu.bash?ref_type=heads) and
+[aws-lam-apache2-sites-configuration-OpenSUSE.bash](https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam-apache2-sites-configuration-OpenSUSE.bash?ref_type=heads)
+script which also assign
 a three digit numerical order for the sites.  Force apache2 to read any
 changes in configuration files with:
-<pre>systemctl reload apache2</pre>
+<pre>sudo systemctl daemon-reload
+systemctl reload apache2</pre>
 
 See Also:
 * [no-ssl repo](https://gitlab.com/aws-lam/no-ssl/-/tree/master?ref_type=heads)
