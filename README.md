@@ -147,7 +147,7 @@ a2ensite in the
 script which also assign
 a three digit numerical order for the sites.  Force apache2 to read any
 changes in configuration files with:
-<pre>sudo systemctl daemon-reload
+<pre>systemctl daemon-reload
 systemctl reload apache2</pre>
 
 See Also:
