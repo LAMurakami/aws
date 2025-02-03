@@ -349,6 +349,22 @@ case ${Availability_Zone} in
     EFS3=fs-0fd8dc7b93b47a3a0.efs.eu-central-1.amazonaws.com
     ;;
 
+  eu-south-1a)
+    EFS3=fs-03d7bedac3687a304.efs.eu-south-1.amazonaws.com
+    ;;
+
+  eu-south-1b)
+    EFS3=fs-040eeafe19545f0db.efs.eu-south-1.amazonaws.com
+    ;;
+
+  eu-south-1c)
+    EFS3=fs-0bee2ce93ba6e560e.efs.eu-south-1.amazonaws.com
+    ;;
+
+#  eu-south-2){a,b,c}) One Zone storage classes are not currently supported in this REGION
+#    EFS3=
+#    ;;
+
   eu-west-1a)
     EFS3=fs-09f8f2dc57e4a232c.efs.eu-west-1.amazonaws.com
     ;;
@@ -373,16 +389,16 @@ case ${Availability_Zone} in
     EFS3=fs-0b954ef62f1defdbf.efs.eu-west-2.amazonaws.com
     ;;
 
-  eu-south-1a)
-    EFS3=fs-03d7bedac3687a304.efs.eu-south-1.amazonaws.com
+  eu-west-3a)
+    EFS3=fs-0617ddb1dd371a2e3.efs.eu-west-3.amazonaws.com
     ;;
 
-  eu-south-1b)
-    EFS3=fs-040eeafe19545f0db.efs.eu-south-1.amazonaws.com
-    ;;
+#  eu-west-3b) One Zone storage classes are not currently supported in this AZ.
+#    EFS3=
+#    ;;
 
-  eu-south-1c)
-    EFS3=fs-0bee2ce93ba6e560e.efs.eu-south-1.amazonaws.com
+  eu-west-3c)
+    EFS3=fs-0c21c0b0c63a37f45.efs.eu-west-3.amazonaws.com
     ;;
 
 #  il-central-1{a,b,c}) One Zone storage classes are not currently supported in this REGION
