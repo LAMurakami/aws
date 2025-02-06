@@ -103,6 +103,8 @@ ln -s /var/www/lam/lam_apache2.conf /etc/apache2/sites-available/011_lam-ssl.con
 a2ensite 011_lam-ssl
 a2dissite default-ssl
 
+echo
+echo 'AWS LAM enable additional secure sites'
 ln -s /var/www/sites/sites_ssl_lam1-apache2.conf \
 /etc/apache2/sites-available/031_sites_ssl_lam1.conf
 a2ensite 031_sites_ssl_lam1
@@ -138,4 +140,4 @@ a2ensite 211_cape_fairbanks_ssl_lam1
 ln -s /var/www/larryforalaska/larryforalaska_ssl_lam1_apache2.conf /etc/apache2/sites-available/811_larryforalaska_ssl_lam1.conf
 a2ensite 811_larryforalaska_ssl_lam1
 
-fi
+fi # End: activate secure sites if not 'no_443'
