@@ -4,7 +4,7 @@
 # aws-lam2-ssh443-Ubuntu-22-Jammy-CloudInit.txt - aws repo - master branch
 # https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam2-ssh443-Ubuntu-22-Jammy-CloudInit.txt?ref_type=heads
 #
-# Initialize lam2.duckdns.org
+# Initialize lam2.lam1.us
 #
 # This version uses the LAM EFS private repo copies and then sets the URL
 # to git@aws:${REPO}.git or git@github.com:LAMurakami/${REPO}.git as
@@ -194,7 +194,7 @@ runcmd:
  - sh -c "cd /var/www/lam;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - echo
  - echo 'AWS LAM Update from default to LAM AWS lam2 web configuration'
- - sed -i "s|aws|lam2|" /var/www/no-ssl/apache2.conf
+ - sed -i "s|aws.lam1.us|lam2.lam1.us|" /var/www/no-ssl/apache2.conf
  - mkdir /var/www/Multicount
  - echo
  - echo 'AWS LAM Install mariadb after swap has been configured'
@@ -276,15 +276,10 @@ runcmd:
  - echo
  - echo 'AWS LAM Install plocate after swap has been configured'
  - apt-get install -y plocate
- - echo
- - echo 'AWS LAM ***** Run cron daily plocate jobs *****'
- - ln -s /var/www/no-ssl/local_scripts/plocate-mnt-efs.sh /etc/cron.daily/plocate-mnt-efs.sh
- - /etc/cron.daily/plocate-mnt-efs.sh
- - chmod a+r /mnt/efs/plocate.db
  - updatedb
  - echo
- - echo 'AWS LAM Use Elastic File System plocate database'
- - ln -s /var/www/no-ssl/plocate.sh /etc/profile.d/plocate.sh
+ - echo 'AWS LAM Update Elastic File System plocate databases'
+ - /var/www/no-ssl/Create-update-efs-plocate-db.bash
  - echo
  - echo 'AWS LAM Enable x11 forwarding over ssh for sudo'
  - ln -s /var/www/no-ssl/xauthority.sh /etc/profile.d

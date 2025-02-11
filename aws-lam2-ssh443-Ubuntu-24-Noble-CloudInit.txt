@@ -4,7 +4,7 @@
 # aws-lam2-ssh443-Ubuntu-24-Noble-CloudInit.txt - aws repo - master branch
 # https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam2-ssh443-Ubuntu-24-Noble-CloudInit.txt?ref_type=heads
 #
-# Initialize lam2.duckdns.org
+# Initialize lam2.lam1.us
 #
 # https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
 #
@@ -168,7 +168,7 @@ runcmd:
  - echo 'AWS LAM Update from default to LAM AWS lam2 web configuration'
  - sed -i "s|aws|lam2|" /var/www/no-ssl/apache2.conf
  - sed -i 's|aws.ServerAdmin|lam2.ServerAdmin|' /etc/apache2/apache2.conf
- - sed -i 's|aws.lam1.us|lam2.duckdns.org|' /etc/apache2/apache2.conf
+ - sed -i 's|aws.lam1.us|lam2.lam1.us|' /etc/apache2/apache2.conf
  - echo
  - echo 'AWS LAM Configuring perl to include LAM perl modules'
  - mkdir /usr/local/lib/site_perl
@@ -216,7 +216,7 @@ runcmd:
  - echo
  - echo 'AWS LAM Tell git /var/www/lam is O.K.'
  - git config --system --add safe.directory /var/www/lam
- # Use lam1 branch to serve secure site at https://lam2.duckdns.org
+ # Use lam1 branch to serve secure site at https://lam2.lam1.us
  - sh -c "cd /var/www/lam;git stash"
  - sh -c "cd /var/www/lam;git checkout lam1"
  - sh -c "cd /var/www/lam;git checkout -b $keyName"
@@ -310,15 +310,10 @@ runcmd:
  - echo
  - echo 'AWS LAM Install plocate after swap has been configured'
  - apt-get install -y plocate
- - echo
- - echo 'AWS LAM ***** Run cron daily plocate jobs *****'
- - ln -s /var/www/no-ssl/local_scripts/plocate-mnt-efs.sh /etc/cron.daily/plocate-mnt-efs.sh
- - /etc/cron.daily/plocate-mnt-efs.sh
- - chmod a+r /mnt/efs/plocate.db
  - updatedb
  - echo
- - echo 'AWS LAM Use Elastic File System plocate database'
- - ln -s /var/www/no-ssl/plocate.sh /etc/profile.d/plocate.sh
+ - echo 'AWS LAM Update Elastic File System plocate databases'
+ - /var/www/no-ssl/Create-update-efs-plocate-db.bash
  - echo
  - echo 'AWS LAM Updating lam2.duckdns.org IP address'
  - ln -s /home/ubuntu/.duckdns /root/.duckdns

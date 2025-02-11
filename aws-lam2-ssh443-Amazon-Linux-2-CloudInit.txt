@@ -149,11 +149,11 @@ runcmd:
  - echo 'AWS LAM Update packages'
  - yum -y update
  - echo
- - echo 'AWS LAM Set lam2.duckdns.org hostname'
+ - echo 'AWS LAM Set lam2.lam1.us hostname'
  - /var/www/aws/Amazon-Linux-2-set-hostname.bash
  - echo
  - echo 'AWS LAM Set hostname and localhost alias in /etc/hosts'
- - sed -i '1s/localhost/lam2.duckdns.org lam2 localhost/' /etc/hosts
+ - sed -i '1s/localhost/lam2.lam1.us lam2 localhost/' /etc/hosts
  - echo
  - echo 'AWS LAM List Installed Packages information'
  - repoquery -a --installed --qf '%-30{UI_FROM_REPO}%{NAME}-%{VERSION}-%{RELEASE}-%{ARCH}' | sort --ignore-case --key=1.31

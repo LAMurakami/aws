@@ -8,7 +8,7 @@
 # SLES 15 was released in 2017
 # AWS provides SUSE Linux Enterprise Server (SLES) AMIs
 #
-# Initialize lam2.duckdns.org
+# Initialize lam2.lam1.us
 #
 # https://aws.lam1.us/a/Amazon_Web_Services_(AWS)
 

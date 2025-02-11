@@ -208,7 +208,7 @@ runcmd:
  # Extract lam from archive that includes MediWiki and git repo
  - /var/www/aws/aws-efs-tar-extract.bash lam.tgz /var/www
  - echo
- - echo 'AWS LAM Use lam2 branch to serve secure site at https://lam2.duckdns.org'
+ - echo 'AWS LAM Use lam2 branch to serve secure site at https://lam2.lam1.us'
  - sh -c "cd /var/www/lam;git stash"
  - sh -c "cd /var/www/lam;git checkout lam2"
  - sh -c "cd /var/www/lam;git checkout -b $keyName"
@@ -299,11 +299,11 @@ runcmd:
  - sh -c 'echo "latest" >> /etc/dnf/vars/releasever'
  - dnf -y upgrade
  - echo
- - echo 'AWS LAM Set lam2.duckdns.org hostname'
+ - echo 'AWS LAM Set lam2.lam1.us hostname'
  - /var/www/aws/Amazon-Linux-2-set-hostname.bash
  - echo
  - echo 'AWS LAM Set hostname and localhost alias in /etc/hosts'
- - sed -i '1s/localhost/lam2.duckdns.org lam2 localhost/' /etc/hosts
+ - sed -i '1s/localhost/lam2.lam1.us lam2 localhost/' /etc/hosts
  - echo
  - echo 'AWS LAM Updating lam2.duckdns.org IP address'
  - ln -s /home/ec2-user/.duckdns /root/.duckdns
@@ -314,10 +314,9 @@ runcmd:
  - echo
  - echo 'AWS LAM ***** Update mlocate database *****'
  - updatedb
- - /var/www/aws/systemd/daily-backup/mlocate-mnt-efs
  - echo
- - echo 'AWS LAM Use Elastic File System mlocate database'
- - ln -s /var/www/no-ssl/mlocate.sh /etc/profile.d/mlocate.sh
+ - echo 'AWS LAM Update Elastic File System mlocate databases'
+ - /var/www/no-ssl/Create-update-efs-mlocate-db.bash
  - echo
  - echo 'AWS LAM link which to /usr/local/bin *****'
  - ln -s /bin/which /usr/local/bin/which
