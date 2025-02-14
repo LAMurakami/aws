@@ -272,7 +272,7 @@ runcmd:
  - sh -c "cd /var/www/blinkenshell/public_html;git tag -a -m 'AWS LAM Initialization' b0-$keyName"
  - echo
  - echo 'AWS LAM Adding alaskademocrat www Content'
- - ./aws-efs-www-git-clone.bash alaskademocrat $keyName
+ - /var/www/aws/aws-efs-www-git-clone.bash alaskademocrat $keyName
  - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
  - echo
