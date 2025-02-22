@@ -70,7 +70,7 @@ ip6tables -A INPUT -p tcp -s 2a05:d019:113:7b00::/56  --dport 22 -j ACCEPT   # e
 ip6tables -A INPUT -p tcp -s 2406:da1e:ee0:4b00::/56  --dport 22 -j ACCEPT   # ap-east-1 Hong Kong LAM AWS VPC IPv6 CIDR
 ip6tables -A INPUT -p tcp -s 2406:da10:8bc3:8000::/56 --dport 22 -j ACCEPT   # ap-southeast-5 Asia Pacific (Malaysia) LAM AWS VPC IPv6 CIDR
 ip6tables -A INPUT -p tcp -s 2406:da14:862d:8d00::/56 --dport 22 -j ACCEPT   # ap-aoutheast-7 Asia Pacific (Thailand) LAM AWS VPC IPv6 CIDR
-ip6tables -A INPUT -p tcp -s 2a0a:d981::/64 --dport 22 -j ACCEPT # SSH from BlinkenShell
+ip6tables -A INPUT -p tcp -s 2a0a:d981::10/64 --dport 22 -j ACCEPT # SSH from BlinkenShell
 
 # Specify services we will allow
 ip6tables -A INPUT -p tcp --dport 2222 -j ACCEPT                  # sshd on alternate port
