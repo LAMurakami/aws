@@ -20,8 +20,8 @@ if [[ ${Public_IPv4} == 'none' ]] ; then
   echo 'Public_IPv4=none'
 else
 
-echo url="https://api.dynu.com/nic/update?username=LAMurakami&password=$(cat \
-~/.dynu-password)&hostname=${Subdomain}.freeddns.org&myip=${Public_IPv4}"\
+echo url="https://api-ipv4.dynu.com/nic/update?username=LAMurakami&password=$(cat \
+~/.dynu-password)&hostname=${Subdomain}.freeddns.org"\
 | curl -k -K -; echo " IPv4 address update for ${Subdomain}.freeddns.org" ; echo
 
 fi
