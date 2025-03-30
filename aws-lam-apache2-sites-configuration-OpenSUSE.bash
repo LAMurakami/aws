@@ -43,6 +43,8 @@ ln -s /var/www/aws/aws_ssl_lam1_apache2.conf \
 /etc/apache2/vhosts.d/001_aws_ssl_lam1.conf
 ln -s /var/www/aws/aws_ssl_duckdns_apache2.conf \
 /etc/apache2/vhosts.d/005_aws_ssl_duckdns.conf
+ln -s /var/www/aws/aws_ssl_freeddns_apache2.conf \
+/etc/apache2/vhosts.d/006_aws_ssl_freeddns.conf
 
 echo
 echo 'AWS LAM enable lam site for ssl'

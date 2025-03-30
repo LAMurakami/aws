@@ -96,6 +96,9 @@ a2ensite 001_aws_ssl_lam1.conf
 ln -s /var/www/aws/aws_ssl_duckdns_apache2.conf \
 /etc/apache2/sites-available/005_aws_ssl_duckdns.conf
 a2ensite 005_aws_ssl_duckdns
+ln -s /var/www/aws/aws_ssl_freeddns_apache2.conf \
+/etc/apache2/sites-available/006_aws_ssl_freeddns.conf
+a2ensite 006_aws_ssl_freeddns
 
 echo
 echo 'AWS LAM enable lam site for ssl'
