@@ -338,6 +338,9 @@ runcmd:
  - ln -s /home/admin/.duckdns /root/.duckdns
  - /var/www/aws/Update-DuckDNS.bash lam2
  - echo
+ - echo 'AWS LAM Updating lam1.freeddns.org IP address'
+ - /var/www/aws/Update-Dynu-FreeDDNS.bash lam2
+ - echo
  - echo 'AWS LAM Alaska List Installed Packages information'
  - dpkg -l
  - echo

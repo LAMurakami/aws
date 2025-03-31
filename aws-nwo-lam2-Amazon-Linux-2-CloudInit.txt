@@ -304,6 +304,9 @@ runcmd:
  - ln -s /home/ec2-user/.duckdns /root/.duckdns
  - /var/www/aws/Update-DuckDNS.bash lam2
  - echo
+ - echo 'AWS LAM Updating lam1.freeddns.org IP address'
+ - /var/www/aws/Update-Dynu-FreeDDNS.bash lam2
+ - echo
  - echo 'AWS LAM List Installed Packages information'
  - repoquery -a --installed --qf '%-30{UI_FROM_REPO}%{NAME}-%{VERSION}-%{RELEASE}-%{ARCH}' | sort --ignore-case --key=1.31
  - echo

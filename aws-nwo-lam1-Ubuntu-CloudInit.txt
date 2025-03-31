@@ -291,6 +291,9 @@ runcmd:
  - ln -s /home/ubuntu/.duckdns /root/.duckdns
  - /var/www/aws/Update-DuckDNS.bash lam1
  - echo
+ - echo 'AWS LAM Updating lam1.freeddns.org IP address'
+ - /var/www/aws/Update-Dynu-FreeDDNS.bash lam1
+ - echo
  - echo 'AWS LAM Install dovecot-imapd after /etc/hosts has been configured'
  - apt-get install --yes dovecot-imapd
  - echo
