@@ -12,10 +12,6 @@ Subdomain=$1
 # For now we will setup the ~/.dynu-password
 scp aws:~/.dynu-password ~
 
-IPv6_Address=$(ip a | grep inet6 \
-| grep 'scope global dynamic' | awk '{print $2;}' \
-| sed 's|/.*||' | tr -d '\n')
-
 if [[ ${Public_IPv4} == 'none' ]] ; then
   echo 'Public_IPv4=none'
 else
@@ -26,7 +22,6 @@ echo url="https://api-ipv4.dynu.com/nic/update?username=LAMurakami&password=$(ca
 
 fi
 
-echo url="https://api.dynu.com/nic/update?username=LAMurakami&password=$(cat \
-~/.dynu-password)&hostname=${Subdomain}.freeddns.org&myip=no\
-&myipv6=${IPv6_Address}"| curl -k -K -; echo \
+echo url="https://api-ipv6.dynu.com/nic/update?username=LAMurakami&password=$(cat \
+~/.dynu-password)&hostname=${Subdomain}.freeddns.org"| curl -k -K -; echo \
 " IPv6 address update for ${Subdomain}.freeddns.org" ; echo
