@@ -2,11 +2,9 @@
 
 # /var/www/aws/aws-efs-install-x86-or-arm-extras.bash
 
-# --:----|----:----|----:----|----:----|----:----|----:----|----:----|----:----|
-
-# This program is designed to reduce the number of cloud init files by half.
+# This program was designed to reduce the number of cloud init files by half.
 #
-# At the current time I have separate scripts for each machine type for each
+# I had separate scripts for each machine type for each
 #  distribution I can handle and a separate script for each machine type.
 # In 2024 I doubled the number of scripts again creating a new one for each
 #  existing one to handle No-Public-IPv4
@@ -46,8 +44,8 @@ case $distro in
     else
       echo "AWS LAM Installing $distro distro aarch64 extras"
       echo
-      echo 'AWS LAM Installing GNU which v2.21 compiled for ARM Ubuntu Server 22.04'
-      /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/which-Ubuntu-22-04-ARM.tgz /usr/local
+      echo 'AWS LAM Installing GNU which v2.23-man-fix compiled for ARM Ubuntu Server 24.04'
+      /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/which-Ubuntu-24-04-ARM.tgz /usr/local
       file /usr/local/bin/which
       echo
       echo 'AWS LAM Installing GNU tnef 1.4.18 compiled for ARM Ubuntu Server 22.04'
