@@ -33,8 +33,8 @@ case $distro in
     if [ $(uname -m) = "x86_64" ]; then
       echo "AWS LAM Installing $distro distro x86_64 extras"
       echo
-      echo 'AWS LAM Installing GNU which v2.21 compiled for Ubuntu Server 22.04'
-      /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/which-Ubuntu-22-04.tgz /usr/local
+      echo 'AWS LAM Installing GNU which v2.23-man-fix compiled for Ubuntu Server 24.04'
+      /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/which-Ubuntu-24-04.tgz /usr/local
       file /usr/local/bin/which
       echo
       echo 'AWS LAM Installing GNU tnef 1.4.18 compiled for Ubuntu Server 22.04'
