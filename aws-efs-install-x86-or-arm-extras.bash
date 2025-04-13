@@ -61,11 +61,11 @@ case $distro in
     if [ $(uname -m) = "x86_64" ]; then
       echo "Installing $distro distro x86_64 extras"
       echo
-      /var/www/aws/aws-efs-tar-extract.bash Debian-12/which-Debian-12-x86.tgz /usr/local
+      /var/www/aws/aws-efs-tar-extract.bash Debian-12/which-v2.23-man-fix-Debian-12-x86.tgz /usr/local
     else
       echo "Installing $distro distro aarch64 extras"
       echo
-      /var/www/aws/aws-efs-tar-extract.bash Debian-12/which-Debian-12-ARM.tgz /usr/local
+      /var/www/aws/aws-efs-tar-extract.bash Debian-12/which-v2.23-man-fix-Debian-12-ARM.tgz /usr/local
     fi
     ;;
 
