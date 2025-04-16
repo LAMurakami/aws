@@ -32,7 +32,7 @@ case $distro in
       echo "AWS LAM Installing $distro distro x86_64 extras"
       echo
       echo 'AWS LAM Installing GNU which v2.23-man-fix compiled for Ubuntu Server 24.04'
-      /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/which-Ubuntu-24-04.tgz /usr/local
+      /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/which-v2.23-man-fix-Ubuntu-24-04-x86.tgz /usr/local
       file /usr/local/bin/which
       echo
       echo 'AWS LAM Installing GNU tnef 1.4.18 compiled for Ubuntu Server 22.04'
@@ -45,7 +45,7 @@ case $distro in
       echo "AWS LAM Installing $distro distro aarch64 extras"
       echo
       echo 'AWS LAM Installing GNU which v2.23-man-fix compiled for ARM Ubuntu Server 24.04'
-      /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/which-Ubuntu-24-04-ARM.tgz /usr/local
+      /var/www/aws/aws-efs-tar-extract.bash aws-lam1-ubuntu/which-v2.23-man-fix-Ubuntu-24-04-ARM.tgz /usr/local
       file /usr/local/bin/which
       echo
       echo 'AWS LAM Installing GNU tnef 1.4.18 compiled for ARM Ubuntu Server 22.04'
