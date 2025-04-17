@@ -267,6 +267,12 @@ runcmd:
  - echo
  - echo 'AWS LAM ***** Final Initialization Steps *****'
  - echo
+ - echo 'AWS LAM Use which function for bash and fix man page'
+ - rm /etc/profile.d/which2.sh
+ - cp /var/www/aws/etc/profile.d/which2.sh /etc/profile.d
+ - ln -s /bin/which /usr/local/bin/which
+ - /var/www/aws/aws-efs-tar-extract.bash Linux/which-v2.23-man-fix-man-page-only.tgz /usr/local
+ - echo
  - echo 'AWS LAM add apache group to ec2-user'
  - sh -c "usermod -a -G apache ec2-user"
  - echo
