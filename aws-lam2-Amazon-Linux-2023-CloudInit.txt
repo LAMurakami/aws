@@ -320,8 +320,9 @@ runcmd:
  - echo 'AWS LAM Update Elastic File System mlocate databases'
  - /var/www/no-ssl/Create-update-efs-mlocate-db.bash
  - echo
- - echo 'AWS LAM link which to /usr/local/bin *****'
+ - echo 'AWS LAM link which to /usr/local/bin and fix man page'
  - ln -s /bin/which /usr/local/bin/which
+ - /var/www/aws/aws-efs-tar-extract.bash Linux/which-v2.23-man-fix-man-page-only.tgz /usr/local
  - echo
  - echo 'AWS LAM Updating lam2.duckdns.org IP address'
  - ln -s /home/ec2-user/.duckdns /root/.duckdns
