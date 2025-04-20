@@ -84,11 +84,6 @@ case $distro in
       echo
       echo 'AWS LAM Install glances compiled for Amazon Linux 2023 for ec2-user'
       /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/Amazom-Linux-2023-glances.tgz /home/ec2-user
-      echo
-      echo 'AWS LAM Install etckeeper compiled for Amazon Linux 2023'
-      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/Amazom-Linux-2023-bin-etckeeper.tgz /usr
-      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/Amazom-Linux-2023-etc-etckeeper.tgz /etc
-      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/Amazom-Linux-2023-lib-systemd-system-etckeeper.tgz /lib/systemd/system
     else
       echo "Installing $distro distro aarch64 extras"
       echo
@@ -103,11 +98,6 @@ case $distro in
       echo
       echo 'AWS LAM Install glances compiled for Amazon Linux 2023 for ec2-user'
       /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/glances-ec2-user-Arm.tgz /home/ec2-user
-      echo
-      echo 'AWS LAM Install etckeeper compiled for Amazon Linux 2023'
-      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/etckeeper-bin-Arm.tgz /usr
-      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/etckeeper-etc-Arm.tgz /etc
-      /var/www/aws/aws-efs-tar-extract.bash Amazon-Linux-2023/etckeeper-lib-systemd-system-Arm.tgz /lib/systemd/system
     fi
     ;;
 

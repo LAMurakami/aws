@@ -57,9 +57,16 @@ packages:
  - texlive
  - libxkbfile
  - xorg-x11-xbitmaps
+ - etckeeper
 
 runcmd:
  - keyName="lam2-AL2023"
+ - echo
+ - echo 'AWS LAM Perform intitial etckeeper commit'
+ - etckeeper init
+ - etckeeper commit -m 'AWS LAM Amazon Linux 2023'
+ - systemctl enable etckeeper.timer
+ - systemctl start etckeeper.timer
  - echo
  - echo 'AWS LAM Add a swapfile'
  - dd if=/dev/zero of=/swapfile bs=32M count=24
@@ -184,12 +191,6 @@ runcmd:
  - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash AL2023
  - echo 'AWS LAM Use l3afpad substitute for leafpad'
  - ln -s /usr/local/bin/l3afpad /usr/bin/leafpad
- - echo
- - echo 'AWS LAM Perform intitial etckeeper commit'
- - etckeeper init
- - etckeeper commit -m 'AWS LAM Amazon Linux 2023'
- - systemctl enable etckeeper.timer
- - systemctl start etckeeper.timer
  - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
  - aws s3 cp s3://lamurakami/Amazon-Linux-2023/sshd_config /etc/ssh/sshd_config
