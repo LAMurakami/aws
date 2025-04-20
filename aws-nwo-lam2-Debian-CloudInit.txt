@@ -218,6 +218,9 @@ runcmd:
  - /var/www/aws/aws-efs-install-x86-or-arm-extras.bash debian
  - file /usr/local/bin/which
  - echo
+ - echo "LAM AWS Use GNU which function for bash users"
+ - cp /var/www/aws/etc/profile.d/which2.sh /etc/profile.d
+ - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
  - aws s3 cp s3://lamurakami/aws-lam1-ubuntu/sshd_config /etc/ssh/sshd_config
  - ln -s /var/www/aws/etc/ssh/Banner.txt /etc/ssh
