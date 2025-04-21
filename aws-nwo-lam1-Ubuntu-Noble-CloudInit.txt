@@ -78,7 +78,7 @@ runcmd:
  - git config --system init.defaultBranch master
  - echo
  - echo 'AWS LAM Installing aws.lam1.us web site'
- - git clone https://gitlab.com/aws-lam/aws /var/www/aws
+ - git clone https://gitlab.com/aws-lam/aws.git /var/www/aws
  - sh -c "cd /var/www/aws;git remote set-url origin git@gitlab.com:aws-lam/aws"
  - sh -c "cd /var/www/aws;git remote rename origin gitlab"
  - sh -c "cd /var/www/aws;git remote add github git@github.com:LAMurakami/aws"

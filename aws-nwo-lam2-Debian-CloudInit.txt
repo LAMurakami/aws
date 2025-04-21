@@ -88,7 +88,7 @@ runcmd:
  - cat /proc/swaps
  - echo
  - echo 'AWS LAM Installing aws.lam1.us web site'
- - git clone https://github.com/LAMurakami/aws /var/www/aws
+ - git clone https://github.com/LAMurakami/aws.git /var/www/aws
  - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
  - sh -c "cd /var/www/aws;git remote rename origin github"
  - sh -c "cd /var/www/aws;git remote add gitlab git@gitlab.com:aws-lam/aws"

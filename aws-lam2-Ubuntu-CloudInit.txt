@@ -136,7 +136,7 @@ runcmd:
  - file /usr/local/bin/tnef
  - echo
  - echo 'AWS LAM Listen for ssh connections on alternate port 55520 and add ssh Banner'
- - git clone https://github.com/LAMurakami/ubuntu-etc /tmp/ubuntu-etc
+ - git clone https://github.com/LAMurakami/ubuntu-etc.git /tmp/ubuntu-etc
  - sh -c "cd /tmp/ubuntu-etc ; git checkout lam2"
  - cp /tmp/ubuntu-etc/ssh/sshd_config /etc/ssh
  - cp /tmp/ubuntu-etc/ssh/Banner.txt /etc/ssh
@@ -156,7 +156,7 @@ runcmd:
  - a2enmod authz_groupfile.load
  - a2enmod rewrite
  - a2enmod cgi
- - git clone https://github.com/LAMurakami/no-ssl /var/www/no-ssl
+ - git clone https://github.com/LAMurakami/no-ssl.git /var/www/no-ssl
  - echo
  - echo 'AWS LAM Replace main apache2 configuration with no-ssl configuration'
  - rm /etc/apache2/apache2.conf
@@ -185,12 +185,12 @@ runcmd:
  - echo 'AWS LAM ***** Additional sites *****'
  - echo
  - echo 'AWS LAM Installing arsc.lam1.us web site'
- - git clone https://github.com/LAMurakami/arsc /var/www/arsc
+ - git clone https://github.com/LAMurakami/arsc.git /var/www/arsc
  - ln -s /var/www/arsc/arsc_apache2.conf /etc/apache2/sites-available/060_arsc.conf
  - a2ensite 060_arsc
  - echo
  - echo 'AWS LAM Installing aws.lam1.us web site'
- - git clone https://github.com/LAMurakami/aws /var/www/aws
+ - git clone https://github.com/LAMurakami/aws.git /var/www/aws
  - ln -s /var/www/aws/aws_apache2.conf /etc/apache2/sites-available/000-aws.conf
  - a2ensite 000-aws
  - /var/www/aws/cloud-init.pl

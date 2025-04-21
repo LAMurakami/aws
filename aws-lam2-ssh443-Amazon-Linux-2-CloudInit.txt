@@ -75,7 +75,7 @@ runcmd:
  - echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
  - echo
  - echo 'AWS LAM Install aws.lam1.us web site'
- - git clone https://github.com/LAMurakami/aws /var/www/aws
+ - git clone https://github.com/LAMurakami/aws.git /var/www/aws
  - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
  - sh -c "cd /var/www/aws;git remote add aws git@aws:aws"
  - echo
@@ -94,7 +94,7 @@ runcmd:
  - ls -lF --time-style=long-iso /etc/localtime
  - echo
  - echo 'AWS LAM Install no-ssl web site'
- - git clone https://github.com/LAMurakami/no-ssl /var/www/no-ssl
+ - git clone https://github.com/LAMurakami/no-ssl.git /var/www/no-ssl
  - sh -c "cd /var/www/no-ssl;git remote set-url origin git@github.com:LAMurakami/no-ssl"
  - sh -c "cd /var/www/no-ssl;git remote add aws git@aws:no-ssl"
  - echo
@@ -124,7 +124,7 @@ runcmd:
  - echo 'AWS LAM ***** Additional sites *****'
  - echo
  - echo 'AWS LAM Installing arsc.lam1.us web site'
- - git clone https://github.com/LAMurakami/arsc /var/www/arsc
+ - git clone https://github.com/LAMurakami/arsc.git /var/www/arsc
  - sh -c "cd /var/www/arsc;git remote set-url origin git@github.com:LAMurakami/arsc"
  - sh -c "cd /var/www/arsc;git remote add aws git@aws:arsc"
  - echo
