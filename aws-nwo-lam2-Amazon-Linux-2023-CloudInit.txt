@@ -62,6 +62,14 @@ packages:
 runcmd:
  - keyName="lam2-AL2023"
  - echo
+ - echo 'AWS LAM Set git user name, email for system'
+ - git config --system user.name "LAMurakami"
+ - git config --system user.email GitHub@LAMurakami.com
+ - git config --system core.editor vi
+ - git config --system branch.autosetuprebase always
+ - git config --system init.defaultBranch master
+ - git config --system --add safe.directory /var/www/lam
+ - echo
  - echo 'AWS LAM Perform intitial etckeeper commit'
  - etckeeper init
  - etckeeper commit -m 'AWS LAM Amazon Linux 2023'
@@ -78,7 +86,7 @@ runcmd:
  - cat /proc/swaps
  - echo
  - echo 'AWS LAM Install aws.lam1.us web site'
- - git clone https://github.com/LAMurakami/aws /var/www/aws
+ - git clone https://github.com/LAMurakami/aws.git /var/www/aws
  - sh -c "cd /var/www/aws;git remote set-url origin git@github.com:LAMurakami/aws"
  - sh -c "cd /var/www/aws;git remote rename origin github"
  - sh -c "cd /var/www/aws;git remote add gitlab git@gitlab.com:aws-lam/aws"
@@ -109,14 +117,6 @@ runcmd:
  - echo
  - echo 'AWS LAM Check US Alaska local time for this system'
  - ls -lF --time-style=long-iso /etc/localtime
- - echo
- - echo 'AWS LAM Set git user name, email for system'
- - git config --system user.name "LAMurakami"
- - git config --system user.email GitHub@LAMurakami.com
- - git config --system core.editor vi
- - git config --system branch.autosetuprebase always
- - git config --system init.defaultBranch master
- - git config --system --add safe.directory /var/www/lam
  - echo
  - echo 'AWS LAM use colors with systemctl'
  - echo 'export SYSTEMD_COLORS=1' > /etc/profile.d/systemd_colors.sh

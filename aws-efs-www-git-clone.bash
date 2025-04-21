@@ -25,7 +25,7 @@ else
   origin1='git@aws:'
 fi
 
-git clone $origin1$repo $target$repo
+git clone $origin1${repo}.git $target$repo
 
 cd $target$repo
 git remote rename origin aws

@@ -23,7 +23,7 @@ else                          # If private repos will be used REGION must be set
   origin2='git@aws:'
 fi
 
-git clone $origin1$repo /var/www/$repo
+git clone $origin1${repo}.git /var/www/$repo
 cd /var/www/$repo
 git remote set-url origin $origin2$repo
 if [ -z $3 ] ; then     # If public repos Set gitlab and aws additional remotes

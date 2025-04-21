@@ -17,7 +17,7 @@ else
   target='/var/www/'
 fi
 
-git clone https://gitlab.com/aws-lam/${REPO} $target${REPO}
+git clone https://gitlab.com/aws-lam/${REPO}.git $target${REPO}
 cd $target${REPO}
 git remote set-url origin git@gitlab.com:aws-lam/${REPO}
 git remote add github git@github.com:LAMurakami/${REPO}
