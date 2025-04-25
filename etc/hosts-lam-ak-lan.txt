@@ -1,0 +1,5 @@
+# The following are the current LAM Alaska LAN machines
+192.168.0.20 ak20.lam1.us ak20
+192.168.0.23 ak23.lam1.us ak23
+192.168.0.24 ak24.lam1.us ak24
+192.168.0.19 ak20.lam1.us ak19
