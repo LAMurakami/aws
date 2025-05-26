@@ -1,4 +1,16 @@
-/var/log/cloud-init*.log
+/var/log/cloud-init.log
+{
+    su root root
+    missingok
+    nocreate
+    notifempty
+    rotate 6
+    compress
+    delaycompress
+    # Don't rotate until size gets large
+    minsize 10M
+}
+/var/log/cloud-init-output.log
 {
     su root root
     missingok
