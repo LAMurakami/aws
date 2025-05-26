@@ -2,10 +2,12 @@
 {
     su root root
     missingok
-    nocreate
+    # Create new log file with other read permissions
+    create 664 root adm
     notifempty
     rotate 6
     compress
     delaycompress
-    size 1M
+    # Don't rotate until size gets large
+    minsize 10M
 }
