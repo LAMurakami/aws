@@ -71,6 +71,7 @@ packages:
  - git
  - xauth
  - l3afpad
+ - logrotate
 
 runcmd:
  - keyName="lam2-Debian"
@@ -333,15 +334,18 @@ runcmd:
  - cp /var/www/aws/etc/gitweb.conf /etc/gitweb.conf
  - systemctl restart apache2
  - echo
- - echo 'AWS LAM Alaska Final Cloud-init etckeeper commit'
- - etckeeper commit -m 'QEMU LAM Alaska Final Cloud-init etckeeper commit'
- - echo
  - echo 'AWS LAM Updating lam2.duckdns.org IP address'
  - ln -s /home/admin/.duckdns /root/.duckdns
  - /var/www/aws/Update-DuckDNS.bash lam2
  - echo
  - echo 'AWS LAM Updating lam1.freeddns.org IP address'
  - /var/www/aws/Update-Dynu-FreeDDNS.bash lam2
+ - echo
+ - echo 'AWS LAM Update cloud-init logrotate configuration'
+ - cp /var/www/aws/etc/logrotate.d/cloud-init /etc/logrotate.d
+ - echo
+ - echo 'AWS LAM Alaska Final Cloud-init etckeeper commit'
+ - etckeeper commit -m 'QEMU LAM Alaska Final Cloud-init etckeeper commit'
  - echo
  - echo 'AWS LAM Alaska List Installed Packages information'
  - dpkg -l

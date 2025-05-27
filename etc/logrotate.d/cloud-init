@@ -7,8 +7,7 @@
     rotate 6
     compress
     delaycompress
-    # Don't rotate until size gets large
-    minsize 10M
+    size 1M
 }
 /var/log/cloud-init-output.log
 {

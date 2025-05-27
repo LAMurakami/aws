@@ -330,6 +330,9 @@ runcmd:
  - echo 'AWS LAM Updating lam1.freeddns.org IP address'
  - /var/www/aws/Update-Dynu-FreeDDNS.bash lam2
  - echo
+ - echo 'AWS LAM Update cloud-init logrotate configuration'
+ - cp /var/www/aws/etc/logrotate.d/cloud-init /etc/logrotate.d
+ - echo
  - echo 'AWS LAM Final Cloud-init etckeeper commit'
  - etckeeper commit -m 'AWS LAM Final Cloud-init etckeeper commit'
  - echo
