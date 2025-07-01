@@ -36,6 +36,11 @@ case ${REGION} in
     EFS2=fs-0135807df97f2cf6e.efs.ap-east-1.amazonaws.com
     ;;
 
+  ap-east-2) # Asia Pacific (Taipei)
+    EFS=fs-0576c9a760ed69654.efs.ap-east-2.amazonaws.com
+    EFS2=fs-073514c3422e14dc2.efs.ap-east-2.amazonaws.com
+    ;;
+
   ap-northeast-1) # Asia Pacific (Tokyo)
     EFS=fs-0055911a273d2036c.efs.ap-northeast-1.amazonaws.com
     EFS2=fs-0b58add49289f1962.efs.ap-northeast-1.amazonaws.com
@@ -224,6 +229,10 @@ case ${Availability_Zone} in
   ap-east-1c)
     EFS3=fs-0994350d719f8851c.efs.ap-east-1.amazonaws.com
     ;;
+
+#  ap-east-2{a,b,c}) One Zone storage classes are not currently supported in this REGION
+#    EFS3=
+#    ;;
 
   ap-northeast-1a)
     EFS3=fs-0784dc0dfabfe9313.efs.ap-northeast-1.amazonaws.com
