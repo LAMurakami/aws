@@ -73,6 +73,9 @@ packages:
 runcmd:
  - keyName="lam2-Debian"
  - echo
+ - echo 'AWS LAM Report environment'
+ - env
+ - echo
  - echo 'AWS LAM Allow any to read /var/log/cloud-init-output.log'
  - chmod a+r /var/log/cloud-init-output.log
  - echo
