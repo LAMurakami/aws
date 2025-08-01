@@ -9,8 +9,8 @@ fi
 
 Subdomain=$1
 
-# For now we will setup the ~/.dynu-password
-scp aws:~/.dynu-password ~
+# Setup the ~/.dynu-password
+cp /home/lam/.dynu-password .
 
 if [[ ${Public_IPv4} == 'none' ]] ; then
   echo 'Public_IPv4=none'
