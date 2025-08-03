@@ -16,7 +16,7 @@ if [ -z $3 ] ; then      # default is the public origin (my public github repos)
   origin2='git@github.com:LAMurakami/'
 else                          # If private repos will be used REGION must be set
   if [[ ${REGION} == 'us-west-2' ]]; then
-    origin1='git@localhost:'
+    origin1='git@ip6-localhost:'
   else                 # If not in the us-west-2 Oregon region or region not set
     origin1='git@aws:'                 # use ssh to aws connection setup earlier
   fi

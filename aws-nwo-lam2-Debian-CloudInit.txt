@@ -108,9 +108,6 @@ runcmd:
  - export REGION=$(cloud-init query region)
  - /var/www/aws/aws-efs-mount.bash
  - echo
- - echo 'AWS LAM Add localhost key to known_hosts'
- - ssh-keyscan -t ed25519 localhost >> /etc/ssh/ssh_known_hosts
- - echo
  - echo 'AWS LAM Create git user'
  - useradd -g staff -G staff -M -d /mnt/efs/git -u 4896 git
  - echo
@@ -137,8 +134,11 @@ runcmd:
  - echo 'AWS LAM Set vim as default editor for system'
  - update-alternatives --set editor /usr/bin/vim.basic
  - echo
- - echo 'AWS LAM Set hostname and localhost alias in /etc/hosts'
- - sed -i '1s/localhost/lam2.lam1.us lam2 localhost/' /etc/hosts
+ - echo 'AWS LAM Set lam2.lam1.us as ip6-localhost alias in /etc/hosts'
+ - sed -i '1s/ip6-localhost/lam2.lam1.us lam2 ip6-localhost/' /etc/hosts
+ - echo
+ - echo 'AWS LAM Add lam2.lam1.us key to known_hosts'
+ - ssh-keyscan -t ed25519 lam2.lam1.us >> /etc/ssh/ssh_known_hosts
  - echo
  - echo 'AWS LAM Create logs/ sybmolic link for Apache2 configuration use'
  - ln -s /var/log/apache2 /etc/apache2/logs
