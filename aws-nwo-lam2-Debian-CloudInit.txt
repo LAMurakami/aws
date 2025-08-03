@@ -135,7 +135,7 @@ runcmd:
  - update-alternatives --set editor /usr/bin/vim.basic
  - echo
  - echo 'AWS LAM Set lam2.lam1.us as ip6-localhost alias in /etc/hosts'
- - sed -i '1s/ip6-localhost/lam2.lam1.us lam2 ip6-localhost/' /etc/hosts
+ - sed -i 's/ip6-localhost/lam2.lam1.us lam2 ip6-localhost/' /etc/hosts
  - echo
  - echo 'AWS LAM Add lam2.lam1.us key to known_hosts'
  - ssh-keyscan -t ed25519 lam2.lam1.us >> /etc/ssh/ssh_known_hosts
