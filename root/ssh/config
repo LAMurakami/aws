@@ -1,4 +1,4 @@
-Host localhost
+Host localhost ip6-localhost
 IdentityFile /root/.ssh/git_ak20_id_rsa
 
 Host aws aws.lam1.us

@@ -68,9 +68,6 @@ runcmd:
  - export REGION=$(cloud-init query region)
  - /var/www/aws/aws-efs-mount.bash
  - echo
- - echo 'AWS LAM Add localhost key to known_hosts'
- - ssh-keyscan -t ed25519 localhost >> /etc/ssh/ssh_known_hosts
- - echo
  - echo 'AWS LAM Create git user'
  - groupadd -g 206 staff
  - useradd -u 4896 -g staff -G staff -M -d /mnt/efs/git git
@@ -308,8 +305,14 @@ runcmd:
  - echo 'AWS LAM Set lam2.lam1.us hostname'
  - /var/www/aws/Amazon-Linux-2-set-hostname.bash
  - echo
- - echo 'AWS LAM Set hostname and localhost alias in /etc/hosts'
- - sed -i '1s/localhost/lam2.lam1.us lam2 localhost/' /etc/hosts
+ - echo 'AWS LAM Set lam2.lam1.us as ip6-localhost alias in /etc/hosts'
+ - sed -i 's/ip6-localhost/lam2.lam1.us lam2 ip6-localhost/' /etc/hosts
+ - echo
+ - echo 'AWS LAM Add lam2.lam1.us key to known_hosts'
+ - ssh-keyscan -t ed25519 localhost >> /tmp/known_hosts
+ - cat /tmp/known_hosts >> /etc/ssh/ssh_known_hosts
+ - sed -i '1s/localhost/lam2.lam1.us/' /tmp/known_hosts
+ - cat /tmp/known_hosts >> /etc/ssh/ssh_known_hosts
  - echo
  - echo 'AWS LAM List Installed Packages information'
  - repoquery -a --installed --qf '%-30{UI_FROM_REPO}%{NAME}-%{VERSION}-%{RELEASE}-%{ARCH}' | sort --ignore-case --key=1.31
