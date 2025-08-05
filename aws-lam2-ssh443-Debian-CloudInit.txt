@@ -106,9 +106,6 @@ runcmd:
  - echo 'AWS LAM Adding nfs4 mounts for AWS LAM VPC Elastic File Systems'
  - /var/www/aws/aws-efs-mount.bash
  - echo
- - echo 'AWS LAM Add localhost to known_hosts'
- - ssh-keyscan -t ed25519 localhost >> /etc/ssh/ssh_known_hosts
- - echo
  - echo 'AWS LAM Create git user'
  - useradd -g staff -G staff -u 4896 git -d /mnt/efs/git
  - echo
@@ -135,8 +132,14 @@ runcmd:
  - echo 'AWS LAM Set vim as default editor for system'
  - update-alternatives --set editor /usr/bin/vim.basic
  - echo
- - echo 'AWS LAM Set hostname and localhost alias in /etc/hosts'
- - sed -i '1s/localhost/lam2.lam1.us lam2 localhost/' /etc/hosts
+ - echo 'AWS LAM Set lam2.lam1.us as ip6-localhost alias in /etc/hosts'
+ - sed -i 's/ip6-localhost/lam2.lam1.us lam2 ip6-localhost/' /etc/hosts
+ - echo
+ - echo 'AWS LAM Add lam2.lam1.us key to known_hosts'
+ - ssh-keyscan -t ed25519 ip6-localhost >> /tmp/known_hosts
+ - cat /tmp/known_hosts >> /etc/ssh/ssh_known_hosts
+ - sed -i '1s/ip6-localhost/lam2.lam1.us/' /tmp/known_hosts
+ - cat /tmp/known_hosts >> /etc/ssh/ssh_known_hosts
  - echo
  - echo 'AWS LAM Use l3afpad fork of leafpad'
  - ln -s /usr/bin/l3afpad /usr/bin/leafpad

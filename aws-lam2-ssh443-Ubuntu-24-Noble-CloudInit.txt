@@ -94,17 +94,20 @@ runcmd:
  - cp /var/www/aws/root/ssh/config /root/.ssh/config
  - cp /var/www/aws/etc/ssh/ssh_known_hosts /etc/ssh/ssh_known_hosts
  - echo
- - echo 'AWS LAM Add localhost key to known_hosts'
- - ssh-keyscan -t ed25519 localhost >> /etc/ssh/ssh_known_hosts
- - echo
  - echo 'AWS LAM Install etckeeper to track configuration changes'
  - apt-get install etckeeper
  - echo
  - echo 'AWS LAM Set vim as default editor for system'
  - update-alternatives --set editor /usr/bin/vim.basic
  - echo
- - echo 'AWS LAM Set hostname and localhost alias in /etc/hosts'
- - sed -i '1s/localhost/lam2.lam1.us lam2 localhost/' /etc/hosts
+ - echo 'AWS LAM Set lam2.lam1.us as ip6-localhost alias in /etc/hosts'
+ - sed -i 's/ip6-localhost/lam2.lam1.us lam2 ip6-localhost/' /etc/hosts
+ - echo
+ - echo 'AWS LAM Add lam2.lam1.us key to known_hosts'
+ - ssh-keyscan -t ed25519 ip6-localhost >> /tmp/known_hosts
+ - cat /tmp/known_hosts >> /etc/ssh/ssh_known_hosts
+ - sed -i '1s/ip6-localhost/lam2.lam1.us/' /tmp/known_hosts
+ - cat /tmp/known_hosts >> /etc/ssh/ssh_known_hosts
  - echo
  - echo 'AWS LAM Enable x11 forwarding over ssh for sudo'
  - ln -s /var/www/no-ssl/xauthority.sh /etc/profile.d
