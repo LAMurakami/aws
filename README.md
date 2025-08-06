@@ -14,11 +14,9 @@ Repostories that can only be accessed over IPv6 with the
 
 ## by IP Address website
 The localhost / accessed by IP Address website for the
-
-[lamurakami.freeddns.org] (https://lamurakami.freeddns.org/)
-[lam1.freeddns.org] (https://lam1.freeddns.org/)
-[lam2.freeddns.org] (https://lam2.freeddns.org/)
-
+[lamurakami.freeddns.org](https://lamurakami.freeddns.org/)
+[lam1.freeddns.org](https://lam1.freeddns.org/)
+[lam2.freeddns.org](https://lam2.freeddns.org/)
 [lamurakami.duckdns.org](http://lamurakami.duckdns.org/)
 [lam1.duckdns.org](http://lam1.duckdns.org/)
 [lam2.duckdns.org](http://lam2.duckdns.org/)
