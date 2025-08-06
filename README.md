@@ -14,6 +14,11 @@ Repostories that can only be accessed over IPv6 with the
 
 ## by IP Address website
 The localhost / accessed by IP Address website for the
+
+[lamurakami.freeddns.org] (https://lamurakami.freeddns.org/)
+[lam1.freeddns.org] (https://lam1.freeddns.org/)
+[lam2.freeddns.org] (https://lam2.freeddns.org/)
+
 [lamurakami.duckdns.org](http://lamurakami.duckdns.org/)
 [lam1.duckdns.org](http://lam1.duckdns.org/)
 [lam2.duckdns.org](http://lam2.duckdns.org/)
@@ -105,11 +110,6 @@ memory since the
 [dnf Out of Memory bug](https://bugzilla.redhat.com/show_bug.cgi?id=1907030)
 on swapless machines with 1G or less
 of RAM was fixed
-
-* [aws-lam2-Amazon-Linux-2-CloudInit.txt](https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam2-Amazon-Linux-2-CloudInit.txt?ref_type=heads)
-and
-[aws-nwo-lam2-Amazon-Linux-2-CloudInit.txt](https://gitlab.com/aws-lam/aws/-/blob/master/aws-nwo-lam2-Amazon-Linux-2-CloudInit.txt?ref_type=heads)
-are alternate initializations for an LAM AWS EC2 using Amazon Linux 2.
 
 * [aws-lam2-SLES-CloudInit.txt](https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam2-SLES-CloudInit.txt?ref_type=heads) is the cloud-config configuration file for the initializaton of a SLES 15 sp6 instance.
 
