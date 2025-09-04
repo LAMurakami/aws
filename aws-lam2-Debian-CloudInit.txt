@@ -27,7 +27,7 @@ bootcmd:
 hostname: lam2
 
 # Set timezone
-timezone: US/Alaska
+timezone: America/Anchorage
 
 # Upgrade apt database on first boot
 package_update: true
@@ -47,8 +47,7 @@ packages:
  - libdbd-mysql-perl
  - php
  - php-gd
- - texlive
- - php-xml*
+ - php-xml
  - lynx
  - apache2-doc
  - libapache2-mod-perl2
@@ -61,7 +60,7 @@ packages:
  - libapache2-mod-php
  - x11-apps
  - whois
- - libgtk2.0-0
+ - libgtk2.0-0t64
  - php-mbstring
  - php-intl
  - php-apcu
@@ -115,6 +114,9 @@ runcmd:
  - echo
  - echo 'AWS LAM Install glances after swap has been configured'
  - apt-get install -y glances
+ - echo
+ - echo 'AWS LAM Install texlive after swap has been configured'
+ - apt-get install -y texlive
  - echo
  - echo 'AWS LAM Check US Alaska local time for this system'
  - ls -lF --time-style=long-iso /etc/localtime
