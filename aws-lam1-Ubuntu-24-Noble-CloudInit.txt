@@ -36,7 +36,7 @@ bootcmd:
 hostname: lam1
 
 # Set timezone
-timezone: US/Alaska
+timezone: America/Anchorage
 
 runcmd:
  - keyName="lam1-Ubuntu-24-Noble"

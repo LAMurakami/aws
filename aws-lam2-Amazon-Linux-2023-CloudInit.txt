@@ -19,7 +19,7 @@ bootcmd:
  - date
 
 # Set timezone
-timezone: US/Alaska
+timezone: America/Anchorage
 
 # Upgrade repo database on first boot
 package_update: true

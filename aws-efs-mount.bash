@@ -91,6 +91,11 @@ case ${REGION} in
     EFS2=fs-05899392e5708808f.efs.ap-southeast-5.amazonaws.com
     ;;
 
+  ap-southeast-6) # Asia Pacific (New Zealand)
+    EFS=fs-08d224dc77c52c61d.efs.ap-southeast-6.amazonaws.com
+    EFS2=fs-0988432d761da4d53.efs.ap-southeast-6.amazonaws.com
+    ;;
+
   ap-southeast-7) # Asia Pacific (Thailand)
     EFS=fs-0cdd71000ba1a3219.efs.ap-southeast-7.amazonaws.com
     EFS2=fs-08ab13c7a2a5370a0.efs.ap-southeast-7.amazonaws.com
@@ -323,6 +328,10 @@ case ${Availability_Zone} in
 #    ;;
 
 #  ap-southeast-5{a,b,c}) One Zone storage classes are not currently supported in this REGION
+#    EFS3=
+#    ;;
+
+#  ap-southeast-6{a,b,c}) One Zone storage classes are not currently supported in this REGION
 #    EFS3=
 #    ;;
 

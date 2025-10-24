@@ -19,7 +19,7 @@ output: {all: '| tee -a /var/log/cloud-init-output.log'}
 hostname: lam2
 
 # Set timezone
-timezone: US/Alaska
+timezone: America/Anchorage
 
 # Upgrade repo database on first boot
 package_update: true
