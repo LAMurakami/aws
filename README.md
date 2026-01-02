@@ -60,7 +60,7 @@ DocumentRoot.
 The LAM AWS EC2 lam1 CloudInit builds a
 [LAMP](https://en.wikipedia.org/wiki/LAMP_(software_bundle))
 model web service software
-stack instance from the Latest Ubuntu Server image available.
+stack instance from the Latest Server image available.
 This repo has the
 content in a html/ subdirectory as outlined below:
 
@@ -137,8 +137,7 @@ additional-sites.
 
 * &lt;site&gt;_apache2.conf is the site apache2 configuration file.  The LAM AWS
 EC2 LAMP instance does not support .htaccess files.  The &lt;site&gt;_apache2.conf
-file is linked into /etc/apache2/sites-available and then enabled with
-a2ensite in the
+file is linked into /etc/apache2/sites-available in the
 [aws-lam-apache2-sites-configuration-Amazon-Linux.bash](https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam-apache2-sites-configuration-Amazon-Linux.bash?ref_type=heads),
 [aws-lam-apache2-sites-configuration-Debian-Ubuntu.bash](https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam-apache2-sites-configuration-Debian-Ubuntu.bash?ref_type=heads) and
 [aws-lam-apache2-sites-configuration-OpenSUSE.bash](https://gitlab.com/aws-lam/aws/-/blob/master/aws-lam-apache2-sites-configuration-OpenSUSE.bash?ref_type=heads)
