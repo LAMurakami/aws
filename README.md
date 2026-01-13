@@ -27,17 +27,12 @@ The aws repo contains content in the html folder and an apache2 configuration fo
 
 It also includes the CloudInit files to launch a new LAM AWS instance.  A Linux Apache MariaDB (LAM) Amazon Web Services (AWS) instance includes the Perl, Python and PHP application programming languages making it a LAMP model web service software stack instance.  A LAM AWS instance also has additional prerequisites for MediaWiki and the secure site web applications in a separate private lam repo.
 
-AWS EC2 metadata values
-local-hostname, local-ipv4, public-hostname, and public-ipv4
-for the instance are used
-in the apache2 ServerAlias for the named virtual host for localhost.
-The Dynamic Domain Name Service subdomains used with DNS CNAME records
-to serve my domain names are also included in the apache2 ServerAlias.
+AWS EC2 metadata values availability-zone, instance-type, local-hostname,
+local-ipv4, public-hostname, and public-ipv4 for the instance are used along
+with the public-ipv6 on the main page for the virtual host in my version of the
+this site is working main page.
+The values for the main page and configuration file are applied during the CloudInit process by [cloud-init.pl](https://gitlab.com/aws-lam/aws/-/blob/master/cloud-init.pl?ref_type=heads) and [ec2-user-data.pl](https://gitlab.com/aws-lam/aws/-/blob/master/ec2-user-data.pl?ref_type=heads)
 
-These values are used along with the instance-type on the main page for the
-virtual host in my version of the this http site is working main page.  The values for the main page and configuration file are applied during the CloudInit process by [cloud-init.pl](https://gitlab.com/aws-lam/aws/-/blob/master/cloud-init.pl?ref_type=heads) and [ec2-user-data.pl](https://gitlab.com/aws-lam/aws/-/blob/master/ec2-user-data.pl?ref_type=heads)
-
-A public-ipv6 value is also used to update the VirtualHost configuration for all the additional-sites possibly being served by the instance.
 Additional sites served by the instance possibly include:
 lam
 [no-ssl](https://gitlab.com/aws-lam/no-ssl/-/tree/master?ref_type=heads)
