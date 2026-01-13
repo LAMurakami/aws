@@ -30,8 +30,6 @@ if [ -z $3 ] ; then     # If public repos Set gitlab and aws additional remotes
   git remote add gitlab git@gitlab.com:aws-lam/$repo
   git remote add aws git@aws:$repo
   git remote rename origin github
-  git remote set-url --add github git@aws:$repo
-  git remote set-url --add github git@gitlab.com:aws-lam/$repo
 fi
 git checkout -b $keyName
 git tag -a -m "AWS LAM Initialization for $keyName" b0-$keyName
