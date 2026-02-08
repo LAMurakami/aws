@@ -17,11 +17,9 @@ else
   target='/var/www/'
 fi
 
-# The git repos are in the us-west-2 Oregon region
-if [[ ${REGION} == 'us-west-2' ]]; then
+if test -f '/mnt/efs/aws-lam-full'; then
   origin1='git@ip6-localhost:'
 else
-# If not in the us-west-2 Oregon region use the ssh to aws connection
   origin1='git@aws:'
 fi
 

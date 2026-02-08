@@ -11,7 +11,7 @@ fi
 sqlFile=$1
 db=$2
 
-if [[ ${REGION} == 'us-west-2' ]]; then
+if test -f '/mnt/efs/aws-lam-full'; then
   cat /mnt/efs/${sqlFile} | gunzip -c | mysql --user=lam ${db}
 else
   ssh aws "cat /mnt/efs/${sqlFile}" | gunzip -c | mysql --user=lam ${db}

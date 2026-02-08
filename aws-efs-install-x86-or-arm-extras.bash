@@ -9,10 +9,6 @@
 # In 2024 I doubled the number of scripts again creating a new one for each
 #  existing one to handle No-Public-IPv4
 #
-# This program will use the new aws-efs-tar-extract.bash program that directly
-#  accesses the efs when in the us-west-2 Oregon region but relies on the
-#  ssh to aws connectivity for any an instance launched in any other region.
-#
 # I have decided that the extras installed by this program are not critical
 #  and an instance launched in another region without the main aws instance
 #  is mostly functional if the installs fail.
