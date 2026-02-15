@@ -241,6 +241,12 @@ runcmd:
  - echo 'AWS LAM Create lam murakami staff credentials.'
  - /var/www/lam/Create-lam-murakami-staff.bash
  - echo
+ - echo 'AWS LAM Update root login message.'
+ - sed -i 's|Please login as the user |Please login as \\"lam\\", \\"murakami\\" or |' /root/.ssh/authorized_keys
+ - echo
+ - echo 'AWS LAM Add git_ak20_id_rsa to root authorized_keys'
+ - cat /var/www/lam/root/git_ak20_id_rsa.pub >> /root/.ssh/authorized_keys
+ - echo
  - echo 'AWS LAM Install mariadb after swap has been configured'
  - apt-get install -y mariadb-client mariadb-server
  - echo
