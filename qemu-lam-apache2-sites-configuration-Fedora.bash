@@ -67,4 +67,9 @@ ln -s /var/www/z/z_apache2.conf /etc/httpd/conf.d/zzz_050_z.conf
 ln -s /var/www/z/z_ssl_lam1_apache2.conf \
 /etc/httpd/conf.d/zzz_051_z_ssl_lam1.conf
 
+ln -s /var/www/arsc/arsc_apache2.conf /etc/httpd/conf.d/zzz_060_arsc.conf
+
+ln -s /var/www/arsc/arsc_ssl_lam1_apache2.conf \
+/etc/httpd/conf.d/zzz_061_arsc_ssl_lam1.conf
+
 ln -s /var/www/no-ssl/no-ssl_apache2.conf /etc/httpd/conf.d/zzz_980-no-ssl.conf
